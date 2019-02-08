@@ -4,26 +4,56 @@ import org.json.JSONObject
 
 data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
-    fun needsHentInntektsTask(): Boolean = !hasInntekt() && !hasHentInntektTask()
+    fun hasDagpengegrunnlag() = jsonObject.has("dagpengeGrunnlag")
 
-//    fun needsPeriodeSubsumsjon(): Boolean = hasInntekt() && !hasPeriodeSubsumsjon()
+    fun hasAntallBarn() = jsonObject.has("antallBarn")
 
-    private fun hasInntekt() = jsonObject.has("inntekt")
+    fun needsSatsSubsumsjon() = !hasSatsSubsumsjon()
 
-    fun hasHentInntektTask(): Boolean {
-        if (jsonObject.has("tasks")) {
-            val tasks = jsonObject.getJSONArray("tasks")
-            for (task in tasks) {
-                if (task.toString() == "hentInntekt") {
-                    return true
-                }
-            }
+    fun getDagpengeGrunnlag() = jsonObject.getInt("dagpengeGrunnlag")
+
+    fun getAntallBarn() = jsonObject.getInt("antallBarn")
+
+    private fun hasSatsSubsumsjon() = jsonObject.has("satsSubsumsjon")
+
+    fun addSatsSubsumsjon(satsSubsumsjon: SatsSubsumsjon) = jsonObject.put("satsSubsumsjon", satsSubsumsjon.build())
+
+    class Builder {
+
+        val jsonObject = JSONObject()
+
+        fun dagpengeGrunnlag(dagpengeGrunnlag: Int): Builder {
+            jsonObject.put("dagpengeGrunnlag", dagpengeGrunnlag)
+            return this
         }
-        return false
+
+        fun antallBarn(antallBarn: Int): Builder {
+            jsonObject.put("antallBarn", antallBarn)
+            return this
+        }
+
+        fun satsSubsumsjon(satsSubsumsjon: SatsSubsumsjon): Builder {
+            jsonObject.put("satsSubsumsjon", satsSubsumsjon.build())
+            return this
+        }
+
+        fun build(): SubsumsjonsBehov = SubsumsjonsBehov(jsonObject)
     }
+}
 
-//    private fun hasPeriodeSubsumsjon() = jsonObject.has("periodeSubsumsjon")
-
-    fun hasTasks(): Boolean = jsonObject.has("tasks")
-
+data class SatsSubsumsjon(
+    val sporingsId: String,
+    val subsumsjonsId: String,
+    val regelidentifikator: String,
+    val dagpengeGrunnlag: Int,
+    val antallBarn: Int,
+    val sats: Int
+) {
+    fun build(): JSONObject = JSONObject()
+        .put("sporingsId", sporingsId)
+        .put("subsumsjonsId", subsumsjonsId)
+        .put("regelidentifikator", regelidentifikator)
+        .put("dagpengeGrunnlag", dagpengeGrunnlag)
+        .put("antallBarn", antallBarn)
+        .put("sats", sats)
 }

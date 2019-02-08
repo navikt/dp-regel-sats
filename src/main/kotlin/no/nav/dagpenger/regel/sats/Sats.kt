@@ -19,9 +19,9 @@ import java.util.Properties
 private val LOGGER = KotlinLogging.logger {}
 
 val dagpengerBehovTopic = Topic(
-        Topics.DAGPENGER_BEHOV_EVENT.name,
-        Serdes.StringSerde(),
-        Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
+    Topics.DAGPENGER_BEHOV_EVENT.name,
+    Serdes.StringSerde(),
+    Serdes.serdeFrom(JsonSerializer(), JsonDeserializer())
 )
 
 class Sats(val env: Environment) : Service() {
@@ -45,61 +45,55 @@ class Sats(val env: Environment) : Service() {
         val builder = StreamsBuilder()
 
         val stream = builder.stream(
-                dagpengerBehovTopic.name,
-                Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
+            dagpengerBehovTopic.name,
+            Consumed.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde)
         )
 
-//        val (needsInntekt, needsSubsumsjon) = stream
-//                .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
-//                .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
-//                .filter { _, behov -> shouldBeProcessed(behov) }
-//                .kbranch(
-//                        { _, behov: SubsumsjonsBehov -> behov.needsHentInntektsTask() },
-//                        { _, behov: SubsumsjonsBehov -> behov.needsPeriodeSubsumsjon() })
-//
-//        needsInntekt.mapValues(this::addInntektTask)
-//        needsSubsumsjon.mapValues(this::addRegelresultat)
-//
-//        needsInntekt.merge(needsSubsumsjon)
-//                .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
-//                .mapValues { _, behov -> behov.jsonObject }
-//                .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
-//
-//        return builder.build()
+        stream
+            .peek { key, value -> LOGGER.info("Processing ${value.javaClass} with key $key") }
+            .mapValues { value: JSONObject -> SubsumsjonsBehov(value) }
+            .filter { _, behov -> shouldBeProcessed(behov) }
+            .mapValues(this::addRegelresultat)
+            .peek { key, value -> LOGGER.info("Producing ${value.javaClass} with key $key") }
+            .mapValues { _, behov -> behov.jsonObject }
+            .to(dagpengerBehovTopic.name, Produced.with(dagpengerBehovTopic.keySerde, dagpengerBehovTopic.valueSerde))
+
+        return builder.build()
     }
 
     override fun getConfig(): Properties {
         val props = streamConfig(
-                appId = SERVICE_APP_ID,
-                bootStapServerUrl = env.bootstrapServersUrl,
-                credential = KafkaCredential(env.username, env.password)
+            appId = SERVICE_APP_ID,
+            bootStapServerUrl = env.bootstrapServersUrl,
+            credential = KafkaCredential(env.username, env.password)
         )
         return props
     }
 
-//    private fun addInntektTask(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-//        val jsonObject = behov.jsonObject
-//
-//        if (behov.hasTasks()) {
-//            jsonObject.append("tasks", "hentInntekt")
-//        } else {
-//            jsonObject.put("tasks", listOf("hentInntekt"))
-//        }
-//
-//        return SubsumsjonsBehov(jsonObject)
-//    }
-//
-//    private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
-//        val jsonObject = behov.jsonObject
-//
-//        return SubsumsjonsBehov(jsonObject
-//                .put("periodeSubsumsjon", JSONObject()
-//                        .put("sporingsId", "123")
-//                        .put("subsumsjonsId", "456")
-//                        .put("regelIdentifikator", "Periode.v1")
-//                        .put("antallUker", if (behov.getAvtjentVerneplikt()) 26 else 0))
-//        )
-//    }
+    private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
+
+        val dagpengeGrunnlag = behov.getDagpengeGrunnlag()
+        val antallBarn = behov.getAntallBarn()
+        val sats = calculateSats(dagpengeGrunnlag, antallBarn)
+
+        behov.addSatsSubsumsjon(
+            SatsSubsumsjon(
+                "123",
+                "456",
+                "Sats.v1",
+                dagpengeGrunnlag,
+                antallBarn,
+                sats
+            )
+        )
+
+        return behov
+    }
+
+    private fun calculateSats(dagpengeGrunnlag: Int, antallBarn: Int): Int {
+        return 200
+    }
 }
 
-//fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean = behov.needsHentInntektsTask() || behov.needsPeriodeSubsumsjon()
+fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean =
+    behov.hasAntallBarn() && behov.hasDagpengegrunnlag() && behov.needsSatsSubsumsjon()
