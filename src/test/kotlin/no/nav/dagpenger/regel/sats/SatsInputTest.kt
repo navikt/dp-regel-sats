@@ -39,7 +39,7 @@ class SatsInputTest {
         val behov = SubsumsjonsBehov.Builder()
             .dagpengeGrunnlag(500)
             .antallBarn(1)
-            .satsSubsumsjon(SatsSubsumsjon("aa", "bb", "Sats.v1", 500, 1, 200))
+            .satsResultat(SatsResultat("aa", "bb", "Sats.v1", 200))
             .build()
 
         assertFalse(shouldBeProcessed(behov))

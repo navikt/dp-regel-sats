@@ -5,8 +5,6 @@ import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Properties
 import kotlin.test.assertTrue
 
@@ -46,7 +44,7 @@ class SatsTopologyTest {
                 dagpengerBehovTopic.valueSerde.deserializer()
             )
 
-            assertTrue("SatsSubsumsjon should be added") { ut.value().has("satsSubsumsjon") }
+            assertTrue("SatsSubsumsjon should be added") { SubsumsjonsBehov(ut.value()).hasSatsResultat() }
         }
     }
 }

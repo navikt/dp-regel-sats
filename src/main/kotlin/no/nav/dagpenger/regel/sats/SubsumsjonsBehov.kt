@@ -8,15 +8,15 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
     fun hasAntallBarn() = jsonObject.has("antallBarn")
 
-    fun needsSatsSubsumsjon() = !hasSatsSubsumsjon()
+    fun needsSatsResultat() = !hasSatsResultat()
 
     fun getDagpengeGrunnlag() = jsonObject.getInt("dagpengeGrunnlag")
 
     fun getAntallBarn() = jsonObject.getInt("antallBarn")
 
-    private fun hasSatsSubsumsjon() = jsonObject.has("satsSubsumsjon")
+    fun hasSatsResultat() = jsonObject.has("satsResultat")
 
-    fun addSatsSubsumsjon(satsSubsumsjon: SatsSubsumsjon) = jsonObject.put("satsSubsumsjon", satsSubsumsjon.build())
+    fun addSatsResultat(satsResultat: SatsResultat) = jsonObject.put("satsResultat", satsResultat.build())
 
     class Builder {
 
@@ -32,8 +32,8 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
             return this
         }
 
-        fun satsSubsumsjon(satsSubsumsjon: SatsSubsumsjon): Builder {
-            jsonObject.put("satsSubsumsjon", satsSubsumsjon.build())
+        fun satsResultat(satsResultat: SatsResultat): Builder {
+            jsonObject.put("satsResultat", satsResultat.build())
             return this
         }
 
@@ -41,19 +41,15 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
     }
 }
 
-data class SatsSubsumsjon(
+data class SatsResultat(
     val sporingsId: String,
     val subsumsjonsId: String,
     val regelidentifikator: String,
-    val dagpengeGrunnlag: Int,
-    val antallBarn: Int,
     val sats: Int
 ) {
     fun build(): JSONObject = JSONObject()
         .put("sporingsId", sporingsId)
         .put("subsumsjonsId", subsumsjonsId)
         .put("regelidentifikator", regelidentifikator)
-        .put("dagpengeGrunnlag", dagpengeGrunnlag)
-        .put("antallBarn", antallBarn)
         .put("sats", sats)
 }

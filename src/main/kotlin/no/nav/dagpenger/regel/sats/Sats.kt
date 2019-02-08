@@ -5,7 +5,6 @@ import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Service
 import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.Topics
-import no.nav.dagpenger.streams.kbranch
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KafkaStreams
@@ -76,13 +75,11 @@ class Sats(val env: Environment) : Service() {
         val antallBarn = behov.getAntallBarn()
         val sats = calculateSats(dagpengeGrunnlag, antallBarn)
 
-        behov.addSatsSubsumsjon(
-            SatsSubsumsjon(
+        behov.addSatsResultat(
+            SatsResultat(
                 "123",
                 "456",
                 "Sats.v1",
-                dagpengeGrunnlag,
-                antallBarn,
                 sats
             )
         )
@@ -96,4 +93,4 @@ class Sats(val env: Environment) : Service() {
 }
 
 fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean =
-    behov.hasAntallBarn() && behov.hasDagpengegrunnlag() && behov.needsSatsSubsumsjon()
+    behov.hasAntallBarn() && behov.hasDagpengegrunnlag() && behov.needsSatsResultat()
