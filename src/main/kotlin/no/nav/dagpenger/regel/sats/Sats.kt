@@ -76,11 +76,13 @@ class Sats(val env: Environment) : Service() {
         val sats = calculateSats(dagpengeGrunnlag, antallBarn)
 
         behov.addSatsResultat(
-            SatsResultat(
+            SubsumsjonsBehov.SatsResultat(
                 "123",
                 "456",
                 "Sats.v1",
-                sats
+                sats / 7,
+                sats,
+                false
             )
         )
 
