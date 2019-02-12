@@ -14,19 +14,19 @@ class SubsumsjonsBehovTest {
         SubsumsjonsBehov(JsonDeserializer().deserialize("", json.toByteArray()) ?: JSONObject())
 
     @Test
-    fun `hasDagpengegrunnlag returns true when dagpengeGrunnlag field exists in json`() {
+    fun `hasDagpengegrunnlag returns true when grunnlag field exists in json`() {
         val jsonWithGrunnlag = """
             {
                 "otherField": "awe",
-                "dagpengeGrunnlag": 200
+                "grunnlag": 200
             }
         """.trimIndent()
 
-        assertTrue(jsonToBehov(jsonWithGrunnlag).hasDagpengegrunnlag())
+        assertTrue(jsonToBehov(jsonWithGrunnlag).hasGrunnlag())
     }
 
     @Test
-    fun `hasDagpengegrunnlag returns false when no dagpengeGrunnlag field in json`() {
+    fun `hasDagpengegrunnlag returns false when no grunnlag field in json`() {
 
         val jsonWithoutGrunnlag = """
             {
@@ -34,7 +34,7 @@ class SubsumsjonsBehovTest {
             }
         """.trimIndent()
 
-        assertFalse(jsonToBehov(jsonWithoutGrunnlag).hasDagpengegrunnlag())
+        assertFalse(jsonToBehov(jsonWithoutGrunnlag).hasGrunnlag())
     }
 
     @Test
@@ -115,15 +115,15 @@ class SubsumsjonsBehovTest {
         val json = """
             {
                 "otherField": "awe",
-                "dagpengeGrunnlag": 250
+                "grunnlag": 250
             }
         """.trimIndent()
 
-        assertEquals(250, jsonToBehov(json).getDagpengeGrunnlag())
+        assertEquals(250, jsonToBehov(json).getGrunnlag())
     }
 
     @Test
-    fun `getDagpengeGrunnlag throws JSONException if missing dagpengeGrunnlag field`() {
+    fun `getDagpengeGrunnlag throws JSONException if missing grunnlag field`() {
         val json = """
             {
                 "otherField": "awe",
@@ -131,7 +131,7 @@ class SubsumsjonsBehovTest {
         """.trimIndent()
 
         assertFailsWith(JSONException::class) {
-            jsonToBehov(json).getDagpengeGrunnlag()
+            jsonToBehov(json).getGrunnlag()
         }
     }
 

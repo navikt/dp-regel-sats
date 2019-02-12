@@ -71,7 +71,7 @@ class Sats(val env: Environment) : Service() {
 
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
 
-        val dagpengeGrunnlag = behov.getDagpengeGrunnlag()
+        val dagpengeGrunnlag = behov.getGrunnlag()
         val antallBarn = behov.getAntallBarn()
         val sats = calculateSats(dagpengeGrunnlag, antallBarn)
 
@@ -93,4 +93,4 @@ class Sats(val env: Environment) : Service() {
 }
 
 fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean =
-    behov.hasAntallBarn() && behov.hasDagpengegrunnlag() && behov.needsSatsResultat()
+    behov.hasAntallBarn() && behov.hasGrunnlag() && behov.needsSatsResultat()

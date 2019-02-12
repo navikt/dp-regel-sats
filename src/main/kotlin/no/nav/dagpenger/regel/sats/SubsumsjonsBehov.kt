@@ -4,36 +4,42 @@ import org.json.JSONObject
 
 data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
-    fun hasDagpengegrunnlag() = jsonObject.has("dagpengeGrunnlag")
+    companion object {
+        val GRUNNLAG = "grunnlag"
+        val ANTALL_BARN = "antallBarn"
+        val SATS_RESULTAT = "satsResultat"
+    }
 
-    fun hasAntallBarn() = jsonObject.has("antallBarn")
+    fun hasGrunnlag() = jsonObject.has(GRUNNLAG)
+
+    fun hasAntallBarn() = jsonObject.has(ANTALL_BARN)
 
     fun needsSatsResultat() = !hasSatsResultat()
 
-    fun getDagpengeGrunnlag() = jsonObject.getInt("dagpengeGrunnlag")
+    fun getGrunnlag() = jsonObject.getInt(GRUNNLAG)
 
-    fun getAntallBarn() = jsonObject.getInt("antallBarn")
+    fun getAntallBarn() = jsonObject.getInt(ANTALL_BARN)
 
-    fun hasSatsResultat() = jsonObject.has("satsResultat")
+    fun hasSatsResultat() = jsonObject.has(SATS_RESULTAT)
 
-    fun addSatsResultat(satsResultat: SatsResultat) = jsonObject.put("satsResultat", satsResultat.build())
+    fun addSatsResultat(satsResultat: SatsResultat) = jsonObject.put(SATS_RESULTAT, satsResultat.build())
 
     class Builder {
 
         val jsonObject = JSONObject()
 
         fun dagpengeGrunnlag(dagpengeGrunnlag: Int): Builder {
-            jsonObject.put("dagpengeGrunnlag", dagpengeGrunnlag)
+            jsonObject.put(GRUNNLAG, dagpengeGrunnlag)
             return this
         }
 
         fun antallBarn(antallBarn: Int): Builder {
-            jsonObject.put("antallBarn", antallBarn)
+            jsonObject.put(ANTALL_BARN, antallBarn)
             return this
         }
 
         fun satsResultat(satsResultat: SatsResultat): Builder {
-            jsonObject.put("satsResultat", satsResultat.build())
+            jsonObject.put(SATS_RESULTAT, satsResultat.build())
             return this
         }
 
