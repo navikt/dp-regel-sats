@@ -46,7 +46,6 @@ class SubsumsjonsBehovTest {
             }
         """.trimIndent()
 
-
         assertTrue(jsonToBehov(jsonWithAntallBarn).hasAntallBarn())
     }
 
@@ -163,12 +162,20 @@ class SubsumsjonsBehovTest {
     @Test
     fun `addSatsResultat adds satsResult to json`() {
         val behov = SubsumsjonsBehov.Builder().build()
-        behov.addSatsResultat(SatsResultat("aa", "ww", "Sats.v1", 500))
+        behov.addSatsResultat(
+            SatsResultat(
+                "aa",
+                "ww",
+                "Sats.v1",
+                500,
+                2500,
+                false
+            ))
 
         assertTrue(behov.hasSatsResultat())
-        assertEquals(500, behov.jsonObject.getJSONObject("satsResultat").getInt("sats"))
+        assertEquals(500, behov.jsonObject.getJSONObject("satsResultat").getInt("dagsats"))
         assertEquals("aa", behov.jsonObject.getJSONObject("satsResultat").getString("sporingsId"))
         assertEquals("ww", behov.jsonObject.getJSONObject("satsResultat").getString("subsumsjonsId"))
-        assertEquals("Sats.v1", behov.jsonObject.getJSONObject("satsResultat").getString("regelidentifikator"))
+        assertEquals("Sats.v1", behov.jsonObject.getJSONObject("satsResultat").getString("regelIdentifikator"))
     }
 }

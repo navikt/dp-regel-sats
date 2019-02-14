@@ -8,12 +8,6 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
         val GRUNNLAG = "grunnlag"
         val ANTALL_BARN = "antallBarn"
         val SATS_RESULTAT = "satsResultat"
-        val SPORINGSID = "sporingsId"
-        val SUBSUMSJONSID = "subsumsjonsId"
-        val REGELIDENTIFIKATOR = "regelidentifikator"
-        val DAGSATS = "dagsats"
-        val UKESATS = "ukesats"
-        val BENYTTET_90PROSENT_REGEL = "benyttet90ProsentRegel"
     }
 
     fun hasGrunnlag() = jsonObject.has(GRUNNLAG)
@@ -29,23 +23,6 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
     fun hasSatsResultat() = jsonObject.has(SATS_RESULTAT)
 
     fun addSatsResultat(satsResultat: SatsResultat) = jsonObject.put(SATS_RESULTAT, satsResultat.build())
-
-    data class SatsResultat(
-        val sporingsId: String,
-        val subsumsjonsId: String,
-        val regelidentifikator: String,
-        val dagSats: Int,
-        val ukeSats: Int,
-        val benyttet90ProsentRegel: Boolean
-    ) {
-        fun build(): JSONObject = JSONObject()
-            .put(SPORINGSID, sporingsId)
-            .put(SUBSUMSJONSID, subsumsjonsId)
-            .put(REGELIDENTIFIKATOR, regelidentifikator)
-            .put(DAGSATS, dagSats)
-            .put(UKESATS, ukeSats)
-            .put(BENYTTET_90PROSENT_REGEL, benyttet90ProsentRegel)
-    }
 
     class Builder {
 
@@ -68,4 +45,31 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
         fun build(): SubsumsjonsBehov = SubsumsjonsBehov(jsonObject)
     }
+}
+
+data class SatsResultat(
+    val sporingsId: String,
+    val subsumsjonsId: String,
+    val regelidentifikator: String,
+    val dagSats: Int,
+    val ukeSats: Int,
+    val benyttet90ProsentRegel: Boolean
+) {
+
+    companion object {
+        val SPORINGSID = "sporingsId"
+        val SUBSUMSJONSID = "subsumsjonsId"
+        val REGELIDENTIFIKATOR = "regelIdentifikator"
+        val DAGSATS = "dagsats"
+        val UKESATS = "ukesats"
+        val BENYTTET_90PROSENT_REGEL = "benyttet90ProsentRegel"
+    }
+
+    fun build(): JSONObject = JSONObject()
+        .put(SPORINGSID, sporingsId)
+        .put(SUBSUMSJONSID, subsumsjonsId)
+        .put(REGELIDENTIFIKATOR, regelidentifikator)
+        .put(DAGSATS, dagSats)
+        .put(UKESATS, ukeSats)
+        .put(BENYTTET_90PROSENT_REGEL, benyttet90ProsentRegel)
 }
