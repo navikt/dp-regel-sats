@@ -13,149 +13,79 @@ class SubsumsjonsBehovTest {
     fun jsonToBehov(json: String): SubsumsjonsBehov =
         SubsumsjonsBehov(JsonDeserializer().deserialize("", json.toByteArray()) ?: JSONObject())
 
-    @Test
-    fun `hasDagpengegrunnlag returns true when grunnlag field exists in json`() {
-        val jsonWithGrunnlag = """
+    val jsonBehovMedGrunnlag = """
             {
                 "otherField": "awe",
                 "grunnlag": 200
             }
         """.trimIndent()
 
-        assertTrue(jsonToBehov(jsonWithGrunnlag).hasGrunnlag())
-    }
-
-    @Test
-    fun `hasDagpengegrunnlag returns false when no grunnlag field in json`() {
-
-        val jsonWithoutGrunnlag = """
+    val jsonBehovMedAnnetFelt = """
             {
                 "otherField": "awe",
             }
         """.trimIndent()
 
-        assertFalse(jsonToBehov(jsonWithoutGrunnlag).hasGrunnlag())
-    }
-
-    @Test
-    fun `hasAntallBarn returns true when antallBarn field exists in json`() {
-        val jsonWithAntallBarn = """
+    val jsonWithAntallBarn = """
             {
                 "otherField": "awe",
                 "antallBarn": 2
             }
         """.trimIndent()
 
-        assertTrue(jsonToBehov(jsonWithAntallBarn).hasAntallBarn())
+    val jsonWithSatsResultat = """
+            {
+                "otherField": "awe",
+                "satsResultat": {
+                    "sporingsId": "aaa",
+                    "sats": 2
+                }
+            }
+        """.trimIndent()
+
+    @Test
+    fun `hasDagpengegrunnlag returns true when grunnlag field exists in json`() {
+
+        assertTrue(jsonToBehov(jsonBehovMedGrunnlag).hasGrunnlag())
+        assertFalse(jsonToBehov(jsonBehovMedAnnetFelt).hasGrunnlag())
     }
 
     @Test
-    fun `hasAntallBarn returns false when antallBarn field doesnt exist in json`() {
-        val jsonWithoutAntallBarn = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
-        assertFalse(jsonToBehov(jsonWithoutAntallBarn).hasAntallBarn())
+    fun `hasAntallBarn returns true when antallBarn field exists in json`() {
+
+        assertTrue(jsonToBehov(jsonWithAntallBarn).hasAntallBarn())
+        assertFalse(jsonToBehov(jsonBehovMedAnnetFelt).hasAntallBarn())
     }
 
     @Test
     fun `needsSatsResultat returns true if satsResultat field doesnt exist in json`() {
-        val jsonWithoutSatsResultat = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
 
-        assertTrue(jsonToBehov(jsonWithoutSatsResultat).needsSatsResultat())
-    }
-
-    @Test
-    fun `needsSatsResultat returns false if satsResultat field exists in json`() {
-        val jsonWithSatsResultat = """
-            {
-                "otherField": "awe",
-                "satsResultat": {
-                    "sporingsId": "aaa",
-                    "sats": 2
-                }
-            }
-        """.trimIndent()
+        assertTrue(jsonToBehov(jsonBehovMedAnnetFelt).needsSatsResultat())
         assertFalse(jsonToBehov(jsonWithSatsResultat).needsSatsResultat())
     }
 
     @Test
-    fun `hasSatsResultat returns false if satsResultat field doesnt exist in json`() {
-        val jsonWithoutSatsResultat = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
+    fun `hasSatsResultat returns true if satsResultat field exists in json`() {
 
-        assertFalse(jsonToBehov(jsonWithoutSatsResultat).hasSatsResultat())
-    }
-
-    @Test
-    fun `needsSatsResultat returns true if satsResultat field exists in json`() {
-        val jsonWithSatsResultat = """
-            {
-                "otherField": "awe",
-                "satsResultat": {
-                    "sporingsId": "aaa",
-                    "sats": 2
-                }
-            }
-        """.trimIndent()
         assertTrue(jsonToBehov(jsonWithSatsResultat).hasSatsResultat())
+        assertFalse(jsonToBehov(jsonBehovMedAnnetFelt).hasSatsResultat())
     }
 
     @Test
     fun `getDagpengeGrunnlag returns value from json`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "grunnlag": 250
-            }
-        """.trimIndent()
 
-        assertEquals(250, jsonToBehov(json).getGrunnlag())
-    }
-
-    @Test
-    fun `getDagpengeGrunnlag throws JSONException if missing grunnlag field`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
-
+        assertEquals(200, jsonToBehov(jsonBehovMedGrunnlag).getGrunnlag())
         assertFailsWith(JSONException::class) {
-            jsonToBehov(json).getGrunnlag()
+            jsonToBehov(jsonBehovMedAnnetFelt).getGrunnlag()
         }
     }
 
     @Test
     fun `getAntallBarn returns value from json`() {
-        val json = """
-            {
-                "otherField": "awe",
-                "antallBarn": 3
-            }
-        """.trimIndent()
 
-        assertEquals(3, jsonToBehov(json).getAntallBarn())
-    }
-
-    @Test
-    fun `getAntallBarn throws JSONException if missing antallBarn field`() {
-        val json = """
-            {
-                "otherField": "awe",
-            }
-        """.trimIndent()
-
+        assertEquals(2, jsonToBehov(jsonWithAntallBarn).getAntallBarn())
         assertFailsWith(JSONException::class) {
-            jsonToBehov(json).getAntallBarn()
+            jsonToBehov(jsonBehovMedAnnetFelt).getAntallBarn()
         }
     }
 

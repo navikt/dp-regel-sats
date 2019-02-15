@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
+import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Service
@@ -26,6 +27,8 @@ val dagpengerBehovTopic = Topic(
 class Sats(val env: Environment) : Service() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
+    val ulidGenerator = ULID()
+    val REGELIDENTIFIKATOR = "Sats.v1"
 
     companion object {
         @JvmStatic
@@ -73,15 +76,16 @@ class Sats(val env: Environment) : Service() {
 
         val dagpengeGrunnlag = behov.getGrunnlag()
         val antallBarn = behov.getAntallBarn()
-        val sats = calculateSats(dagpengeGrunnlag, antallBarn)
+        val dagsats = calculateDagSats(dagpengeGrunnlag)
+        val ukesats = calculateUkeSats(dagsats, antallBarn)
 
         behov.addSatsResultat(
             SatsResultat(
-                "123",
-                "456",
-                "Sats.v1",
-                sats / 5,
-                sats,
+                ulidGenerator.nextULID(),
+                ulidGenerator.nextULID(),
+                REGELIDENTIFIKATOR,
+                dagsats,
+                ukesats,
                 false
             )
         )
@@ -89,8 +93,12 @@ class Sats(val env: Environment) : Service() {
         return behov
     }
 
-    private fun calculateSats(dagpengeGrunnlag: Int, antallBarn: Int): Int {
-        return 200
+    private fun calculateDagSats(dagpengeGrunnlag: Int): Int {
+        return (dagpengeGrunnlag / 10000 * 24)
+    }
+
+    private fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
+        return (dagsats * 5)
     }
 }
 
