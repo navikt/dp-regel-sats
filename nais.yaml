@@ -1,6 +1,7 @@
 name: dp-regel-sats
 image: repo.adeo.no:5443/dp-regel-sats
 team: teamdagpenger
+port: 8097
 replicas:
   min: 2
   max: 4
@@ -15,9 +16,9 @@ prometheus:
   enabled: true
 fasitResources:
   used:
-  - alias: srvdp-regel-sats
-    resourceType: credential
-  - alias:  kafka-schema-registry
-    resourceType: baseUrl
-  - alias: dp-regel-sats-properties
-    resourceType: applicationproperties
+    - alias: srvdp-regel-sats
+      resourceType: credential
+    - alias:  kafka-schema-registry
+      resourceType: baseUrl
+    - alias: dp-regel-sats-properties
+      resourceType: applicationproperties

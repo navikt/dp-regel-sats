@@ -4,7 +4,7 @@ data class Environment(
     val username: String = getEnvVar("SRVDP_REGEL_SATS_USERNAME"),
     val password: String = getEnvVar("SRVDP_REGEL_SATS_PASSWORD"),
     val bootstrapServersUrl: String = getEnvVar("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"),
-    val httpPort: Int? = 8095
+    val httpPort: Int? = 8097
 )
 
 fun getEnvVar(varName: String, defaultValue: String? = null) =
