@@ -86,20 +86,24 @@ class Sats(val env: Environment) : Service() {
                 REGELIDENTIFIKATOR,
                 dagsats,
                 ukesats,
-                false
+                check90procent(dagpengeGrunnlag, ukesats)
             )
         )
-
         return behov
     }
+}
 
-    private fun calculateDagSats(dagpengeGrunnlag: Int): Int {
-        return (dagpengeGrunnlag / 10000 * 24)
-    }
+fun calculateDagSats(dagpengeGrunnlag: Int): Int {
+    return (dagpengeGrunnlag / 10000 * 24)
+}
 
-    private fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
-        return (dagsats * 5)
-    }
+fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
+    val barnetilleggSats = 17
+    return ((dagsats * 5) + (barnetilleggSats * antallBarn * 5))
+}
+
+fun check90procent(dagpengeGrunnlag: Int, ukesats: Int): Boolean {
+    return false
 }
 
 fun shouldBeProcessed(behov: SubsumsjonsBehov): Boolean =
