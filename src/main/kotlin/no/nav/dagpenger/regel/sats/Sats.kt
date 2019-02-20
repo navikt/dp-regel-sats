@@ -94,7 +94,7 @@ class Sats(val env: Environment) : Service() {
 }
 
 fun calculateDagSats(dagpengeGrunnlag: Int): Int {
-    return (dagpengeGrunnlag / 10000 * 24)
+    return (dagpengeGrunnlag.toDouble() * 0.0024).toInt()
 }
 
 fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
