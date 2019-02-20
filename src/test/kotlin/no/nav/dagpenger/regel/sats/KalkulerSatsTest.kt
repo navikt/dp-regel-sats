@@ -8,7 +8,7 @@ class KalkulerSatsTest {
     @Test
     fun ` Skal kunne returnere en dagsats `() {
         val resultat = calculateDagSats(100000)
-        assertEquals(240, resultat)
+        assertEquals(239, resultat)
     }
 
     @Test
