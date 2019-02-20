@@ -28,8 +28,8 @@ data class SubsumsjonsBehov(val jsonObject: JSONObject) {
 
         val jsonObject = JSONObject()
 
-        fun dagpengeGrunnlag(dagpengeGrunnlag: Int): Builder {
-            jsonObject.put(GRUNNLAG, dagpengeGrunnlag)
+        fun grunnlag(grunnlag: Int): Builder {
+            jsonObject.put(GRUNNLAG, grunnlag)
             return this
         }
 

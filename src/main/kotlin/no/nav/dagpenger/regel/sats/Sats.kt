@@ -74,9 +74,9 @@ class Sats(val env: Environment) : Service() {
 
     private fun addRegelresultat(behov: SubsumsjonsBehov): SubsumsjonsBehov {
 
-        val dagpengeGrunnlag = behov.getGrunnlag()
+        val grunnlag = behov.getGrunnlag()
         val antallBarn = behov.getAntallBarn()
-        val dagsats = calculateDagSats(dagpengeGrunnlag)
+        val dagsats = calculateDagSats(grunnlag)
         val ukesats = calculateUkeSats(dagsats, antallBarn)
 
         behov.addSatsResultat(
@@ -86,15 +86,15 @@ class Sats(val env: Environment) : Service() {
                 REGELIDENTIFIKATOR,
                 dagsats,
                 ukesats,
-                check90procent(dagpengeGrunnlag, ukesats)
+                check90procent(grunnlag, ukesats)
             )
         )
         return behov
     }
 }
 
-fun calculateDagSats(dagpengeGrunnlag: Int): Int {
-    return (dagpengeGrunnlag.toDouble() * 0.0024).toInt()
+fun calculateDagSats(grunnlag: Int): Int {
+    return (grunnlag.toDouble() * 0.0024).toInt()
 }
 
 fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
@@ -102,7 +102,7 @@ fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
     return ((dagsats * 5) + (barnetilleggSats * antallBarn * 5))
 }
 
-fun check90procent(dagpengeGrunnlag: Int, ukesats: Int): Boolean {
+fun check90procent(grunnlag: Int, ukesats: Int): Boolean {
     return false
 }
 

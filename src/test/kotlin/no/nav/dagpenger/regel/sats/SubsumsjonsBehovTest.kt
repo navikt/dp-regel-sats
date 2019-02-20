@@ -44,7 +44,7 @@ class SubsumsjonsBehovTest {
         """.trimIndent()
 
     @Test
-    fun `hasDagpengegrunnlag returns true when grunnlag field exists in json`() {
+    fun `hasGrunnlag returns true when grunnlag field exists in json`() {
 
         assertTrue(jsonToBehov(jsonBehovMedGrunnlag).hasGrunnlag())
         assertFalse(jsonToBehov(jsonBehovMedAnnetFelt).hasGrunnlag())
@@ -72,7 +72,7 @@ class SubsumsjonsBehovTest {
     }
 
     @Test
-    fun `getDagpengeGrunnlag returns value from json`() {
+    fun `getGrunnlag returns value from json`() {
 
         assertEquals(200, jsonToBehov(jsonBehovMedGrunnlag).getGrunnlag())
         assertFailsWith(JSONException::class) {

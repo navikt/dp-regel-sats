@@ -24,7 +24,7 @@ class SatsTopologyTest {
     }
 
     @Test
-    fun `Should add SatsSubsumsjon to behov with dagpengeGrunnlag and antallBarn `() {
+    fun `Should add SatsSubsumsjon to behov with grunnlag and antallBarn `() {
         val sats = Sats(
             Environment(
                 username = "bogus",
@@ -32,7 +32,7 @@ class SatsTopologyTest {
             )
         )
 
-        val behov = SubsumsjonsBehov.Builder().dagpengeGrunnlag(500).antallBarn(1).build()
+        val behov = SubsumsjonsBehov.Builder().grunnlag(500).antallBarn(1).build()
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
             val inputRecord = factory.create(behov.jsonObject)

@@ -9,7 +9,7 @@ class SatsInputTest {
     @Test
     fun `Process behov with grunnlag and antallBarn`() {
         val behov = SubsumsjonsBehov.Builder()
-            .dagpengeGrunnlag(500)
+            .grunnlag(500)
             .antallBarn(1)
             .build()
 
@@ -37,7 +37,7 @@ class SatsInputTest {
     @Test
     fun `Do not (re)process behov with satsSubsumsjon`() {
         val behov = SubsumsjonsBehov.Builder()
-            .dagpengeGrunnlag(500)
+            .grunnlag(500)
             .antallBarn(1)
             .satsResultat(
                 SatsResultat(
