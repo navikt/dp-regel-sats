@@ -102,7 +102,12 @@ fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
     return ((dagsats * 5) + (barnetilleggSats * antallBarn * 5))
 }
 
-fun check90procent(grunnlag: Int, ukesats: Int): Boolean {
+fun check90procent(dagpengeGrunnlag: Int, ukesats: Int): Boolean {
+    val ukeSatsIÅr = ukesats * 52
+
+    if (ukeSatsIÅr > (dagpengeGrunnlag / 100 * 90)) {
+        return true
+    }
     return false
 }
 
