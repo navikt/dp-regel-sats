@@ -8,7 +8,6 @@ import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.Topics
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.common.serialization.Serdes
-import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
