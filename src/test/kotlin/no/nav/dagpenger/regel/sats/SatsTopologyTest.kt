@@ -6,7 +6,6 @@ import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
-import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.Properties
@@ -87,8 +86,14 @@ class SatsTopologyTest {
             )
         )
 
-        val packet = Packet("{}")
-        packet.putValue(Sats.GRUNNLAG, 50000)
+        val jsonString = """
+            {
+                grunnlagResultat: {
+                    avkortet: 50000.0
+                }
+            }
+        """.trimIndent()
+        val packet = Packet(jsonString)
         packet.putValue(Sats.ANTALL_BARN, 0)
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->

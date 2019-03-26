@@ -1,12 +1,8 @@
 package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
-import mu.KotlinLogging
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.streams.River
-import no.nav.dagpenger.streams.Topic
-import no.nav.dagpenger.streams.Topics
-import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 
@@ -16,7 +12,8 @@ class Sats(private val env: Environment) : River() {
     val ulidGenerator = ULID()
 
     companion object {
-        val GRUNNLAG = "grunnlag"
+        val GRUNNLAG_RESULTAT = "grunnlagResultat"
+        val AVKORTET_GRUNNLAG = "avkortet"
         val ANTALL_BARN = "antallBarn"
         val SATS_RESULTAT = "satsResultat"
         val REGELIDENTIFIKATOR = "Sats.v1"
@@ -25,15 +22,15 @@ class Sats(private val env: Environment) : River() {
     override fun filterPredicates(): List<Predicate<String, Packet>> {
         return listOf(
             Predicate { _, packet -> !packet.hasField(SATS_RESULTAT) },
-            Predicate { _, packet -> packet.hasField(GRUNNLAG) },
+            Predicate { _, packet -> packet.hasField(GRUNNLAG_RESULTAT) },
             Predicate { _, packet -> packet.hasField(ANTALL_BARN) }
         )
     }
 
     override fun onPacket(packet: Packet): Packet {
-        val grunnlag = packet.getIntValue(GRUNNLAG)
+        val avkortetGrunnlag = packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG] as Double
         val antallBarn = packet.getIntValue(ANTALL_BARN)
-        val dagsats = calculateDagSats(grunnlag)
+        val dagsats = calculateDagSats(avkortetGrunnlag.toBigDecimal())
         val ukesats = calculateUkeSats(dagsats, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
@@ -42,7 +39,7 @@ class Sats(private val env: Environment) : River() {
             REGELIDENTIFIKATOR,
             dagsats,
             ukesats,
-            check90procent(grunnlag, ukesats)
+            ukeSatsMoreThan90PercentOfGrunnlag(avkortetGrunnlag.toBigDecimal(), ukesats)
         )
 
         packet.putValue(SATS_RESULTAT, satsResultat.toMap())
@@ -51,22 +48,17 @@ class Sats(private val env: Environment) : River() {
     }
 }
 
-fun calculateDagSats(grunnlag: Int): Int {
-    return (grunnlag.toDouble() * 0.0024).toInt()
-}
+fun calculateDagSats(grunnlag: BigDecimal) = grunnlag * 0.0024.toBigDecimal()
 
-fun calculateUkeSats(dagsats: Int, antallBarn: Int): Int {
+fun calculateUkeSats(dagsats: BigDecimal, antallBarn: Int): BigDecimal {
     val barnetilleggSats = 17
-    return ((dagsats * 5) + (barnetilleggSats * antallBarn * 5))
+    return (dagsats * 5.toBigDecimal()) + (barnetilleggSats * antallBarn * 5).toBigDecimal()
 }
 
-fun check90procent(dagpengeGrunnlag: Int, ukesats: Int): Boolean {
-    val ukeSatsIÅr = ukesats * 52
+fun ukeSatsMoreThan90PercentOfGrunnlag(dagpengeGrunnlag: BigDecimal, ukesats: BigDecimal): Boolean {
+    val ukeSatsIÅr = ukesats * 52.toBigDecimal()
 
-    if (ukeSatsIÅr > (dagpengeGrunnlag / 100 * 90)) {
-        return true
-    }
-    return false
+    return ukeSatsIÅr > (dagpengeGrunnlag / 100.toBigDecimal() * 90.toBigDecimal())
 }
 
 fun main(args: Array<String>) {
