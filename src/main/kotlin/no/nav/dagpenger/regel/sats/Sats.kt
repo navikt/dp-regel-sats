@@ -31,15 +31,15 @@ class Sats(private val env: Environment) : River() {
         val avkortetGrunnlag = packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG] as Double
         val antallBarn = packet.getIntValue(ANTALL_BARN)
 
-        val (dagSats, ukeSats, brukt90ProsentRegel) = calculateSats(BigDecimal(avkortetGrunnlag), antallBarn)
+        val satsResult = calculateSats(BigDecimal(avkortetGrunnlag), antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),
             ulidGenerator.nextULID(),
             REGELIDENTIFIKATOR,
-            dagSats,
-            ukeSats,
-            brukt90ProsentRegel
+            satsResult.dagSats,
+            satsResult.ukeSats,
+            satsResult.brukt90ProsentRegel
         )
 
         packet.putValue(SATS_RESULTAT, satsResultat.toMap())

@@ -23,37 +23,37 @@ class KalkulerSatsTest {
     @Test
     fun `Skal regne ut korrekte satser uten barnetillegg`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(BigDecimal(100000), 0)
-        assertEquals(BigDecimal("240.000000"), dagSats)
-        assertEquals(BigDecimal("1200.000000"), ukeSats)
+        assertEquals(240, dagSats)
+        assertEquals(1200, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
     @Test
     fun ` Skal inkludere korrekt barnetillegg til ukesats`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(BigDecimal(100000), 3)
-        assertEquals(BigDecimal("240.000000"), dagSats)
-        assertEquals(BigDecimal("1455.000000"), ukeSats)
+        assertEquals(240, dagSats)
+        assertEquals(1455, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
     @Test
     fun `Skal nedjustere dagsats og ukeSats for 90-prosent regel`() {
         val (dagSats, ukeSats, brukt90ProsentRegel) = calculateSats(BigDecimal(100000), 10)
-        assertEquals(BigDecimal("346.153846"), dagSats)
-        assertEquals(BigDecimal("1730.769231"), ukeSats)
+        assertEquals(346, dagSats)
+        assertEquals(1731, ukeSats)
         assertTrue(brukt90ProsentRegel)
     }
 
     @Test
     fun `Test grenseverdier for 90-prosentregel`() {
         val (dagSats1, ukeSats1, brukt90ProsentRegel1) = calculateSats(BigDecimal(96086), 6)
-        assertEquals(BigDecimal("332.605385"), dagSats1)
-        assertEquals(BigDecimal("1663.026923"), ukeSats1)
+        assertEquals(333, dagSats1)
+        assertEquals(1663, ukeSats1)
         assertTrue(brukt90ProsentRegel1)
 
         val (dagSats2, ukeSats2, brukt90ProsentRegel2) = calculateSats(BigDecimal(96087), 6)
-        assertEquals(BigDecimal("230.608800"), dagSats2)
-        assertEquals(BigDecimal("1663.044000"), ukeSats2)
+        assertEquals(231, dagSats2)
+        assertEquals(1663, ukeSats2)
         assertFalse(brukt90ProsentRegel2)
     }
 }

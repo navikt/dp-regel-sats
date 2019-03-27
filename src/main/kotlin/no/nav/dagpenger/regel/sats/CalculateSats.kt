@@ -9,7 +9,7 @@ val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
 val dagerPerÅr = dagerPerUke * ukerPerÅr
 
-private fun calculateSatsUnrounded(grunnlag: BigDecimal, antallBarn: Int): Triple<BigDecimal, BigDecimal, Boolean> {
+fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
     val dagSats = grunnlag * dagSatsFaktor
     val ukeSats = (dagSats + BigDecimal(antallBarn) * barneTillegg) * dagerPerUke
     val årligDagpenger = ukeSats * ukerPerÅr
@@ -18,18 +18,14 @@ private fun calculateSatsUnrounded(grunnlag: BigDecimal, antallBarn: Int): Tripl
     if (årligDagpenger > nittProsentAvGrunnlag) {
         val redusertDagSats = nittProsentAvGrunnlag / dagerPerÅr
         val redusertUkeSats = redusertDagSats * dagerPerUke
-        return Triple(redusertDagSats, redusertUkeSats, true)
+        return SatsResult(redusertDagSats.setScale(0, RoundingMode.HALF_UP).toInt(), redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(), true)
     }
 
-    return Triple(dagSats, ukeSats, false)
+    return SatsResult(dagSats.setScale(0, RoundingMode.HALF_UP).toInt(), ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(), false)
 }
 
-fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): Triple<BigDecimal, BigDecimal, Boolean> {
-    return calculateSatsUnrounded(grunnlag, antallBarn).let {
-        Triple(
-            it.first.setScale(6, RoundingMode.HALF_UP),
-            it.second.setScale(6, RoundingMode.HALF_UP),
-            it.third
-        )
-    }
-}
+data class SatsResult(
+    val dagSats: Int,
+    val ukeSats: Int,
+    val brukt90ProsentRegel: Boolean
+)

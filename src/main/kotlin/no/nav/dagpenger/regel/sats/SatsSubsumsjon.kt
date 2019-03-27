@@ -1,13 +1,11 @@
 package no.nav.dagpenger.regel.sats
 
-import java.math.BigDecimal
-
 data class SatsSubsumsjon(
     val sporingsId: String,
     val subsumsjonsId: String,
     val regelidentifikator: String,
-    val dagSats: BigDecimal,
-    val ukeSats: BigDecimal,
+    val dagSats: Int,
+    val ukeSats: Int,
     val benyttet90ProsentRegel: Boolean
 ) {
 
