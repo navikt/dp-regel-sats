@@ -5,6 +5,7 @@ import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.streams.River
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class Sats(private val env: Environment) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
@@ -30,16 +31,16 @@ class Sats(private val env: Environment) : River() {
     override fun onPacket(packet: Packet): Packet {
         val avkortetGrunnlag = packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG] as Double
         val antallBarn = packet.getIntValue(ANTALL_BARN)
-        val dagsats = calculateDagSats(avkortetGrunnlag.toBigDecimal())
-        val ukesats = calculateUkeSats(dagsats, antallBarn)
+
+        val (dagSats, ukeSats, brukt90ProsentRegel) = calculateSats(BigDecimal(avkortetGrunnlag), antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),
             ulidGenerator.nextULID(),
             REGELIDENTIFIKATOR,
-            dagsats,
-            ukesats,
-            ukeSatsMoreThan90PercentOfGrunnlag(avkortetGrunnlag.toBigDecimal(), ukesats)
+            dagSats,
+            ukeSats,
+            brukt90ProsentRegel
         )
 
         packet.putValue(SATS_RESULTAT, satsResultat.toMap())
@@ -48,17 +49,18 @@ class Sats(private val env: Environment) : River() {
     }
 }
 
-fun calculateDagSats(grunnlag: BigDecimal) = grunnlag * 0.0024.toBigDecimal()
+fun calculateSats(grunnlag: BigDecimal, antallBarn: Int) : Triple<BigDecimal, BigDecimal, Boolean> {
+    val dagSats = grunnlag * BigDecimal(0.0024)
+    val ukeSats = (dagSats + BigDecimal(antallBarn * 17)) * BigDecimal(5)
+    val yearlyDagpenger = ukeSats * BigDecimal(52)
 
-fun calculateUkeSats(dagsats: BigDecimal, antallBarn: Int): BigDecimal {
-    val barnetilleggSats = 17
-    return (dagsats * 5.toBigDecimal()) + (barnetilleggSats * antallBarn * 5).toBigDecimal()
-}
+    if (yearlyDagpenger > grunnlag * BigDecimal(0.9)) {
+        val redusertDagSats = (grunnlag * BigDecimal(0.9)) / BigDecimal(260)
+        val redusertUkeSats = redusertDagSats * BigDecimal(5)
+        return Triple(redusertDagSats.setScale(6, RoundingMode.HALF_UP), redusertUkeSats.setScale(6, RoundingMode.HALF_UP), true)
+    }
 
-fun ukeSatsMoreThan90PercentOfGrunnlag(dagpengeGrunnlag: BigDecimal, ukesats: BigDecimal): Boolean {
-    val ukeSatsIÅr = ukesats * 52.toBigDecimal()
-
-    return ukeSatsIÅr > (dagpengeGrunnlag / 100.toBigDecimal() * 90.toBigDecimal())
+    return Triple(dagSats.setScale(6, RoundingMode.HALF_UP), ukeSats.setScale(6, RoundingMode.HALF_UP), false)
 }
 
 fun main(args: Array<String>) {
