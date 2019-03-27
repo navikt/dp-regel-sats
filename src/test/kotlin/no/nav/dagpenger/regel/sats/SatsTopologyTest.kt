@@ -89,7 +89,7 @@ class SatsTopologyTest {
         val jsonString = """
             {
                 grunnlagResultat: {
-                    avkortet: 50000.0
+                    avkortet: 50000
                 }
             }
         """.trimIndent()

@@ -28,10 +28,10 @@ class Sats(private val env: Environment) : River() {
     }
 
     override fun onPacket(packet: Packet): Packet {
-        val avkortetGrunnlag = packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG] as Double
+        val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
 
-        val satsResult = calculateSats(BigDecimal(avkortetGrunnlag), antallBarn)
+        val satsResult = calculateSats(avkortetGrunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),
