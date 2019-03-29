@@ -26,7 +26,7 @@ repositories {
 
 application {
     applicationName = "dp-regel-sats"
-    mainClassName = "no.nav.dagpenger.regel.sats.Sats"
+    mainClassName = "no.nav.dagpenger.regel.sats.SatsKt"
 }
 
 java {
