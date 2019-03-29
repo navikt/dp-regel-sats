@@ -2,9 +2,12 @@ package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
+import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
+import java.util.Properties
 
 class Sats(private val env: Environment) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
@@ -45,6 +48,14 @@ class Sats(private val env: Environment) : River() {
         packet.putValue(SATS_RESULTAT, satsResultat.toMap())
 
         return packet
+    }
+
+    override fun getConfig(): Properties {
+        return streamConfig(
+            appId = SERVICE_APP_ID,
+            bootStapServerUrl = env.bootstrapServersUrl,
+            credential = KafkaCredential(env.username, env.password)
+        )
     }
 }
 
