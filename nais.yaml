@@ -8,7 +8,7 @@ replicas:
 resources:
   limits:
     cpu: 1000m
-    memory: 512Mi
+    memory: 384Mi
   requests:
     cpu: 100m
     memory: 256Mi
@@ -18,5 +18,7 @@ fasitResources:
   used:
     - alias: srvdp-regel-sats
       resourceType: credential
+    - alias:  kafka-schema-registry
+      resourceType: baseUrl
     - alias: dp-regel-sats-properties
       resourceType: applicationproperties
