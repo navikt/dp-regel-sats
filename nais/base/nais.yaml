@@ -3,7 +3,7 @@ kind: "Application"
 metadata:
   name: dp-regel-sats
 spec:
-  image: repo.adeo.no:5443/dp-regel-grunnlag:latest
+  image: repo.adeo.no:5443/dp-regel-sats:latest
   port: 8097
   liveness:
     path: /isAlive
