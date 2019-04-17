@@ -157,7 +157,7 @@ pipeline {
       }
     }
 
-    stage('Deploy') {1
+    stage('Deploy') {
       when { branch 'master' }
 
       steps {
