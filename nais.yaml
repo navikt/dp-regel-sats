@@ -18,7 +18,5 @@ fasitResources:
   used:
     - alias: srvdp-regel-sats
       resourceType: credential
-    - alias:  kafka-schema-registry
-      resourceType: baseUrl
     - alias: dp-regel-sats-properties
       resourceType: applicationproperties
