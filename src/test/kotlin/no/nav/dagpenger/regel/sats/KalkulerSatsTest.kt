@@ -31,15 +31,15 @@ class KalkulerSatsTest {
     @Test
     fun ` Skal inkludere korrekt barnetillegg til ukesats`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(BigDecimal(100000), 3)
-        assertEquals(291, dagSats)
+        assertEquals(240, dagSats)
         assertEquals(1455, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
     @Test
-    fun `Skal nedjustere dagsats og ukeSats for 90-prosent regel`() {
+    fun `Skal nedjustere dagsats for 90-prosent regel`() {
         val (dagSats, ukeSats, brukt90ProsentRegel) = calculateSats(BigDecimal(100000), 10)
-        assertEquals(346, dagSats)
+        assertEquals(176, dagSats)
         assertEquals(1731, ukeSats)
         assertTrue(brukt90ProsentRegel)
     }
@@ -47,12 +47,12 @@ class KalkulerSatsTest {
     @Test
     fun `Test grenseverdier for 90-prosentregel`() {
         val (dagSats1, ukeSats1, brukt90ProsentRegel1) = calculateSats(BigDecimal(100000), 6)
-        assertEquals(342, dagSats1)
+        assertEquals(240, dagSats1)
         assertEquals(1710, ukeSats1)
         assertFalse(brukt90ProsentRegel1)
 
         val (dagSats2, ukeSats2, brukt90ProsentRegel2) = calculateSats(BigDecimal(100000), 7)
-        assertEquals(346, dagSats2)
+        assertEquals(227, dagSats2)
         assertEquals(1731, ukeSats2)
         assertTrue(brukt90ProsentRegel2)
     }
