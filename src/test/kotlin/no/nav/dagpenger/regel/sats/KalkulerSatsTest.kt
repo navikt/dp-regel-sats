@@ -48,7 +48,7 @@ class KalkulerSatsTest {
     fun `Skal nedjustere uksesats for 90-prosent regel`() {
         val (dagSats, ukeSats, brukt90ProsentRegel) = calculateSats(BigDecimal(100000), 10)
         assertEquals(240, dagSats)
-        assertEquals(1730, ukeSats)
+        assertEquals(1731, ukeSats)
         assertTrue(brukt90ProsentRegel)
     }
 
@@ -61,7 +61,7 @@ class KalkulerSatsTest {
 
         val (dagSats2, ukeSats2, brukt90ProsentRegel2) = calculateSats(BigDecimal(100000), 7)
         assertEquals(240, dagSats2)
-        assertEquals(1730, ukeSats2)
+        assertEquals(1731, ukeSats2)
         assertTrue(brukt90ProsentRegel2)
     }
 }

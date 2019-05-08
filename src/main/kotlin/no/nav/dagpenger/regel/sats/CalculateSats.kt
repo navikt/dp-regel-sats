@@ -20,7 +20,7 @@ fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
         val redusertUkeSats = nittProsentAvGrunnlag / ukerPerÅr
         return SatsResult(
             dagSats.toInt(),
-            redusertUkeSats.setScale(0, RoundingMode.DOWN).toInt(),
+            redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
             true)
     }
 
