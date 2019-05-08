@@ -7,10 +7,9 @@ val barneTillegg = BigDecimal(17)
 val dagSatsFaktor = BigDecimal(0.0024)
 val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
-val dagerPerÅr = dagerPerUke * ukerPerÅr
 
 fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
-    val dagSats = grunnlag * dagSatsFaktor
+    val dagSats = (grunnlag * dagSatsFaktor).setScale(0, RoundingMode.HALF_UP)
     val barnetillegg = BigDecimal(antallBarn) * barneTillegg
     val ukeSats = (dagSats + barnetillegg) * dagerPerUke
 
@@ -18,16 +17,15 @@ fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
     val nittProsentAvGrunnlag = grunnlag * BigDecimal(0.9)
 
     if (årligDagpenger > nittProsentAvGrunnlag) {
-        val redusertDagSats = (nittProsentAvGrunnlag / dagerPerÅr) - barnetillegg
-        val redusertUkeSats = (redusertDagSats + barnetillegg) * dagerPerUke
+        val redusertUkeSats = nittProsentAvGrunnlag / ukerPerÅr
         return SatsResult(
-            redusertDagSats.setScale(0, RoundingMode.HALF_UP).toInt(),
-            redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
+            dagSats.toInt(),
+            redusertUkeSats.setScale(0, RoundingMode.DOWN).toInt(),
             true)
     }
 
     return SatsResult(
-        dagSats.setScale(0, RoundingMode.HALF_UP).toInt(),
+        dagSats.toInt(),
         ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
         false)
 }
