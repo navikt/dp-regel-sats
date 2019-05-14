@@ -6,8 +6,10 @@ import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.net.URI
 import java.util.Properties
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -108,6 +110,35 @@ class SatsTopologyTest {
 
             assertTrue("SatsSubsumsjon should be added") { ut.value().hasField(Sats.SATS_RESULTAT) }
             assertEquals(Sats.REGELIDENTIFIKATOR, ut.value().getMapValue(Sats.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR])
+        }
+    }
+
+    @Test
+    fun ` Should add problem on failure`() {
+        val minsteinntekt = Sats(
+            Environment(
+                username = "bogus",
+                password = "bogus"
+            )
+        )
+
+        val packet = Packet()
+        packet.putValue("grunnlagResultat", "ERROR")
+        packet.putValue("antallBarn", "ERROR")
+
+        TopologyTestDriver(minsteinntekt.buildTopology(), config).use { topologyTestDriver ->
+            val inputRecord = factory.create(packet)
+            topologyTestDriver.pipeInput(inputRecord)
+
+            val ut = topologyTestDriver.readOutput(
+                DAGPENGER_BEHOV_PACKET_EVENT.name,
+                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
+                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+            )
+
+            assert(ut.value().hasProblem())
+            Assertions.assertEquals(URI("urn:dp:error:regel"), ut.value().getProblem()!!.type)
+            Assertions.assertEquals(URI("urn:dp:regel:sats"), ut.value().getProblem()!!.instance)
         }
     }
 }

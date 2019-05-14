@@ -2,11 +2,13 @@ package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
+import java.net.URI
 import java.util.Properties
 
 class Sats(private val env: Environment) : River() {
@@ -56,6 +58,17 @@ class Sats(private val env: Environment) : River() {
             bootStapServerUrl = env.bootstrapServersUrl,
             credential = KafkaCredential(env.username, env.password)
         )
+    }
+
+    override fun onFailure(packet: Packet): Packet {
+        packet.addProblem(
+            Problem(
+                type = URI("urn:dp:error:regel"),
+                title = "Ukjent feil ved bruk av satsregel",
+                instance = URI("urn:dp:regel:sats")
+            )
+        )
+        return packet
     }
 }
 
