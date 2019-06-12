@@ -12,7 +12,6 @@ spec:
   prometheus:
     enabled: true
     path: /metrics
-    port: 8097
   replicas:
     min: 2
     max: 4
