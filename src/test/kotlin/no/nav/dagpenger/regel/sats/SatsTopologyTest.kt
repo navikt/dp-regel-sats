@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
+import io.mockk.mockk
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.streams.Topics
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
@@ -15,9 +16,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class SatsTopologyTest {
-
     companion object {
-
         val factory = ConsumerRecordFactory<String, Packet>(
             Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
             Topics.DAGPENGER_BEHOV_PACKET_EVENT.keySerde.serializer(),
@@ -28,6 +27,8 @@ class SatsTopologyTest {
             this[StreamsConfig.APPLICATION_ID_CONFIG] = "test"
             this[StreamsConfig.BOOTSTRAP_SERVERS_CONFIG] = "dummy:1234"
         }
+
+        val fakeSatsInstrumentation = mockk<SatsInstrumentation>()
     }
 
     @Test
@@ -36,7 +37,8 @@ class SatsTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeSatsInstrumentation
         )
 
         val packet = Packet("{}")
@@ -60,7 +62,8 @@ class SatsTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeSatsInstrumentation
         )
 
         val packet = Packet("{}")
@@ -85,7 +88,8 @@ class SatsTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeSatsInstrumentation
         )
 
         val jsonString = """
@@ -109,7 +113,10 @@ class SatsTopologyTest {
             )
 
             assertTrue("SatsSubsumsjon should be added") { ut.value().hasField(Sats.SATS_RESULTAT) }
-            assertEquals(Sats.REGELIDENTIFIKATOR, ut.value().getMapValue(Sats.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR])
+            assertEquals(
+                Sats.REGELIDENTIFIKATOR,
+                ut.value().getMapValue(Sats.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR]
+            )
         }
     }
 
@@ -119,7 +126,8 @@ class SatsTopologyTest {
             Environment(
                 username = "bogus",
                 password = "bogus"
-            )
+            ),
+            fakeSatsInstrumentation
         )
 
         val packet = Packet()
