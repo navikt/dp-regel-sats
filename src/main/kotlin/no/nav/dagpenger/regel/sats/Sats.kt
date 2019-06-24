@@ -51,8 +51,7 @@ class Sats(private val env: Environment, private val instrumentation: SatsInstru
 
         instrumentation.satsBeregnet(
             regelIdentifikator = REGELIDENTIFIKATOR,
-            brukt90ProsentRegel = satsResult.brukt90ProsentRegel,
-            antallBarn = antallBarn
+            brukt90ProsentRegel = satsResult.brukt90ProsentRegel
         )
 
         return packet
