@@ -6,6 +6,7 @@ class SatsInstrumentation {
     private val regelBrukt = Counter.build()
         .namespace("dagpenger")
         .name("sats_regel_brukt")
+        .help("Antall ganger det er beregnet sats")
         .labelNames(
             "regelIdentifikator",
             "brukt90ProsentRegel",
