@@ -11,17 +11,17 @@ import java.math.BigDecimal
 import java.net.URI
 import java.util.Properties
 
-class Sats(private val env: Environment) : River() {
+class Sats(private val env: Environment, private val instrumentation: SatsInstrumentation) : River() {
     override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
-    val ulidGenerator = ULID()
+    private val ulidGenerator = ULID()
 
     companion object {
-        val GRUNNLAG_RESULTAT = "grunnlagResultat"
-        val AVKORTET_GRUNNLAG = "avkortet"
-        val ANTALL_BARN = "antallBarn"
-        val SATS_RESULTAT = "satsResultat"
-        val REGELIDENTIFIKATOR = "Sats.v1"
+        const val GRUNNLAG_RESULTAT = "grunnlagResultat"
+        const val AVKORTET_GRUNNLAG = "avkortet"
+        const val ANTALL_BARN = "antallBarn"
+        const val SATS_RESULTAT = "satsResultat"
+        const val REGELIDENTIFIKATOR = "Sats.v1"
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
@@ -49,6 +49,12 @@ class Sats(private val env: Environment) : River() {
 
         packet.putValue(SATS_RESULTAT, satsResultat.toMap())
 
+        instrumentation.satsBeregnet(
+            regelIdentifikator = REGELIDENTIFIKATOR,
+            brukt90ProsentRegel = satsResult.brukt90ProsentRegel,
+            antallBarn = antallBarn
+        )
+
         return packet
     }
 
@@ -73,6 +79,6 @@ class Sats(private val env: Environment) : River() {
 }
 
 fun main(args: Array<String>) {
-    val service = Sats(Environment())
+    val service = Sats(Environment(), SatsInstrumentation())
     service.start()
 }
