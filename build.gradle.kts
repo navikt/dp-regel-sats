@@ -55,7 +55,7 @@ val mockkVersion = "1.9.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.github.navikt:dagpenger-streams:2019.06.26-21.19.bdd7e296c753")
+    implementation("com.github.navikt:dagpenger-streams:2019.06.26-21.57.bdd7e296c753")
     implementation("com.github.navikt:dagpenger-events:2019.06.12-14.01.4b1e1a663635")
 
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
