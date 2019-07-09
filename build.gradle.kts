@@ -19,7 +19,7 @@ apply {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven("http://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
@@ -39,7 +39,6 @@ val jar by tasks.getting(Jar::class) {
         attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
     }
 }
-
 
 dependencies {
     implementation(kotlin("stdlib"))
