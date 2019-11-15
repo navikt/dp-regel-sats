@@ -5,13 +5,14 @@ import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
+import no.nav.dagpenger.streams.Topics
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
 import java.util.Properties
 
-class Sats(private val env: Environment, private val instrumentation: SatsInstrumentation) : River() {
+class Sats(private val env: Environment, private val instrumentation: SatsInstrumentation) : River(Topics.DAGPENGER_BEHOV_PACKET_EVENT) {
     override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
     override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
     private val ulidGenerator = ULID()
