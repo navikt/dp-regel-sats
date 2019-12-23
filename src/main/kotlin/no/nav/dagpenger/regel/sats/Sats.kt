@@ -3,18 +3,16 @@ package no.nav.dagpenger.regel.sats
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
-import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.River
-import no.nav.dagpenger.streams.Topics
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
 import java.util.Properties
 
-class Sats(private val env: Environment, private val instrumentation: SatsInstrumentation) : River(Topics.DAGPENGER_BEHOV_PACKET_EVENT) {
+class Sats(private val configuration: Configuration, private val instrumentation: SatsInstrumentation) : River(configuration.behovTopic) {
     override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
-    override val HTTP_PORT: Int = env.httpPort ?: super.HTTP_PORT
+    override val HTTP_PORT: Int = configuration.httpPort
     private val ulidGenerator = ULID()
 
     companion object {
@@ -61,8 +59,8 @@ class Sats(private val env: Environment, private val instrumentation: SatsInstru
     override fun getConfig(): Properties {
         return streamConfig(
             appId = SERVICE_APP_ID,
-            bootStapServerUrl = env.bootstrapServersUrl,
-            credential = KafkaCredential(env.username, env.password)
+            bootStapServerUrl = configuration.kafka.brokers,
+            credential = configuration.kafka.credential()
         )
     }
 
@@ -79,6 +77,6 @@ class Sats(private val env: Environment, private val instrumentation: SatsInstru
 }
 
 fun main(args: Array<String>) {
-    val service = Sats(Environment(), SatsInstrumentation())
+    val service = Sats(Configuration(), SatsInstrumentation())
     service.start()
 }
