@@ -11,7 +11,7 @@ import java.net.URI
 import java.util.Properties
 
 class Sats(private val configuration: Configuration, private val instrumentation: SatsInstrumentation) : River(configuration.behovTopic) {
-    override val SERVICE_APP_ID: String = "dagpenger-regel-sats"
+    override val SERVICE_APP_ID: String = configuration.application.id
     override val HTTP_PORT: Int = configuration.httpPort
     private val ulidGenerator = ULID()
 
