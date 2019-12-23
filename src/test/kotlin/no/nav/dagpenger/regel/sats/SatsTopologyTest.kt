@@ -2,12 +2,10 @@ package no.nav.dagpenger.regel.sats
 
 import io.mockk.mockk
 import no.nav.dagpenger.events.Packet
-import no.nav.dagpenger.streams.Topics
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.net.URI
@@ -18,9 +16,9 @@ import kotlin.test.assertTrue
 class SatsTopologyTest {
     companion object {
         val factory = ConsumerRecordFactory<String, Packet>(
-            Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
-            Topics.DAGPENGER_BEHOV_PACKET_EVENT.keySerde.serializer(),
-            Topics.DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.serializer()
+            DAGPENGER_BEHOV_PACKET_EVENT.name,
+            DAGPENGER_BEHOV_PACKET_EVENT.keySerde.serializer(),
+            DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.serializer()
         )
 
         val config = Properties().apply {
@@ -34,10 +32,7 @@ class SatsTopologyTest {
     @Test
     fun `Should ignore packet without grunnlag and antallBarn`() {
         val sats = Sats(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeSatsInstrumentation
         )
 
@@ -59,10 +54,7 @@ class SatsTopologyTest {
     @Test
     fun `Should ignore packet with satsresultat`() {
         val sats = Sats(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeSatsInstrumentation
         )
 
@@ -85,10 +77,7 @@ class SatsTopologyTest {
     @Test
     fun `Should add SatsSubsumsjon to packet with grunnlag and antallBarn `() {
         val sats = Sats(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeSatsInstrumentation
         )
 
@@ -123,10 +112,7 @@ class SatsTopologyTest {
     @Test
     fun ` Should add problem on failure`() {
         val minsteinntekt = Sats(
-            Environment(
-                username = "bogus",
-                password = "bogus"
-            ),
+            Configuration(),
             fakeSatsInstrumentation
         )
 
@@ -145,8 +131,8 @@ class SatsTopologyTest {
             )
 
             assert(ut.value().hasProblem())
-            Assertions.assertEquals(URI("urn:dp:error:regel"), ut.value().getProblem()!!.type)
-            Assertions.assertEquals(URI("urn:dp:regel:sats"), ut.value().getProblem()!!.instance)
+            assertEquals(URI("urn:dp:error:regel"), ut.value().getProblem()!!.type)
+            assertEquals(URI("urn:dp:regel:sats"), ut.value().getProblem()!!.instance)
         }
     }
 }

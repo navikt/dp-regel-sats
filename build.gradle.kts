@@ -64,6 +64,8 @@ dependencies {
     implementation(Kafka.clients)
     implementation(Kafka.streams)
 
+    implementation(Konfig.konfig)
+
     implementation(Log4j2.api)
     implementation(Log4j2.core)
     implementation(Log4j2.slf4j)
