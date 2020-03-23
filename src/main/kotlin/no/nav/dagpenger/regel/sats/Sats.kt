@@ -29,4 +29,3 @@ data class SatsResult(
     val ukeSats: Int,
     val brukt90ProsentRegel: Boolean
 )
-

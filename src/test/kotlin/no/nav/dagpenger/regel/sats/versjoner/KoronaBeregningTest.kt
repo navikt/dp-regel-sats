@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-internal class CoronaBeregningTest {
+internal class KoronaBeregningTest {
     private val sats = KoronaBeregning()
 
     @Test

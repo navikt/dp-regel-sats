@@ -9,14 +9,18 @@ import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.Month
 
+// Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
+
 class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
 
-    private val fom = LocalDate.of(2020, Month.MARCH,20)
-
     override fun isActive(beregningstidspunkt: LocalDate): Boolean {
-        return beregningstidspunkt.isEqual(fom).or(beregningstidspunkt.isAfter(fom))
+        val fom = LocalDate.of(2020, Month.MARCH, 20)
+        val tom = LocalDate.of(2020, Month.DECEMBER, 31)
+        val gyldighetsperiode = fom..tom
+
+        return beregningstidspunkt in gyldighetsperiode
     }
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
