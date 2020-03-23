@@ -1,18 +1,22 @@
 package no.nav.dagpenger.regel.sats
 
-import no.nav.dagpenger.regel.sats.Versjoner.BeregningMedBraNavnSomSierNårRegelenGjelder
+import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import java.math.BigDecimal
 
-val nameMeBetter = BeregningMedBraNavnSomSierNårRegelenGjelder()
+val barneTillegg = BigDecimal(17)
+val dagerPerUke = BigDecimal(5)
+val ukerPerÅr = BigDecimal(52)
 
 class Sats : Beregning {
-    override fun beregn(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
+    private val nameMeBetter = OrdinærBeregning()
+
+    override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         return nameMeBetter.beregn(grunnlag, antallBarn)
     }
 }
 
 interface Beregning {
-    fun beregn(grunnlag: BigDecimal, antallBarn: Int): SatsResult
+    fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult
 }
 
 data class SatsResult(
@@ -20,3 +24,4 @@ data class SatsResult(
     val ukeSats: Int,
     val brukt90ProsentRegel: Boolean
 )
+

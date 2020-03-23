@@ -3,11 +3,15 @@ package no.nav.dagpenger.regel.sats
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
+import no.nav.dagpenger.grunnbelop.Regel
+import no.nav.dagpenger.grunnbelop.forDato
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
+import java.time.LocalDate
 import java.util.Properties
 
 class Application(
@@ -39,7 +43,8 @@ class Application(
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
 
-        val satsResult = sats.beregn(avkortetGrunnlag, antallBarn)
+        val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi)
+        val satsResult = sats.beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),

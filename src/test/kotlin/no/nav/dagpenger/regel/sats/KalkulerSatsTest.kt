@@ -1,6 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
-import no.nav.dagpenger.regel.sats.Versjoner.calculateSats
+import no.nav.dagpenger.regel.sats.versjoner.calculateSats
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
