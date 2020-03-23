@@ -3,15 +3,17 @@ package no.nav.dagpenger.regel.sats.versjoner
 import no.nav.dagpenger.regel.sats.Beregning
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
-import no.nav.dagpenger.regel.sats.barneTillegg
 import no.nav.dagpenger.regel.sats.dagerPerUke
 import no.nav.dagpenger.regel.sats.ukerPerÅr
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
 
 class OrdinærBeregning : Beregning {
     // 62.4% dekning/ 260 dager / 100
     private val dagSatsFaktor = BigDecimal(0.0024)
+
+    override fun isActive(beregningstidspunkt: LocalDate): Boolean = true
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val dagSats = (grunnlag.grunnlag * dagSatsFaktor).setScale(
@@ -40,4 +42,3 @@ class OrdinærBeregning : Beregning {
         )
     }
 }
-

@@ -2,7 +2,6 @@ package no.nav.dagpenger.regel.sats.versjoner
 
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
-import no.nav.dagpenger.regel.sats.barneTillegg
 import no.nav.dagpenger.regel.sats.dagerPerUke
 import no.nav.dagpenger.regel.sats.ukerPerÅr
 import java.math.BigDecimal
@@ -36,3 +35,5 @@ open class BarnetilleggBeregning {
         )
     }
 }
+
+val barneTillegg = BigDecimal(17)

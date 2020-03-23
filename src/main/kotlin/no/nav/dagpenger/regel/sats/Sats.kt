@@ -1,21 +1,26 @@
 package no.nav.dagpenger.regel.sats
 
+import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import java.math.BigDecimal
+import java.time.LocalDate
 
-val barneTillegg = BigDecimal(17)
 val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
 
-class Sats : Beregning {
-    private val nameMeBetter = OrdinærBeregning()
+class Sats {
+    private val ordinærBeregning = OrdinærBeregning()
+    private val koronaBeregning = KoronaBeregning()
 
-    override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
-        return nameMeBetter.beregn(grunnlag, antallBarn)
-    }
+    fun forDato(beregningsdato: LocalDate): Beregning =
+        when {
+            koronaBeregning.isActive(beregningsdato) -> koronaBeregning
+            else -> ordinærBeregning
+        }
 }
 
 interface Beregning {
+    fun isActive(beregningstidspunkt: LocalDate): Boolean
     fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult
 }
 

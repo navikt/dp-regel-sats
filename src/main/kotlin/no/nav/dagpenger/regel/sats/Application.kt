@@ -17,7 +17,7 @@ import java.util.Properties
 class Application(
     private val configuration: Configuration,
     private val instrumentation: SatsInstrumentation,
-    private val sats: Beregning
+    private val sats: Sats
 ) : River(configuration.behovTopic) {
     override val SERVICE_APP_ID: String = configuration.application.id
     override val HTTP_PORT: Int = configuration.httpPort
@@ -29,22 +29,25 @@ class Application(
         const val ANTALL_BARN = "antallBarn"
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
+        const val BEREGNINGSDATO = "beregningsDato"
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
         return listOf(
             Predicate { _, packet -> !packet.hasField(SATS_RESULTAT) },
             Predicate { _, packet -> packet.hasField(GRUNNLAG_RESULTAT) },
-            Predicate { _, packet -> packet.hasField(ANTALL_BARN) }
+            Predicate { _, packet -> packet.hasField(ANTALL_BARN) },
+            Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) }
         )
     }
 
     override fun onPacket(packet: Packet): Packet {
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
+        val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
 
         val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi)
-        val satsResult = sats.beregn(grunnlag, antallBarn)
+        val satsResult = sats.forDato(beregningsdato).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),

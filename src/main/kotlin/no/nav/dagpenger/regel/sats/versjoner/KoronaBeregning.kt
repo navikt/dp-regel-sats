@@ -6,10 +6,18 @@ import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.LocalDate
+import java.time.Month
 
 class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
+
+    private val fom = LocalDate.of(2020, Month.MARCH,20)
+
+    override fun isActive(beregningstidspunkt: LocalDate): Boolean {
+        return beregningstidspunkt.isEqual(fom).or(beregningstidspunkt.isAfter(fom))
+    }
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 3.0)

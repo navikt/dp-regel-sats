@@ -1,11 +1,23 @@
 package no.nav.dagpenger.regel.sats
 
-import no.nav.dagpenger.regel.sats.versjoner.calculateSats
+import no.nav.dagpenger.grunnbelop.Regel
+import no.nav.dagpenger.grunnbelop.forDato
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.time.LocalDate
 import kotlin.test.assertEquals
+
+val sats = Sats()
+
+fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
+    return sats.forDato(LocalDate.of(2020, 1, 1)).beregn(
+        grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi),
+        antallBarn = antallBarn
+    )
+}
 
 class KalkulerSatsTest {
 

@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.sats
 
 import io.mockk.mockk
 import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.regel.sats.Application.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
@@ -9,6 +10,7 @@ import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.net.URI
+import java.time.LocalDate
 import java.util.Properties
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -92,6 +94,7 @@ class SatsTopologyTest {
             }
         """.trimIndent()
         val packet = Packet(jsonString)
+        packet.putValue(BEREGNINGSDATO, LocalDate.now())
         packet.putValue(Application.ANTALL_BARN, 0)
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
@@ -121,6 +124,7 @@ class SatsTopologyTest {
         )
 
         val packet = Packet()
+        packet.putValue(BEREGNINGSDATO, LocalDate.now())
         packet.putValue("grunnlagResultat", "ERROR")
         packet.putValue("antallBarn", "ERROR")
 
