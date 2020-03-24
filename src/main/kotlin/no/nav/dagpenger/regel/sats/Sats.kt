@@ -12,9 +12,9 @@ class Sats {
     private val ordinærBeregning = OrdinærBeregning()
     private val koronaBeregning = KoronaBeregning()
 
-    fun forDato(beregningsdato: LocalDate): Beregning =
+    fun forDato(beregningsdato: LocalDate, koronaToggle: Boolean = false): Beregning =
         when {
-            koronaBeregning.isActive(beregningsdato) -> koronaBeregning
+            koronaToggle && koronaBeregning.isActive(beregningsdato) -> koronaBeregning
             else -> ordinærBeregning
         }
 }

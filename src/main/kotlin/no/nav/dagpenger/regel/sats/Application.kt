@@ -30,6 +30,7 @@ class Application(
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
         const val BEREGNINGSDATO = "beregningsDato"
+        const val KORONA_TOGGLE = "koronaToggle"
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
@@ -45,9 +46,10 @@ class Application(
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
+        val koronaToggle = packet.getNullableBoolean(KORONA_TOGGLE) == true
 
         val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi)
-        val satsResult = sats.forDato(beregningsdato).beregn(grunnlag, antallBarn)
+        val satsResult = sats.forDato(beregningsdato, koronaToggle).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),

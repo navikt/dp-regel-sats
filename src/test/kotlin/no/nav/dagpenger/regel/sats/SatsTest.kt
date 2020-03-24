@@ -16,13 +16,18 @@ internal class SatsTest {
     }
 
     @Test
-    fun `beregningsdato for 20 Mars 2020 gir korona regler`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20)) is KoronaBeregning)
+    fun `beregningsdato for 20 Mars 2020 gir korona regler når feature er på`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), true) is KoronaBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Juli 2020 gir korona regler`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20)) is KoronaBeregning)
+    fun `beregningsdato for 20 Juli 2020 gir korona regler når feature er på`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), true) is KoronaBeregning)
+    }
+
+    @Test
+    fun `beregningsdato for 20 Mars 2020 gir ordinære regler når feature er av`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), false) is OrdinærBeregning)
     }
 
     @Test
