@@ -27,5 +27,11 @@ interface Beregning {
 data class SatsResult(
     val dagSats: Int,
     val ukeSats: Int,
-    val brukt90ProsentRegel: Boolean
+    val brukt90ProsentRegel: Boolean,
+    val beregningsregel: Beregningsregel
 )
+
+enum class Beregningsregel {
+    ORDINAER,
+    KORONA
+}

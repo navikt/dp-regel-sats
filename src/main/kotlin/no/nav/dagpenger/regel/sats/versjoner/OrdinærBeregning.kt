@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
 import no.nav.dagpenger.regel.sats.Beregning
+import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
 import no.nav.dagpenger.regel.sats.dagerPerUke
@@ -10,6 +11,8 @@ import java.math.RoundingMode
 import java.time.LocalDate
 
 class OrdinærBeregning : Beregning {
+    private val REGEL_NAVN = Beregningsregel.ORDINAER
+
     // 62.4% dekning/ 260 dager / 100
     private val dagSatsFaktor = BigDecimal(0.0024)
 
@@ -29,16 +32,18 @@ class OrdinærBeregning : Beregning {
         if (årligDagpenger > nittProsentAvGrunnlag) {
             val redusertUkeSats = nittProsentAvGrunnlag / ukerPerÅr
             return SatsResult(
-                dagSats.toInt(),
-                redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
-                true
+                dagSats = dagSats.toInt(),
+                ukeSats = redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
+                brukt90ProsentRegel = true,
+                beregningsregel = REGEL_NAVN
             )
         }
 
         return SatsResult(
-            dagSats.toInt(),
-            ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
-            false
+            dagSats = dagSats.toInt(),
+            ukeSats = ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
+            brukt90ProsentRegel = false,
+            beregningsregel = REGEL_NAVN
         )
     }
 }

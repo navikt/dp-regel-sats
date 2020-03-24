@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
 import no.nav.dagpenger.regel.sats.dagerPerUke
@@ -11,7 +12,8 @@ open class BarnetilleggBeregning {
     protected fun inkluderBarnetillegg(
         antallBarn: Int,
         dagSats: BigDecimal,
-        grunnlag: Grunnlag
+        grunnlag: Grunnlag,
+        regelBrukt: Beregningsregel
     ): SatsResult {
         val barnetillegg = BigDecimal(antallBarn) * barneTillegg
         val ukeSats = (dagSats + barnetillegg) * dagerPerUke
@@ -22,16 +24,18 @@ open class BarnetilleggBeregning {
         if (årligDagpenger > nittProsentAvGrunnlag) {
             val redusertUkeSats = nittProsentAvGrunnlag / ukerPerÅr
             return SatsResult(
-                dagSats.toInt(),
-                redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
-                true
+                dagSats = dagSats.toInt(),
+                ukeSats = redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
+                brukt90ProsentRegel = true,
+                beregningsregel = regelBrukt
             )
         }
 
         return SatsResult(
-            dagSats.toInt(),
-            ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
-            false
+            dagSats = dagSats.toInt(),
+            ukeSats = ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
+            brukt90ProsentRegel = false,
+            beregningsregel = regelBrukt
         )
     }
 }

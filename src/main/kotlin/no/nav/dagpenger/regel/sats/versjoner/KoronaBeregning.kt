@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
 import no.nav.dagpenger.regel.sats.Beregning
+import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Dekningsgrad
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
@@ -12,6 +13,8 @@ import java.time.Month
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
 
 class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
+    private val REGEL_NAVN = Beregningsregel.KORONA
+
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
 
@@ -32,7 +35,7 @@ class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
 
         val dagSats = dagSatsUnder3G + dagSatsOver3G
 
-        return inkluderBarnetillegg(antallBarn, dagSats, grunnlag)
+        return inkluderBarnetillegg(antallBarn, dagSats, grunnlag, REGEL_NAVN)
     }
 
     private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal =
