@@ -51,6 +51,21 @@ class KalkulerSatsTest {
     }
 
     @Test
+    fun `Skal regne ut korrekte satser i Koronatider`() {
+        val dayInTheKorona = LocalDate.of(2020, 3, 21)
+        val grunnlag = getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi.times(BigDecimal(1.5))
+
+        val (dagSats, ukeSats, used90ProsentRegel) = sats.forDato(dayInTheKorona).beregn(
+            grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi),
+            antallBarn = 0
+        )
+        assertEquals(149787.0.toBigDecimal(), grunnlag, "Grunnlag må stemme med hva 1.5G tilsvarte når testen ble skrevet. Det er kjemperart at denne testen har tryna.")
+        assertEquals(359, dagSats)
+        assertEquals(1795, ukeSats)
+        assertFalse(used90ProsentRegel)
+    }
+
+    @Test
     fun `Skal runde av dagsats før ukesats`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(
             BigDecimal(111111),
