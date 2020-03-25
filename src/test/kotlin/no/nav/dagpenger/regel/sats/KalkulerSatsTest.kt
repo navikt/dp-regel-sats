@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.sats
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
+import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -53,15 +54,15 @@ class KalkulerSatsTest {
     @Test
     fun `Skal regne ut korrekte satser i Koronatider`() {
         val dayInTheKorona = LocalDate.of(2020, 3, 21)
-        val grunnlag = getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi.times(BigDecimal(1.5))
+        val grunnlag = BigDecimal(180374)
 
-        val (dagSats, ukeSats, used90ProsentRegel) = sats.forDato(dayInTheKorona).beregn(
+        val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning().beregn(
             grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi),
             antallBarn = 0
         )
-        assertEquals(149787.0.toBigDecimal(), grunnlag, "Grunnlag må stemme med hva 1.5G tilsvarte når testen ble skrevet. Det er kjemperart at denne testen har tryna.")
-        assertEquals(359, dagSats)
-        assertEquals(1795, ukeSats)
+
+        assertEquals(555, dagSats)
+        assertEquals(2775, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
