@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
+import io.prometheus.client.CollectorRegistry
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -34,5 +35,11 @@ internal class SatsTest {
     fun `beregningsdato for 1 Januar 2021 gir ordinære regler`() {
         // Forskriften utløper automatisk 31. desember 2020
         assertTrue(sats.forDato(LocalDate.of(2021, Month.JANUARY, 1)) is OrdinærBeregning)
+    }
+
+    @Test
+    fun `vi teller hvilken regel som blir brukt`() {
+        sats.forDato(LocalDate.of(2021, Month.JANUARY, 1))
+        assert(CollectorRegistry.defaultRegistry.getSampleValue(satsBeregningBruktName, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0)
     }
 }

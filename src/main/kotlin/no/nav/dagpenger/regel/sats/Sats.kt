@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
+import io.prometheus.client.Counter
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import java.math.BigDecimal
@@ -8,16 +9,32 @@ import java.time.LocalDate
 val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
 
+const val satsBeregningBruktName = "sats_beregning_brukt"
+private val satsBeregningBrukt = Counter.build()
+    .name(satsBeregningBruktName)
+    .labelNames("navn")
+    .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
+    .register()
+
 class Sats {
     private val ordinærBeregning = OrdinærBeregning()
     private val koronaBeregning = KoronaBeregning()
 
     fun forDato(beregningsdato: LocalDate, koronaToggle: Boolean = false): Beregning =
-        when {
-            koronaToggle && koronaBeregning.isActive(beregningsdato) -> koronaBeregning
-            else -> ordinærBeregning
+        instrument {
+            return@instrument when {
+                koronaToggle && koronaBeregning.isActive(beregningsdato) -> koronaBeregning
+                else -> ordinærBeregning
+            }
         }
 }
+
+fun Sats.instrument(handler: () -> Beregning): Beregning =
+    handler().also {
+        satsBeregningBrukt
+            .labels(it.javaClass.simpleName.toString())
+            .inc()
+    }
 
 interface Beregning {
     fun isActive(beregningstidspunkt: LocalDate): Boolean
