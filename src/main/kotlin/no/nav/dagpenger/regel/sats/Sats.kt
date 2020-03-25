@@ -1,82 +1,37 @@
 package no.nav.dagpenger.regel.sats
 
-import de.huxhorn.sulky.ulid.ULID
-import no.nav.dagpenger.events.Packet
-import no.nav.dagpenger.events.Problem
-import no.nav.dagpenger.streams.River
-import no.nav.dagpenger.streams.streamConfig
-import org.apache.kafka.streams.kstream.Predicate
+import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
+import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import java.math.BigDecimal
-import java.net.URI
-import java.util.Properties
+import java.time.LocalDate
 
-class Sats(private val configuration: Configuration, private val instrumentation: SatsInstrumentation) : River(configuration.behovTopic) {
-    override val SERVICE_APP_ID: String = configuration.application.id
-    override val HTTP_PORT: Int = configuration.httpPort
-    private val ulidGenerator = ULID()
+val dagerPerUke = BigDecimal(5)
+val ukerPerÅr = BigDecimal(52)
 
-    companion object {
-        const val GRUNNLAG_RESULTAT = "grunnlagResultat"
-        const val AVKORTET_GRUNNLAG = "avkortet"
-        const val ANTALL_BARN = "antallBarn"
-        const val SATS_RESULTAT = "satsResultat"
-        const val REGELIDENTIFIKATOR = "Sats.v1"
-    }
+class Sats {
+    private val ordinærBeregning = OrdinærBeregning()
+    private val koronaBeregning = KoronaBeregning()
 
-    override fun filterPredicates(): List<Predicate<String, Packet>> {
-        return listOf(
-            Predicate { _, packet -> !packet.hasField(SATS_RESULTAT) },
-            Predicate { _, packet -> packet.hasField(GRUNNLAG_RESULTAT) },
-            Predicate { _, packet -> packet.hasField(ANTALL_BARN) }
-        )
-    }
-
-    override fun onPacket(packet: Packet): Packet {
-        val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
-        val antallBarn = packet.getIntValue(ANTALL_BARN)
-
-        val satsResult = calculateSats(avkortetGrunnlag, antallBarn)
-
-        val satsResultat = SatsSubsumsjon(
-            ulidGenerator.nextULID(),
-            ulidGenerator.nextULID(),
-            REGELIDENTIFIKATOR,
-            satsResult.dagSats,
-            satsResult.ukeSats,
-            satsResult.brukt90ProsentRegel
-        )
-
-        packet.putValue(SATS_RESULTAT, satsResultat.toMap())
-
-        instrumentation.satsBeregnet(
-            regelIdentifikator = REGELIDENTIFIKATOR,
-            brukt90ProsentRegel = satsResult.brukt90ProsentRegel
-        )
-
-        return packet
-    }
-
-    override fun getConfig(): Properties {
-        return streamConfig(
-            appId = SERVICE_APP_ID,
-            bootStapServerUrl = configuration.kafka.brokers,
-            credential = configuration.kafka.credential()
-        )
-    }
-
-    override fun onFailure(packet: Packet, error: Throwable?): Packet {
-        packet.addProblem(
-            Problem(
-                type = URI("urn:dp:error:regel"),
-                title = "Ukjent feil ved bruk av satsregel",
-                instance = URI("urn:dp:regel:sats")
-            )
-        )
-        return packet
-    }
+    fun forDato(beregningsdato: LocalDate, koronaToggle: Boolean = false): Beregning =
+        when {
+            koronaToggle && koronaBeregning.isActive(beregningsdato) -> koronaBeregning
+            else -> ordinærBeregning
+        }
 }
 
-fun main(args: Array<String>) {
-    val service = Sats(Configuration(), SatsInstrumentation())
-    service.start()
+interface Beregning {
+    fun isActive(beregningstidspunkt: LocalDate): Boolean
+    fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult
+}
+
+data class SatsResult(
+    val dagSats: Int,
+    val ukeSats: Int,
+    val brukt90ProsentRegel: Boolean,
+    val beregningsregel: Beregningsregel
+)
+
+enum class Beregningsregel {
+    ORDINAER,
+    KORONA
 }
