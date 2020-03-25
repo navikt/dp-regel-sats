@@ -6,7 +6,8 @@ data class SatsSubsumsjon(
     val regelidentifikator: String,
     val dagSats: Int,
     val ukeSats: Int,
-    val benyttet90ProsentRegel: Boolean
+    val benyttet90ProsentRegel: Boolean,
+    val beregningsregel: Beregningsregel
 ) {
 
     companion object {
@@ -16,6 +17,7 @@ data class SatsSubsumsjon(
         val DAGSATS = "dagsats"
         val UKESATS = "ukesats"
         val BENYTTET_90PROSENT_REGEL = "benyttet90ProsentRegel"
+        val BEREGNINGSREGEL = "beregningsregel"
     }
 
     fun toMap(): Map<String, Any> {
@@ -25,7 +27,8 @@ data class SatsSubsumsjon(
             REGELIDENTIFIKATOR to regelidentifikator,
             DAGSATS to dagSats,
             UKESATS to ukeSats,
-            BENYTTET_90PROSENT_REGEL to benyttet90ProsentRegel
+            BENYTTET_90PROSENT_REGEL to benyttet90ProsentRegel,
+            BEREGNINGSREGEL to beregningsregel
         )
     }
 }

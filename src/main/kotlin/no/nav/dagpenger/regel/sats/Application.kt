@@ -57,7 +57,8 @@ class Application(
             REGELIDENTIFIKATOR,
             satsResult.dagSats,
             satsResult.ukeSats,
-            satsResult.brukt90ProsentRegel
+            satsResult.brukt90ProsentRegel,
+            satsResult.beregningsregel
         )
 
         packet.putValue(SATS_RESULTAT, satsResultat.toMap())
