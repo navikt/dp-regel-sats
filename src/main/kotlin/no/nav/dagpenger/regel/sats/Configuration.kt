@@ -11,15 +11,12 @@ import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.Topics
-import org.apache.kafka.streams.errors.LogAndContinueExceptionHandler
-import org.apache.kafka.streams.errors.LogAndFailExceptionHandler
 
 private val localProperties = ConfigurationMap(
     mapOf(
         "kafka.bootstrap.servers" to "localhost:9092",
         "application.profile" to Profile.LOCAL.toString(),
         "application.httpPort" to "8096",
-        "kafka.deserialization.exception.handler" to LogAndFailExceptionHandler::class.java.name,
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
@@ -28,7 +25,6 @@ private val devProperties = ConfigurationMap(
         "kafka.bootstrap.servers" to "b27apvl00045.preprod.local:8443,b27apvl00046.preprod.local:8443,b27apvl00047.preprod.local:8443",
         "application.profile" to Profile.DEV.toString(),
         "application.httpPort" to "8096",
-        "kafka.deserialization.exception.handler" to LogAndContinueExceptionHandler::class.java.name,
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
@@ -37,7 +33,6 @@ private val prodProperties = ConfigurationMap(
         "kafka.bootstrap.servers" to "a01apvl00145.adeo.no:8443,a01apvl00146.adeo.no:8443,a01apvl00147.adeo.no:8443,a01apvl00148.adeo.no:8443,a01apvl00149.adeo.no:8443,a01apvl00150.adeo.no:8443",
         "application.profile" to Profile.PROD.toString(),
         "application.httpPort" to "8096",
-        "kafka.deserialization.exception.handler" to LogAndFailExceptionHandler::class.java.name,
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
@@ -60,7 +55,6 @@ data class Configuration(
 ) {
     data class Kafka(
         val brokers: String = config()[Key("kafka.bootstrap.servers", stringType)],
-        val deserializationExceptionHandler: String = config()[Key("kafka.deserialization.exception.handler", stringType)],
         val user: String? = config().getOrNull(Key("srvdp.regel.sats.username", stringType)), // SRVDP_REGEL_SATS_USERNAME
         val password: String? = config().getOrNull(Key("srvdp.regel.sats.password", stringType))
     ) {

@@ -8,7 +8,6 @@ import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
@@ -77,10 +76,7 @@ class Application(
             appId = SERVICE_APP_ID,
             bootStapServerUrl = configuration.kafka.brokers,
             credential = configuration.kafka.credential()
-        ).apply {
-            this[StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG] =
-                configuration.kafka.deserializationExceptionHandler
-        }
+        )
     }
 
     override fun onFailure(packet: Packet, error: Throwable?): Packet {
