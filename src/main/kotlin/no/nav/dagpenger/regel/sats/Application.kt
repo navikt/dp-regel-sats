@@ -29,6 +29,7 @@ class Application(
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
         const val BEREGNINGSDATO = "beregningsDato"
+        const val LÆRLING = "lærling"
         const val KORONA_TOGGLE = "koronaToggle"
     }
 
@@ -46,9 +47,13 @@ class Application(
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val koronaToggle = packet.getNullableBoolean(KORONA_TOGGLE) == true
+        val erLærling = packet.getNullableBoolean(LÆRLING) == true
 
         val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato).verdi)
-        val satsResult = sats.forDato(beregningsdato, koronaToggle).beregn(grunnlag, antallBarn)
+        val satsResult = sats.forDato(
+            beregningsdato = beregningsdato,
+            koronaToggle = koronaToggle,
+            lærling = erLærling).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),
