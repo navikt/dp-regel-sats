@@ -2,8 +2,9 @@ package no.nav.dagpenger.regel.sats.versjoner
 
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.sats.Grunnlag
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 internal class KoronaLærlingBeregningTest {
     private val sats = KoronaLærlingBeregning()
@@ -14,9 +15,9 @@ internal class KoronaLærlingBeregningTest {
             grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
             antallBarn = 0
         )
-        kotlin.test.assertEquals(385, dagSats)
-        kotlin.test.assertEquals(385 * 5, ukeSats)
-        Assertions.assertFalse(used90ProsentRegel)
+        assertEquals(385, dagSats)
+        assertEquals(385 * 5, ukeSats)
+        assertFalse(used90ProsentRegel)
     }
 
     @Test
@@ -25,9 +26,9 @@ internal class KoronaLærlingBeregningTest {
             grunnlag = Grunnlag(grunnlag = 200_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
             antallBarn = 0
         )
-        kotlin.test.assertEquals(697, dagSats)
-        kotlin.test.assertEquals(697 * 5, ukeSats)
-        Assertions.assertFalse(used90ProsentRegel)
+        assertEquals(697, dagSats)
+        assertEquals(697 * 5, ukeSats)
+        assertFalse(used90ProsentRegel)
     }
 
     @Test
@@ -47,7 +48,7 @@ internal class KoronaLærlingBeregningTest {
             ),
             antallBarn = 0
         )
-        kotlin.test.assertEquals(maksDagsats, dagsatsMedGrunnlagOver6G)
+        assertEquals(maksDagsats, dagsatsMedGrunnlagOver6G)
     }
 
     @Test
@@ -56,7 +57,7 @@ internal class KoronaLærlingBeregningTest {
             grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
             antallBarn = 5
         )
-        kotlin.test.assertEquals(385, dagSats)
-        Assertions.assertFalse(used90ProsentRegel)
+        assertEquals(385, dagSats)
+        assertFalse(used90ProsentRegel)
     }
 }
