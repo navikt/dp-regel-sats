@@ -12,7 +12,7 @@ import java.time.Month
 
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
 
-class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
+open class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     private val REGEL_NAVN = Beregningsregel.KORONA
 
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
