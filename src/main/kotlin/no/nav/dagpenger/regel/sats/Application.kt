@@ -11,7 +11,6 @@ import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
-import java.time.LocalDate
 import java.util.Properties
 
 class Application(
@@ -48,7 +47,7 @@ class Application(
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val koronaToggle = packet.getNullableBoolean(KORONA_TOGGLE) == true
 
-        val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi)
+        val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato).verdi)
         val satsResult = sats.forDato(beregningsdato, koronaToggle).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
