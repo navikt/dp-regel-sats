@@ -54,5 +54,5 @@ data class SatsResult(
 enum class Beregningsregel {
     ORDINAER,
     KORONA,
-    KORONA_LÆRLING
+    KORONA_LAERLING
 }

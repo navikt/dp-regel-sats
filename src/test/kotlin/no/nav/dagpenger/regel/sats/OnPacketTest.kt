@@ -21,7 +21,7 @@ class OnPacketTest {
 
         val outPacket = service.onPacket(packet)
 
-        assertEquals("KORONA_LÆRLING", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
+        assertEquals("KORONA_LAERLING", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
     }
 
     @Test
@@ -35,7 +35,7 @@ class OnPacketTest {
         val outPacket = service.onPacket(packet)
 
         assertNotEquals(
-            "KORONA_LÆRLING",
+            "KORONA_LAERLING",
             outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString()
         )
     }

@@ -12,7 +12,7 @@ import java.math.RoundingMode
 
 class KoronaLærlingBeregning : KoronaBeregning() {
 
-    private val REGEL_NAVN = Beregningsregel.KORONA_LÆRLING
+    private val REGEL_NAVN = Beregningsregel.KORONA_LAERLING
 
     private val dagsatsfaktorUnder1Komma5G = Dekningsgrad(dekningsgrad = 100.0).getDagSatsFaktor()
     private val dagsatsfaktorOver1Komma5G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
