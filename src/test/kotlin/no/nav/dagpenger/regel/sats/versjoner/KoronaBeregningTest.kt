@@ -1,9 +1,10 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
 import no.nav.dagpenger.regel.sats.Grunnlag
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 internal class KoronaBeregningTest {
     private val sats = KoronaBeregning()
@@ -14,8 +15,8 @@ internal class KoronaBeregningTest {
             grunnlag = Grunnlag(BigDecimal(100000), BigDecimal(100000)),
             antallBarn = 0
         )
-        kotlin.test.assertEquals(308, dagSats)
-        kotlin.test.assertEquals(1540, ukeSats)
+        assertEquals(308, dagSats)
+        assertEquals(1540, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -25,8 +26,8 @@ internal class KoronaBeregningTest {
             grunnlag = Grunnlag(BigDecimal(500000), BigDecimal(100000)),
             antallBarn = 0
         )
-        kotlin.test.assertEquals(1403, dagSats)
-        kotlin.test.assertEquals(7015, ukeSats)
+        assertEquals(1403, dagSats)
+        assertEquals(7015, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -36,8 +37,8 @@ internal class KoronaBeregningTest {
             grunnlag = Grunnlag(BigDecimal(5000000), BigDecimal(100000)),
             antallBarn = 0
         )
-        kotlin.test.assertEquals(1643, dagSats)
-        kotlin.test.assertEquals(8215, ukeSats)
+        assertEquals(1643, dagSats)
+        assertEquals(8215, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 }

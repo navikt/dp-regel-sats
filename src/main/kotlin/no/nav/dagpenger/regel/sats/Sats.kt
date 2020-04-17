@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.sats
 
 import io.prometheus.client.Counter
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
+import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -19,11 +20,13 @@ private val satsBeregningBrukt = Counter.build()
 class Sats {
     private val ordinærBeregning = OrdinærBeregning()
     private val koronaBeregning = KoronaBeregning()
+    private val koronaLærlingBeregning = KoronaLærlingBeregning()
 
-    fun forDato(beregningsdato: LocalDate, koronaToggle: Boolean = false): Beregning =
+    fun forDato(beregningsdato: LocalDate, koronaToggle: Boolean = false, lærling: Boolean = false): Beregning =
         instrument {
             return@instrument when {
-                koronaToggle && koronaBeregning.isActive(beregningsdato) -> koronaBeregning
+                koronaToggle && koronaBeregning.isActive(beregningsdato) && !lærling -> koronaBeregning
+                koronaToggle && koronaBeregning.isActive(beregningsdato) && lærling -> koronaLærlingBeregning
                 else -> ordinærBeregning
             }
         }
@@ -50,5 +53,6 @@ data class SatsResult(
 
 enum class Beregningsregel {
     ORDINAER,
-    KORONA
+    KORONA,
+    KORONA_LAERLING
 }
