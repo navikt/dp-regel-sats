@@ -46,13 +46,11 @@ class Application(
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
-        val koronaToggle = packet.getNullableBoolean(KORONA_TOGGLE) == true
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
 
         val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato).verdi)
         val satsResult = sats.forDato(
             beregningsdato = beregningsdato,
-            koronaToggle = koronaToggle,
             lærling = erLærling).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
