@@ -30,7 +30,6 @@ class Application(
         const val REGELIDENTIFIKATOR = "Sats.v1"
         const val BEREGNINGSDATO = "beregningsDato"
         const val LÆRLING = "lærling"
-        const val KORONA_TOGGLE = "koronaToggle"
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
