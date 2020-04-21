@@ -1,14 +1,14 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.time.LocalDate
+import java.time.Month
 import no.nav.dagpenger.regel.sats.Beregning
 import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Dekningsgrad
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.time.LocalDate
-import java.time.Month
 
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
 

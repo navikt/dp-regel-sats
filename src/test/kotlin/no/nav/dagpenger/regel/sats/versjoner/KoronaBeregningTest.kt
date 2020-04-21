@@ -1,10 +1,10 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
-import no.nav.dagpenger.regel.sats.Grunnlag
-import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import no.nav.dagpenger.regel.sats.Grunnlag
+import org.junit.jupiter.api.Test
 
 internal class KoronaBeregningTest {
     private val sats = KoronaBeregning()

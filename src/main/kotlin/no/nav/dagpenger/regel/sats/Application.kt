@@ -1,6 +1,9 @@
 package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
+import java.math.BigDecimal
+import java.net.URI
+import java.util.Properties
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.grunnbelop.Regel
@@ -9,9 +12,6 @@ import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
 import org.apache.kafka.streams.kstream.Predicate
-import java.math.BigDecimal
-import java.net.URI
-import java.util.Properties
 
 class Application(
     private val configuration: Configuration,

@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.sats
 
+import java.math.BigDecimal
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 
 internal class GrunnlagTest {
     @Test

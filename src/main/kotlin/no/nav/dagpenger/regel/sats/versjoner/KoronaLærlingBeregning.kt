@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import java.math.BigDecimal
+import java.math.RoundingMode
 import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Dekningsgrad
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
 import no.nav.dagpenger.regel.sats.dagerPerUke
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 // Defineres her: https://lovdata.no/forskrift/2020-03-20-368/§2-3 andre ledd
 

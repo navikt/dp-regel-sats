@@ -1,11 +1,11 @@
 package no.nav.dagpenger.regel.sats
 
 import io.prometheus.client.Counter
+import java.math.BigDecimal
+import java.time.LocalDate
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
-import java.math.BigDecimal
-import java.time.LocalDate
 
 val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)

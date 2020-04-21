@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import java.math.BigDecimal
+import java.math.RoundingMode
 import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
 import no.nav.dagpenger.regel.sats.dagerPerUke
 import no.nav.dagpenger.regel.sats.ukerPerÅr
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 open class BarnetilleggBeregning {
     protected fun inkluderBarnetillegg(

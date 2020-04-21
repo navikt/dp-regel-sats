@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.sats
 
 import io.prometheus.client.CollectorRegistry
+import java.time.LocalDate
+import java.time.Month
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.Month
 
 internal class SatsTest {
     private val sats = Sats()

@@ -1,11 +1,11 @@
 package no.nav.dagpenger.regel.sats
 
 import io.mockk.mockk
-import no.nav.dagpenger.events.Packet
-import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import no.nav.dagpenger.events.Packet
+import org.junit.jupiter.api.Test
 
 class OnPacketTest {
     val service = Application(Configuration(), mockk(relaxed = true), Sats())

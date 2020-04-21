@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.sats
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.math.RoundingMode
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 internal class DekningsgradTest {
 

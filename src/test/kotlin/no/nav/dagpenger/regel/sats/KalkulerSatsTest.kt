@@ -1,5 +1,8 @@
 package no.nav.dagpenger.regel.sats
 
+import java.math.BigDecimal
+import java.time.LocalDate
+import kotlin.test.assertEquals
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
@@ -7,9 +10,6 @@ import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-import java.time.LocalDate
-import kotlin.test.assertEquals
 
 val sats = Sats()
 
