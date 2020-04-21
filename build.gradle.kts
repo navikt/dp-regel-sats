@@ -48,6 +48,8 @@ dependencies {
     implementation(Dagpenger.Events)
     implementation(Dagpenger.Biblioteker.grunnbeløp)
 
+    implementation("com.github.navikt:rapids-and-rivers:1.35001d7")
+
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
     implementation(Moshi.moshiKotlin)
@@ -66,14 +68,12 @@ dependencies {
 
     implementation(Konfig.konfig)
 
-    implementation(Log4j2.api)
-    implementation(Log4j2.core)
-    implementation(Log4j2.slf4j)
-    implementation(Log4j2.Logstash.logstashLayout)
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+
     implementation(Kotlin.Logging.kotlinLogging)
 
     testImplementation(kotlin("test"))
-
+    testImplementation(Junit5.kotlinRunner)
     testImplementation(Junit5.api)
     testRuntimeOnly(Junit5.engine)
     testRuntimeOnly(Junit5.vintageEngine)
