@@ -48,7 +48,7 @@ dependencies {
     implementation(Dagpenger.Events)
     implementation(Dagpenger.Biblioteker.grunnbeløp)
 
-    implementation("com.github.navikt:rapids-and-rivers:1.35001d7")
+    implementation(RapidAndRivers)
 
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
