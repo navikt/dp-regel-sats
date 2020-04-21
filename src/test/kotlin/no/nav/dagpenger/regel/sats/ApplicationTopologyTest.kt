@@ -2,9 +2,9 @@ package no.nav.dagpenger.regel.sats
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import io.kotlintest.matchers.collections.shouldContain
-import io.kotlintest.matchers.numerics.shouldBeExactly
-import io.kotlintest.shouldBe
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.ints.shouldBeExactly
+import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.AVKORTET_GRUNNLAG
