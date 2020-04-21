@@ -9,14 +9,19 @@ import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
+import no.nav.dagpenger.streams.HealthCheck
+import no.nav.dagpenger.streams.HealthStatus
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
+import no.nav.helse.rapids_rivers.RapidApplication
+import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 
 class Application(
     private val configuration: Configuration,
     private val instrumentation: SatsInstrumentation,
-    private val sats: Sats
+    private val sats: Sats,
+    public override val healthChecks: List<HealthCheck> = listOf()
 ) : River(configuration.behovTopic) {
     override val SERVICE_APP_ID: String = configuration.application.id
     override val HTTP_PORT: Int = configuration.httpPort
@@ -93,6 +98,50 @@ class Application(
 }
 
 fun main(args: Array<String>) {
-    val service = Application(Configuration(), SatsInstrumentation(), Sats())
-    service.start()
+    val instrumentation = SatsInstrumentation()
+    val sats = Sats()
+
+    Application(
+        configuration = Configuration(),
+        instrumentation = instrumentation,
+        sats = sats,
+        healthChecks = listOf(RapidHealthCheck)
+    ).start()
+
+    RapidApplication.create(
+        Configuration().rapidApplication
+    ).apply {
+        LøsningService(
+            this,
+            sats = sats,
+            instrumentation = instrumentation
+        )
+    }.also {
+        it.register(RapidHealthCheck)
+    }.start()
+}
+
+object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
+    var healthy: Boolean = false
+
+    override fun onStartup(rapidsConnection: RapidsConnection) {
+        healthy = true
+    }
+
+    override fun onReady(rapidsConnection: RapidsConnection) {
+        healthy = true
+    }
+
+    override fun onNotReady(rapidsConnection: RapidsConnection) {
+        healthy = false
+    }
+
+    override fun onShutdown(rapidsConnection: RapidsConnection) {
+        healthy = false
+    }
+
+    override fun status(): HealthStatus = when (healthy) {
+        true -> HealthStatus.UP
+        false -> HealthStatus.DOWN
+    }
 }
