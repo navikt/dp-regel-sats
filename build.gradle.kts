@@ -75,7 +75,6 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(KoTest.assertions)
     testImplementation(KoTest.runner)
-    testImplementation(Junit5.kotlinRunner)
     testImplementation(Junit5.api)
     testRuntimeOnly(Junit5.engine)
     testRuntimeOnly(Junit5.vintageEngine)
