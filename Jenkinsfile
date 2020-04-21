@@ -52,6 +52,10 @@ pipeline {
         sh label: 'Prepare prod service contract', script: """
            kustomize build ./nais/prod -o ./nais/nais-prod-deploy.yaml &&  cat ./nais/nais-prod-deploy.yaml
         """
+
+        archiveArtifacts artifacts: 'nais/nais-dev-deploy.yaml', fingerprint: true
+        archiveArtifacts artifacts: 'nais/nais-dev-q2-deploy.yaml', fingerprint: true
+        archiveArtifacts artifacts: 'nais/nais-prod-deploy.yaml', fingerprint: true
       }
 
       post {
@@ -82,8 +86,6 @@ pipeline {
               kubectl apply -f ./nais/nais-dev-deploy.yaml --wait
               kubectl rollout status -w deployment/${APPLICATION_NAME}
             """
-
-            archiveArtifacts artifacts: 'nais/nais-dev-deploy.yaml', fingerprint: true
           }
         }
 
@@ -97,9 +99,6 @@ pipeline {
             sleep 5
             kubectl rollout status -w deployment/${APPLICATION_NAME} -n q2
           """
-
-            archiveArtifacts artifacts: 'nais/nais-dev-q2-deploy.yaml', fingerprint: true
-
           }
         }
 
@@ -107,6 +106,8 @@ pipeline {
           // Since these tests usually are quite expensive, running them as
           // separate stages allows distributing them on seperate agents
           failFast true
+
+          when { branch 'master' }
 
           parallel {
             stage('User Acceptance Tests') {
@@ -185,9 +186,6 @@ pipeline {
           kubectl apply  -f ./nais/nais-prod-deploy.yaml --wait
           kubectl rollout status -w deployment/${APPLICATION_NAME}
         """
-
-        archiveArtifacts artifacts: 'nais/nais-prod-deploy.yaml', fingerprint: true
-
       }
     }
 
