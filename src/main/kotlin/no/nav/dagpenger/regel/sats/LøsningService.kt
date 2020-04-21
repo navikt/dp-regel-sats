@@ -93,10 +93,7 @@ class LøsningService(
             grunnlag = avkortetGrunnlag,
             grunnbeløp = getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato).verdi
         )
-        val satsResult = sats.forDato(
-            beregningsdato = beregningsdato,
-            koronaToggle = lærling
-        ).beregn(
+        val satsResult = sats.forDato(beregningsdato, lærling).beregn(
             grunnlag = grunnlag,
             antallBarn = antallBarn
         )
