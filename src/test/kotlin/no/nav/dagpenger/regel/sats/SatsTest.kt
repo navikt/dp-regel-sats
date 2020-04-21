@@ -26,7 +26,6 @@ internal class SatsTest {
         assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), true) is KoronaBeregning)
     }
 
-
     @Test
     fun `beregningsdato for 1 Januar 2021 gir ordinære regler`() {
         // Forskriften utløper automatisk 31. desember 2020
