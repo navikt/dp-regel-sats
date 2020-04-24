@@ -27,8 +27,8 @@ internal class KoronaBeregning(val unleash: Unleash) : Beregning, BarnetilleggBe
         val andelØvre = grunnlag.getGrunnlagMellom(3.0, 6.0)
 
         val dagSats = if (unleash.isEnabled("dp-regel-sats.Avrunding", false)) {
-            val dagSatsUnder3G = getIkkeAvrunderDagstats(andelNedre, dagSatsFaktorUnder3G)
-            val dagSatsOver3G = getIkkeAvrunderDagstats(andelØvre, dagSatsFaktorOver3G)
+            val dagSatsUnder3G = getIkkeAvrundetDagstats(andelNedre, dagSatsFaktorUnder3G)
+            val dagSatsOver3G = getIkkeAvrundetDagstats(andelØvre, dagSatsFaktorOver3G)
             (dagSatsUnder3G + dagSatsOver3G).setScale(0, RoundingMode.HALF_UP)
         } else {
             val dagSatsUnder3G = getDagSats(andelNedre, dagSatsFaktorUnder3G)
@@ -39,7 +39,7 @@ internal class KoronaBeregning(val unleash: Unleash) : Beregning, BarnetilleggBe
         return inkluderBarnetillegg(antallBarn, dagSats, grunnlag, REGEL_NAVN)
     }
 
-    private fun getIkkeAvrunderDagstats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(
+    private fun getIkkeAvrundetDagstats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(
         antallDesimaler))
 
     private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal =
