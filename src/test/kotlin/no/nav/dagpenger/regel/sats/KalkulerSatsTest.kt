@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.sats
 import java.math.BigDecimal
 import java.time.LocalDate
 import kotlin.test.assertEquals
+import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-val sats = Sats()
+val sats = Sats(FakeUnleash())
 
 fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
     return sats.forDato(LocalDate.of(2020, 1, 1)).beregn(
@@ -56,7 +57,7 @@ class KalkulerSatsTest {
         val dayInTheKorona = LocalDate.of(2020, 3, 21)
         val grunnlag = BigDecimal(180374)
 
-        val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning().beregn(
+        val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning(FakeUnleash()).beregn(
             grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi),
             antallBarn = 0
         )

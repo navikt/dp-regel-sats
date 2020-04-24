@@ -3,11 +3,13 @@ package no.nav.dagpenger.regel.sats.versjoner
 import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.sats.Grunnlag
 import org.junit.jupiter.api.Test
 
 internal class KoronaBeregningTest {
-    private val sats = KoronaBeregning()
+    private val fakeUnleash = FakeUnleash().apply { this.enable("dp-regel-sats.Avrunding") }
+    private val sats = KoronaBeregning(fakeUnleash)
 
     @Test
     fun `gir økt dagsats for de under 3G`() {
@@ -39,6 +41,17 @@ internal class KoronaBeregningTest {
         )
         assertEquals(1643, dagSats)
         assertEquals(8215, ukeSats)
+        assertFalse(used90ProsentRegel)
+    }
+
+    @Test
+    fun ` Skal ikke  avrunde del satsene men avrunde når delsatsene summeres `() {
+        val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
+            grunnlag = Grunnlag(BigDecimal(305650), BigDecimal(99858)),
+            antallBarn = 0
+        )
+        assertEquals(936, dagSats)
+        assertEquals(4680, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 }

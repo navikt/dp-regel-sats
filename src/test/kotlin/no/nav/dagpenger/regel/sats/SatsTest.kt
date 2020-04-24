@@ -3,13 +3,15 @@ package no.nav.dagpenger.regel.sats
 import io.prometheus.client.CollectorRegistry
 import java.time.LocalDate
 import java.time.Month
+import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
+import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class SatsTest {
-    private val sats = Sats()
+    private val sats = Sats(FakeUnleash())
 
     @Test
     fun `beregningsdato for 1 Januar 2020 gir ordinære regler`() {
@@ -17,13 +19,23 @@ internal class SatsTest {
     }
 
     @Test
-    fun `beregningsdato for 20 Mars 2020 gir korona regler når feature er på`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), true) is KoronaBeregning)
+    fun `beregningsdato for 20 Mars 2020 gir korona ordinære regler når feature er på`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), false) is KoronaBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Juli 2020 gir korona regler når feature er på`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), true) is KoronaBeregning)
+    fun `beregningsdato for 20 Juli 2020 gir korona ordinære regler når feature er på`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), false) is KoronaBeregning)
+    }
+
+    @Test
+    fun `beregningsdato for 20 Mars 2020 gir korona lærling regler når feature er på`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), true) is KoronaLærlingBeregning)
+    }
+
+    @Test
+    fun `beregningsdato for 20 Juli 2020 gir korona lærling regler når feature er på`() {
+        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), true) is KoronaLærlingBeregning)
     }
 
     @Test
