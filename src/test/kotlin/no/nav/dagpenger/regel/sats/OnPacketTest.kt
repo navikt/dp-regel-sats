@@ -4,11 +4,12 @@ import io.mockk.mockk
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.events.Packet
 import org.junit.jupiter.api.Test
 
 class OnPacketTest {
-    val service = Application(Configuration(), mockk(relaxed = true), Sats())
+    val service = Application(Configuration(), mockk(relaxed = true), Sats(FakeUnleash()))
     @Test
     fun `bruker lærling-koronaregler når lærling er satt til true på pakka og dato er innenfor koronaperiode`() {
 

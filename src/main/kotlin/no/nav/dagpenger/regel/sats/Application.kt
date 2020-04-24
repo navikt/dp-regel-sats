@@ -4,6 +4,7 @@ import de.huxhorn.sulky.ulid.ULID
 import java.math.BigDecimal
 import java.net.URI
 import java.util.Properties
+import no.finn.unleash.DefaultUnleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.grunnbelop.Regel
@@ -98,11 +99,14 @@ class Application(
 }
 
 fun main(args: Array<String>) {
+    val configuration = Configuration()
+
     val instrumentation = SatsInstrumentation()
-    val sats = Sats()
+    val unleash = DefaultUnleash(configuration.unleashConfig)
+    val sats = Sats(unleash)
 
     Application(
-        configuration = Configuration(),
+        configuration = configuration,
         instrumentation = instrumentation,
         sats = sats,
         healthChecks = listOf(RapidHealthCheck)
@@ -113,6 +117,7 @@ fun main(args: Array<String>) {
     ).apply {
         LøsningService(
             this,
+            unleash = unleash,
             sats = sats,
             instrumentation = instrumentation
         )

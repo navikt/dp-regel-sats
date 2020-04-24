@@ -68,6 +68,9 @@ dependencies {
 
     implementation(Konfig.konfig)
 
+    // unleash
+    implementation("no.finn.unleash:unleash-client-java:3.3.1")
+
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
     implementation(Kotlin.Logging.kotlinLogging)

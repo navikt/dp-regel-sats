@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
@@ -59,5 +60,15 @@ internal class KoronaLærlingBeregningTest {
         )
         assertEquals(385, dagSats)
         assertFalse(used90ProsentRegel)
+    }
+
+    @Test
+    fun ` Skal ikke  avrunde del satsene men avrunde når delsatsene summeres `() {
+        val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
+            grunnlag = Grunnlag(BigDecimal(239987), BigDecimal(99858)),
+            antallBarn = 0
+        )
+        assertEquals(793, dagSats)
+        assertEquals(3965, ukeSats)
     }
 }

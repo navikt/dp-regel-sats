@@ -7,6 +7,9 @@ import com.natpryce.konfig.Key
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
+import java.net.InetAddress
+import java.net.UnknownHostException
+import no.finn.unleash.util.UnleashConfig
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Topic
@@ -23,7 +26,8 @@ private val localProperties = ConfigurationMap(
         "nav.truststore.password" to "changeme",
         "application.profile" to Profile.LOCAL.toString(),
         "application.httpPort" to "8096",
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "unleash.url" to "https://localhost"
     )
 )
 private val devProperties = ConfigurationMap(
@@ -33,7 +37,8 @@ private val devProperties = ConfigurationMap(
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.DEV.toString(),
         "application.httpPort" to "8096",
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "unleash.url" to "http://unleash.default.svc.nais.local/api"
     )
 )
 private val prodProperties = ConfigurationMap(
@@ -43,7 +48,8 @@ private val prodProperties = ConfigurationMap(
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.PROD.toString(),
         "application.httpPort" to "8096",
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "unleash.url" to "https://unleash.nais.adeo.no/api/"
     )
 )
 
@@ -69,7 +75,12 @@ data class Configuration(
         "KAFKA_RESET_POLICY" to config()[Key("kafka.reset.policy", stringType)],
         "NAV_TRUSTSTORE_PATH" to config()[Key("nav.truststore.path", stringType)],
         "NAV_TRUSTSTORE_PASSWORD" to config()[Key("nav.truststore.password", stringType)]
-    )
+    ),
+    val unleashConfig: UnleashConfig = UnleashConfig.builder()
+        .appName(config().getOrElse(Key("application.id", stringType), "dp-regel-sats"))
+        .instanceId(getHostname())
+        .unleashAPI(config()[Key("unleash.url", stringType)])
+        .build()
 ) {
     data class Kafka(
         val brokers: String = config()[Key("kafka.bootstrap.servers", stringType)],
@@ -93,6 +104,15 @@ data class Configuration(
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
         val httpPort: Int = config()[Key("application.httpPort", intType)]
     )
+}
+
+private fun getHostname(): String {
+    return try {
+        val addr: InetAddress = InetAddress.getLocalHost()
+        addr.hostName
+    } catch (e: UnknownHostException) {
+        "unknown"
+    }
 }
 
 enum class Profile {

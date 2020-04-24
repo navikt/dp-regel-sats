@@ -6,6 +6,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
+import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.AVKORTET_GRUNNLAG
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.BEREGNINGSDATO
@@ -22,7 +23,7 @@ class ApplicationTopologyTest {
     @BeforeEach
     fun setUp() {
         rapid = createRapid {
-            LøsningService(it, instrumentation = instrumentation)
+            LøsningService(it, unleash = FakeUnleash(), instrumentation = instrumentation)
         }
     }
 
