@@ -42,7 +42,7 @@ class LøsningService(
         const val SATS = "Sats"
         const val ANTALL_BARN = "antallBarn"
         const val AVKORTET_GRUNNLAG = "avkortetGrunnlag"
-        const val BEREGNINGSDATO = "beregningsDato"
+        const val BEREGNINGSDATO = "beregningsdato"
         const val LÆRLING = "lærling"
     }
 
