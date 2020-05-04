@@ -25,19 +25,13 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 3.0)
         val andelØvre = grunnlag.getGrunnlagMellom(3.0, 6.0)
 
-        val dagSatsUnder3G = getIkkeAvrundetDagstats(andelNedre, dagSatsFaktorUnder3G)
-        val dagSatsOver3G = getIkkeAvrundetDagstats(andelØvre, dagSatsFaktorOver3G)
+        val dagSatsUnder3G = getDagSats(andelNedre, dagSatsFaktorUnder3G)
+        val dagSatsOver3G = getDagSats(andelØvre, dagSatsFaktorOver3G)
         val dagSats = (dagSatsUnder3G + dagSatsOver3G).setScale(0, RoundingMode.HALF_UP)
 
         return inkluderBarnetillegg(antallBarn, dagSats, grunnlag, REGEL_NAVN)
     }
 
-    private fun getIkkeAvrundetDagstats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(
+    private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(
         antallDesimaler))
-
-    private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal =
-        (grunnlag * dagSatsFaktor).setScale(
-            0,
-            RoundingMode.HALF_UP
-        )
 }
