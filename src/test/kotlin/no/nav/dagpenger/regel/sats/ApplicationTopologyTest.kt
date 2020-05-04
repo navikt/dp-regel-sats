@@ -6,7 +6,6 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
-import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.AVKORTET_GRUNNLAG
 import no.nav.dagpenger.regel.sats.LøsningService.Companion.BEREGNINGSDATO
@@ -17,7 +16,7 @@ import org.junit.jupiter.api.Test
 
 class ApplicationTopologyTest {
     private val instrumentation = mockk<SatsInstrumentation>(relaxed = true)
-    private val rapid = TestRapid().apply { LøsningService(this, unleash = FakeUnleash(), instrumentation = instrumentation) }
+    private val rapid = TestRapid().apply { LøsningService(this, instrumentation = instrumentation) }
 
     @BeforeEach
     fun setUp() {

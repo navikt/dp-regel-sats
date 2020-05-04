@@ -1,11 +1,9 @@
 package no.nav.dagpenger.regel.sats
 
-import de.huxhorn.sulky.ulid.ULID
 import java.math.BigDecimal
 import java.time.LocalDate
 import mu.KotlinLogging
 import mu.withLoggingContext
-import no.finn.unleash.Unleash
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
@@ -20,11 +18,9 @@ private val log = KotlinLogging.logger {}
 
 class LøsningService(
     rapidsConnection: RapidsConnection,
-    private val unleash: Unleash,
-    private val sats: Sats = Sats(unleash),
+    private val sats: Sats = Sats(),
     private val instrumentation: SatsInstrumentation = SatsInstrumentation()
 ) : PacketListener {
-    private val ulidGenerator = ULID()
 
     init {
         River(rapidsConnection).apply {
