@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 internal class KoronaBeregningTest {
     private val fakeUnleash = FakeUnleash().apply { this.enable("dp-regel-sats.Avrunding") }
-    private val sats = KoronaBeregning(fakeUnleash)
+    private val sats = KoronaBeregning()
 
     @Test
     fun `gir økt dagsats for de under 3G`() {

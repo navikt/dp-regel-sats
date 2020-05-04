@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.sats
 import io.prometheus.client.Counter
 import java.math.BigDecimal
 import java.time.LocalDate
-import no.finn.unleash.Unleash
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
@@ -20,9 +19,9 @@ private val satsBeregningBrukt = Counter.build()
     .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
     .register()
 
-class Sats(val unleash: Unleash) {
+class Sats() {
     private val ordinærBeregning = OrdinærBeregning()
-    private val koronaBeregning = KoronaBeregning(unleash)
+    private val koronaBeregning = KoronaBeregning()
     private val koronaLærlingBeregning = KoronaLærlingBeregning()
 
     fun forDato(beregningsdato: LocalDate, lærling: Boolean = false): Beregning =

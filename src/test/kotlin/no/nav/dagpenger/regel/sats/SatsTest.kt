@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.sats
 import io.prometheus.client.CollectorRegistry
 import java.time.LocalDate
 import java.time.Month
-import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 internal class SatsTest {
-    private val sats = Sats(FakeUnleash())
+    private val sats = Sats()
 
     @Test
     fun `beregningsdato for 1 Januar 2020 gir ordinære regler`() {

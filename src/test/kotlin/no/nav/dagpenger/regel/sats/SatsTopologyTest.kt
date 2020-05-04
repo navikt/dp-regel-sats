@@ -6,7 +6,6 @@ import java.time.LocalDate
 import java.util.Properties
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.regel.sats.Application.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
@@ -37,7 +36,7 @@ class SatsTopologyTest {
         val sats = Application(
             Configuration(),
             fakeSatsInstrumentation,
-            Sats(FakeUnleash())
+            Sats()
         )
 
         val packet = Packet("{}")
@@ -60,7 +59,7 @@ class SatsTopologyTest {
         val sats = Application(
             Configuration(),
             fakeSatsInstrumentation,
-            Sats(FakeUnleash())
+            Sats()
         )
 
         val packet = Packet("{}")
@@ -84,7 +83,7 @@ class SatsTopologyTest {
         val sats = Application(
             Configuration(),
             fakeSatsInstrumentation,
-            Sats(FakeUnleash())
+            Sats()
         )
 
         val jsonString = """
@@ -121,7 +120,7 @@ class SatsTopologyTest {
         val minsteinntekt = Application(
             Configuration(),
             fakeSatsInstrumentation,
-            Sats(FakeUnleash())
+            Sats()
         )
 
         val packet = Packet()
