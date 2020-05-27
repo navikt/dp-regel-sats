@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class GrunnlagTest {
+
     @Test
     fun `splitter over og under 3G`() {
         val grunnlag = Grunnlag(500000.toBigDecimal(), 100000.toBigDecimal())
