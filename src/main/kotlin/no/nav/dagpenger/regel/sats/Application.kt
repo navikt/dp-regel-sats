@@ -6,9 +6,6 @@ import java.net.URI
 import java.util.Properties
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
-import no.nav.dagpenger.grunnbelop.Regel
-import no.nav.dagpenger.grunnbelop.forDato
-import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import no.nav.dagpenger.streams.HealthCheck
 import no.nav.dagpenger.streams.HealthStatus
 import no.nav.dagpenger.streams.River
@@ -51,11 +48,17 @@ class Application(
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
+        val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
 
-        val grunnlag = Grunnlag(avkortetGrunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato).verdi)
+        val grunnlag = Grunnlag(
+            grunnlag = avkortetGrunnlag,
+            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+        )
+
         val satsResult = sats.forDato(
             beregningsdato = beregningsdato,
-            lærling = erLærling).beregn(grunnlag, antallBarn)
+            lærling = erLærling
+        ).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
             ulidGenerator.nextULID(),
@@ -99,7 +102,6 @@ class Application(
 
 fun main(args: Array<String>) {
     val configuration = Configuration()
-
     val instrumentation = SatsInstrumentation()
     val sats = Sats()
 
@@ -116,6 +118,7 @@ fun main(args: Array<String>) {
         LøsningService(
             this,
             sats = sats,
+            features = Features(configuration.features),
             instrumentation = instrumentation
         )
     }.also {

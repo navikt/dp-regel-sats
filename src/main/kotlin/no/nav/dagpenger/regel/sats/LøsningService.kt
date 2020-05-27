@@ -4,9 +4,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import mu.KotlinLogging
 import mu.withLoggingContext
-import no.nav.dagpenger.grunnbelop.Regel
-import no.nav.dagpenger.grunnbelop.forDato
-import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.RapidsConnection.MessageContext
@@ -18,9 +15,12 @@ private val log = KotlinLogging.logger {}
 
 class LøsningService(
     rapidsConnection: RapidsConnection,
+    features: Features,
     private val sats: Sats = Sats(),
     private val instrumentation: SatsInstrumentation = SatsInstrumentation()
 ) : PacketListener {
+
+    private val gjeldendeGrunnbeløp: GjeldendeGrunnbeløp = GjeldendeGrunnbeløp(features)
 
     init {
         River(rapidsConnection).apply {
@@ -87,10 +87,12 @@ class LøsningService(
         beregningsdato: LocalDate,
         lærling: Boolean
     ): FastsattSats {
+
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
-            grunnbeløp = getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato).verdi
+            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
         )
+
         val satsResult = sats.forDato(beregningsdato, lærling).beregn(
             grunnlag = grunnlag,
             antallBarn = antallBarn

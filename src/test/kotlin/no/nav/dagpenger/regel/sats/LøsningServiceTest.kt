@@ -14,9 +14,15 @@ import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class ApplicationTopologyTest {
+class LøsningServiceTest {
     private val instrumentation = mockk<SatsInstrumentation>(relaxed = true)
-    private val rapid = TestRapid().apply { LøsningService(this, instrumentation = instrumentation) }
+    private val rapid = TestRapid().apply {
+        LøsningService(
+            this, instrumentation = instrumentation, features = Features(
+                emptyMap()
+            )
+        )
+    }
 
     @BeforeEach
     fun setUp() {

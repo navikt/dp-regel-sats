@@ -4,6 +4,7 @@ import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.natpryce.konfig.Key
+import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
@@ -32,6 +33,7 @@ private val devProperties = ConfigurationMap(
         "kafka.topic" to TOPIC,
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.DEV.toString(),
+        "feature.gjustering" to true.toString(),
         "application.httpPort" to "8096",
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
@@ -93,6 +95,9 @@ data class Configuration(
         val id: String = config().getOrElse(Key("application.id", stringType), "dagpenger-regel-sats"),
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
         val httpPort: Int = config()[Key("application.httpPort", intType)]
+    )
+    val features = mapOf(
+        "gjustering" to config().getOrElse(Key("feature.gjustering", booleanType), false)
     )
 }
 
