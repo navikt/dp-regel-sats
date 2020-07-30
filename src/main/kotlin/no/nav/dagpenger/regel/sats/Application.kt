@@ -1,9 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
-import java.math.BigDecimal
-import java.net.URI
-import java.util.Properties
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.HealthCheck
@@ -13,6 +10,9 @@ import no.nav.dagpenger.streams.streamConfig
 import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
+import java.math.BigDecimal
+import java.net.URI
+import java.util.Properties
 
 class Application(
     private val configuration: Configuration,

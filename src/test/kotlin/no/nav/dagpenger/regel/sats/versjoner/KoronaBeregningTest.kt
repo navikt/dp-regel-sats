@@ -1,11 +1,11 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
-import java.math.BigDecimal
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.sats.Grunnlag
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 internal class KoronaBeregningTest {
     private val fakeUnleash = FakeUnleash().apply { this.enable("dp-regel-sats.Avrunding") }
