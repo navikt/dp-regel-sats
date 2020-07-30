@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.sats
 
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.time.LocalDate
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.time.LocalDate
 
 class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
 

@@ -1,11 +1,6 @@
 package no.nav.dagpenger.regel.sats
 
 import io.mockk.mockk
-import java.net.URI
-import java.time.LocalDate
-import java.util.Properties
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.regel.sats.Application.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
@@ -14,6 +9,11 @@ import org.apache.kafka.streams.TopologyTestDriver
 import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.net.URI
+import java.time.LocalDate
+import java.util.Properties
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class SatsTopologyTest {
     companion object {
@@ -86,13 +86,14 @@ class SatsTopologyTest {
             Sats()
         )
 
-        val jsonString = """
+        val jsonString =
+            """
             {
                 grunnlagResultat: {
                     avkortet: 50000
                 }
             }
-        """.trimIndent()
+            """.trimIndent()
         val packet = Packet(jsonString)
         packet.putValue(BEREGNINGSDATO, LocalDate.now())
         packet.putValue(Application.ANTALL_BARN, 0)

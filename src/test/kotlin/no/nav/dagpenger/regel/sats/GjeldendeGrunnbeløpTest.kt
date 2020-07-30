@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.sats
 
-import java.math.BigDecimal
-import java.time.LocalDate
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
 
 internal class GjeldendeGrunnbeløpTest {
 

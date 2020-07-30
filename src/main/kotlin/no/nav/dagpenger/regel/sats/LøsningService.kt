@@ -1,7 +1,5 @@
 package no.nav.dagpenger.regel.sats
 
-import java.math.BigDecimal
-import java.time.LocalDate
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.helse.rapids_rivers.JsonMessage
@@ -10,6 +8,8 @@ import no.nav.helse.rapids_rivers.RapidsConnection.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.River.PacketListener
 import no.nav.helse.rapids_rivers.asLocalDate
+import java.math.BigDecimal
+import java.time.LocalDate
 
 private val log = KotlinLogging.logger {}
 

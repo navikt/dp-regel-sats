@@ -1,15 +1,15 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
-import java.time.LocalDate
 import no.nav.dagpenger.regel.sats.Beregning
 import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Dekningsgrad
 import no.nav.dagpenger.regel.sats.Grunnlag
 import no.nav.dagpenger.regel.sats.SatsResult
 import no.nav.dagpenger.regel.sats.antallDesimaler
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
+import java.time.LocalDate
 
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
 
@@ -32,6 +32,10 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
         return inkluderBarnetillegg(antallBarn, dagSats, grunnlag, REGEL_NAVN)
     }
 
-    private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(
-        antallDesimaler))
+    private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(
+        dagSatsFaktor,
+        MathContext(
+            antallDesimaler
+        )
+    )
 }
