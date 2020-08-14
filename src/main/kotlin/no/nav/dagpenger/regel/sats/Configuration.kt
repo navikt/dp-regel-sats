@@ -23,7 +23,7 @@ private val localProperties = ConfigurationMap(
         "nav.truststore.path" to "",
         "nav.truststore.password" to "changeme",
         "application.profile" to Profile.LOCAL.toString(),
-        "application.httpPort" to "8096",
+        "application.httpPort" to "8080",
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
@@ -33,7 +33,7 @@ private val devProperties = ConfigurationMap(
         "kafka.topic" to TOPIC,
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.DEV.toString(),
-        "application.httpPort" to "8096",
+        "application.httpPort" to "8080",
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
@@ -43,7 +43,7 @@ private val prodProperties = ConfigurationMap(
         "kafka.topic" to TOPIC, // Used for Behov v2 / rapids-and-rivers
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.PROD.toString(),
-        "application.httpPort" to "8096",
+        "application.httpPort" to "8080",
         "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
@@ -62,7 +62,7 @@ data class Configuration(
     val behovTopic: Topic<String, Packet> = Topics.DAGPENGER_BEHOV_PACKET_EVENT.copy(
         name = config()[Key("behov.topic", stringType)]
     ),
-    val httpPort: Int = 8097,
+    val httpPort: Int = 8080,
     val rapidApplication: Map<String, String> = mapOf(
         "RAPID_APP_NAME" to application.id,
         "KAFKA_BOOTSTRAP_SERVERS" to config()[Key("kafka.bootstrap.servers", stringType)],
