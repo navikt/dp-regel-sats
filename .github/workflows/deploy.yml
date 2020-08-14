@@ -4,6 +4,7 @@ on: [push]
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dagpenger-joark-mottak:${{ github.sha }}
+  APP: dp-regel-sats
 jobs:
   build:
     name: Build and publish Docker image
