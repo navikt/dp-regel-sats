@@ -4,7 +4,6 @@ on: [push]
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dagpenger-joark-mottak:${{ github.sha }}
-  APP: dp-regel-sats
 jobs:
   build:
     name: Build and publish Docker image
@@ -96,12 +95,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: navikt/dagpenger-funksjonelle-tester
+      - id: repo-name
+        name: Split owner from repository name
+        run: |
+          echo ::set-output name=name::$(echo ${{github.repository}} | sed -e "s/^navikt\///" )
       - uses: nais/deploy/actions/deploy@v1
         name: Run tests
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          VAR: GITHUB_REPO=${{ env.APP }}
+          VAR: GITHUB_REPO=${{ steps.repo-name.outputs.name }}
           RESOURCE: nais/tests.yml
         timeout-minutes: 5
 
