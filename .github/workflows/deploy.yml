@@ -3,7 +3,7 @@ name: Build and deploy
 on: [push]
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/dagpenger-joark-mottak:${{ github.sha }}
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-regel-sats:${{ github.sha }}
 jobs:
   build:
     name: Build and publish Docker image
