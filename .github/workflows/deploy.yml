@@ -4,7 +4,6 @@ on: [push]
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dagpenger-joark-mottak:${{ github.sha }}
-  APP: dp-regel-sats
 jobs:
   build:
     name: Build and publish Docker image
@@ -101,7 +100,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          VAR: GITHUB_REPO=$APP
+          VAR: GITHUB_REPO=${{ env.APP }}
           RESOURCE: nais/tests.yml
         timeout-minutes: 5
 
