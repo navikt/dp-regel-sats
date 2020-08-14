@@ -21,7 +21,7 @@ class Application(
     public override val healthChecks: List<HealthCheck> = listOf()
 ) : River(configuration.behovTopic) {
     override val SERVICE_APP_ID: String = configuration.application.id
-    override val HTTP_PORT: Int = configuration.httpPort
+    override val HTTP_PORT: Int = configuration.application.httpPort
     private val ulidGenerator = ULID()
 
     companion object {
