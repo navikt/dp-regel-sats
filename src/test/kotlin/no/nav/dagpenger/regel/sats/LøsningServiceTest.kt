@@ -18,7 +18,8 @@ class LøsningServiceTest {
     private val instrumentation = mockk<SatsInstrumentation>(relaxed = true)
     private val rapid = TestRapid().apply {
         LøsningService(
-            this, instrumentation = instrumentation,
+            this,
+            instrumentation = instrumentation,
             features = Features(
                 emptyMap()
             )
