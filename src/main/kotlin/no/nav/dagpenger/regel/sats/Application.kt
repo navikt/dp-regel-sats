@@ -1,6 +1,8 @@
 package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
+import no.finn.unleash.DefaultUnleash
+import no.finn.unleash.Unleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.HealthCheck
@@ -12,11 +14,13 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
+import java.time.LocalDate
 import java.util.Properties
 
 class Application(
     private val configuration: Configuration,
     private val instrumentation: SatsInstrumentation,
+    private val unleash: Unleash,
     private val sats: Sats,
     public override val healthChecks: List<HealthCheck> = listOf()
 ) : River(configuration.behovTopic) {
@@ -27,6 +31,7 @@ class Application(
     companion object {
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val AVKORTET_GRUNNLAG = "avkortet"
+        const val VERNEPLIKT = "harAvtjentVerneplikt"
         const val ANTALL_BARN = "antallBarn"
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
@@ -48,12 +53,20 @@ class Application(
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
+        val verneplikt = packet.getNullableBoolean(VERNEPLIKT) == true
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
 
-        val grunnlag = Grunnlag(
-            grunnlag = avkortetGrunnlag,
-            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
-        )
+        val grunnlag = if (unleash.isEnabled("dp-regel-sats.VernepliktGjustering", false) && verneplikt) {
+            Grunnlag(
+                grunnlag = avkortetGrunnlag,
+                grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now(), verneplikt)
+            )
+        } else {
+            Grunnlag(
+                grunnlag = avkortetGrunnlag,
+                grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+            )
+        }
 
         val satsResult = sats.forDato(
             beregningsdato = beregningsdato,
@@ -105,9 +118,12 @@ fun main(args: Array<String>) {
     val instrumentation = SatsInstrumentation()
     val sats = Sats()
 
+    val unleash = DefaultUnleash(configuration.unleashConfig)
+
     Application(
         configuration = configuration,
         instrumentation = instrumentation,
+        unleash = unleash,
         sats = sats,
         healthChecks = listOf(RapidHealthCheck)
     ).start()

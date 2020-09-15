@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
 import io.mockk.mockk
+import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.regel.sats.Application.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
@@ -36,6 +37,7 @@ class SatsTopologyTest {
         val sats = Application(
             Configuration(),
             fakeSatsInstrumentation,
+            FakeUnleash(),
             Sats()
         )
 
@@ -59,6 +61,7 @@ class SatsTopologyTest {
         val sats = Application(
             Configuration(),
             fakeSatsInstrumentation,
+            FakeUnleash(),
             Sats()
         )
 
@@ -83,6 +86,7 @@ class SatsTopologyTest {
         val sats = Application(
             Configuration(),
             fakeSatsInstrumentation,
+            FakeUnleash(),
             Sats()
         )
 
@@ -121,6 +125,7 @@ class SatsTopologyTest {
         val minsteinntekt = Application(
             Configuration(),
             fakeSatsInstrumentation,
+            FakeUnleash(),
             Sats()
         )
 
