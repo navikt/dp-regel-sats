@@ -1,8 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
-import org.junit.jupiter.api.Assertions
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 import java.time.LocalDate
 
 internal class GjeldendeGrunnbeløpTest {
@@ -11,13 +10,13 @@ internal class GjeldendeGrunnbeløpTest {
     fun ` under g-justeringstest`() {
 
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(mapOf("gjustering" to true)))
-        Assertions.assertEquals(gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()), BigDecimal("102000"))
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 101351.toBigDecimal()
     }
 
     @Test
     fun ` ikke g-justeringstest`() {
 
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(mapOf("gjustering" to false)))
-        Assertions.assertEquals(gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()), BigDecimal("99858"))
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 101351.toBigDecimal()
     }
 }
