@@ -7,13 +7,10 @@ import com.natpryce.konfig.Key
 import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
-import no.finn.unleash.util.UnleashConfig
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.streams.KafkaCredential
 import no.nav.dagpenger.streams.Topic
 import no.nav.dagpenger.streams.Topics
-import java.net.InetAddress
-import java.net.UnknownHostException
 
 private const val TOPIC = "privat-dagpenger-behov-v2"
 
@@ -25,8 +22,7 @@ private val localProperties = ConfigurationMap(
         "nav.truststore.path" to "",
         "nav.truststore.password" to "changeme",
         "application.profile" to Profile.LOCAL.toString(),
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
-        "unleash.url" to "http://localhost/api",
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
 private val devProperties = ConfigurationMap(
@@ -35,8 +31,7 @@ private val devProperties = ConfigurationMap(
         "kafka.topic" to TOPIC,
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.DEV.toString(),
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
-        "unleash.url" to "http://unleash.aura.svc.nais.local/api",
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
 private val prodProperties = ConfigurationMap(
@@ -45,8 +40,7 @@ private val prodProperties = ConfigurationMap(
         "kafka.topic" to TOPIC, // Used for Behov v2 / rapids-and-rivers
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.PROD.toString(),
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
-        "unleash.url" to "http://unleash.aura.svc.nais.local/api",
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
 
@@ -64,11 +58,6 @@ data class Configuration(
     val behovTopic: Topic<String, Packet> = Topics.DAGPENGER_BEHOV_PACKET_EVENT.copy(
         name = config()[Key("behov.topic", stringType)]
     ),
-    val unleashConfig: UnleashConfig = UnleashConfig.builder()
-        .appName(config().getOrElse(Key("app.name", stringType), "dp-regel-sats"))
-        .instanceId(getHostname())
-        .unleashAPI(config()[Key("unleash.url", stringType)])
-        .build(),
     val rapidApplication: Map<String, String> = mapOf(
         "RAPID_APP_NAME" to application.id,
         "KAFKA_BOOTSTRAP_SERVERS" to config()[Key("kafka.bootstrap.servers", stringType)],
@@ -109,13 +98,4 @@ data class Configuration(
 
 enum class Profile {
     LOCAL, DEV, PROD
-}
-
-fun getHostname(): String {
-    return try {
-        val addr: InetAddress = InetAddress.getLocalHost()
-        addr.hostName
-    } catch (e: UnknownHostException) {
-        "unknown"
-    }
 }
