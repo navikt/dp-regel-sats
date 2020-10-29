@@ -28,7 +28,7 @@ class Sats() {
         instrument {
             return@instrument when {
                 koronaBeregning.isActive(beregningsdato) && !lærling -> koronaBeregning
-                koronaBeregning.isActive(beregningsdato) && lærling -> koronaLærlingBeregning
+                koronaLærlingBeregning.isActive(beregningsdato) && lærling -> koronaLærlingBeregning
                 else -> ordinærBeregning
             }
         }

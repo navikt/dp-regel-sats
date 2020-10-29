@@ -2,8 +2,10 @@ package no.nav.dagpenger.regel.sats.versjoner
 
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.regel.sats.Grunnlag
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -70,5 +72,13 @@ internal class KoronaLærlingBeregningTest {
         )
         assertEquals(793, dagSats)
         assertEquals(3965, ukeSats)
+    }
+
+    @Test
+    fun `er aktiv til fra 20 mars 2020 til 31 desember 2021`() {
+        assertTrue(sats.isActive(LocalDate.of(2020, 3, 20)))
+        assertTrue(sats.isActive(LocalDate.of(2021, 12, 31)))
+        assertFalse(sats.isActive(LocalDate.of(2020, 2, 29)))
+        assertFalse(sats.isActive(LocalDate.of(2022, 1, 1)))
     }
 }

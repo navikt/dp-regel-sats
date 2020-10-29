@@ -11,16 +11,23 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 import java.time.LocalDate
+import java.time.Month
 
 // Defineres her: https://lovdata.no/forskrift/2020-03-20-368/§2-3 andre ledd
 
 class KoronaLærlingBeregning : Beregning {
 
+    companion object {
+        private val fom = LocalDate.of(2020, Month.MARCH, 20)
+        private val tom = LocalDate.of(2021, Month.DECEMBER, 31)
+        private val periode = fom..tom
+    }
+
     private val REGEL_NAVN = Beregningsregel.KORONA_LAERLING
 
     private val dagsatsfaktorUnder1Komma5G = Dekningsgrad(dekningsgrad = 100.0).getDagSatsFaktor()
     private val dagsatsfaktorOver1Komma5G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
-    override fun isActive(beregningstidspunkt: LocalDate): Boolean = beregningstidspunkt.erKoronaPeriode()
+    override fun isActive(beregningstidspunkt: LocalDate): Boolean = beregningstidspunkt in periode
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 1.5)
