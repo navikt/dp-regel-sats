@@ -7,7 +7,6 @@ import no.nav.dagpenger.streams.HealthCheck
 import no.nav.dagpenger.streams.HealthStatus
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
@@ -109,21 +108,21 @@ fun main(args: Array<String>) {
         configuration = configuration,
         instrumentation = instrumentation,
         sats = sats,
-        healthChecks = listOf(RapidHealthCheck)
+        healthChecks = emptyList()
     ).start()
 
-    RapidApplication.create(
-        Configuration().rapidApplication
-    ).apply {
-        LøsningService(
-            this,
-            sats = sats,
-            features = Features(configuration.features),
-            instrumentation = instrumentation
-        )
-    }.also {
-        it.register(RapidHealthCheck)
-    }.start()
+    // RapidApplication.create(
+    //     Configuration().rapidApplication
+    // ).apply {
+    //     LøsningService(
+    //         this,
+    //         sats = sats,
+    //         features = Features(configuration.features),
+    //         instrumentation = instrumentation
+    //     )
+    // }.also {
+    //     it.register(RapidHealthCheck)
+    // }.start()
 }
 
 object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
