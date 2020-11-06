@@ -29,7 +29,7 @@ class Application(
         const val ANTALL_BARN = "antallBarn"
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
-        const val BEREGNINGSDATO = "beregningsDato"
+        const val VIRKNINGSTIDSPUNKT = "virkningstidspunkt"
         const val LÆRLING = "lærling"
     }
 
@@ -38,24 +38,24 @@ class Application(
             Predicate { _, packet -> !packet.hasField(SATS_RESULTAT) },
             Predicate { _, packet -> packet.hasField(GRUNNLAG_RESULTAT) },
             Predicate { _, packet -> packet.hasField(ANTALL_BARN) },
-            Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) }
+            Predicate { _, packet -> packet.hasField(VIRKNINGSTIDSPUNKT) }
         )
     }
 
     override fun onPacket(packet: Packet): Packet {
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
-        val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
+        val virkningstidspunkt = packet.getLocalDate(VIRKNINGSTIDSPUNKT)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
 
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
-            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(virkningstidspunkt)
         )
 
         val satsResult = sats.forDato(
-            beregningsdato = beregningsdato,
+            virkningstidspunkt = virkningstidspunkt,
             lærling = erLærling
         ).beregn(grunnlag, antallBarn)
 

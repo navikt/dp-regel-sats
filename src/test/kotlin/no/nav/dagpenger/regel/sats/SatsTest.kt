@@ -13,32 +13,32 @@ internal class SatsTest {
     private val sats = Sats()
 
     @Test
-    fun `beregningsdato for 1 Januar 2020 gir ordinære regler`() {
+    fun `virkningstidspunkt for 1 Januar 2020 gir ordinære regler`() {
         assertTrue(sats.forDato(LocalDate.of(2020, Month.JANUARY, 1)) is OrdinærBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Mars 2020 gir korona ordinære regler når feature er på`() {
+    fun `virkningstidspunkt for 20 Mars 2020 gir korona ordinære regler når feature er på`() {
         assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), false) is KoronaBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Juli 2020 gir korona ordinære regler når feature er på`() {
+    fun `virkningstidspunkt for 20 Juli 2020 gir korona ordinære regler når feature er på`() {
         assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), false) is KoronaBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Mars 2020 gir korona lærling regler når feature er på`() {
+    fun `virkningstidspunkt for 20 Mars 2020 gir korona lærling regler når feature er på`() {
         assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), true) is KoronaLærlingBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Juli 2020 gir korona lærling regler når feature er på`() {
+    fun `virkningstidspunkt for 20 Juli 2020 gir korona lærling regler når feature er på`() {
         assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), true) is KoronaLærlingBeregning)
     }
 
     @Test
-    fun `beregningsdato for 1 Januar 2021 gir ordinære regler`() {
+    fun `virkningstidspunkt for 1 Januar 2021 gir ordinære regler`() {
         // Forskriften utløper automatisk 31. desember 2020
         assertTrue(sats.forDato(LocalDate.of(2021, Month.JANUARY, 1)) is OrdinærBeregning)
     }
