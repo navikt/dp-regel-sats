@@ -15,6 +15,7 @@ class OnPacketTest {
         val packet = Packet("""{"grunnlagResultat": { "avkortet": 100000 }}""").apply {
             this.putValue(Application.ANTALL_BARN, 0)
             this.putValue(Application.VIRKNINGSTIDSPUNKT, LocalDate.of(2020, 3, 21))
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 3, 21))
             this.putValue(Application.LÆRLING, true)
         }
 
@@ -28,6 +29,7 @@ class OnPacketTest {
         val packet = Packet("""{"grunnlagResultat": { "avkortet": 100000 }}""").apply {
             this.putValue(Application.ANTALL_BARN, 0)
             this.putValue(Application.VIRKNINGSTIDSPUNKT, LocalDate.of(2020, 3, 21))
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 3, 21))
         }
 
         val outPacket = service.onPacket(packet)

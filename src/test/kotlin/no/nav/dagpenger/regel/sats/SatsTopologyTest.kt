@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.sats
 
 import io.mockk.mockk
 import no.nav.dagpenger.events.Packet
+import no.nav.dagpenger.regel.sats.Application.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.Application.Companion.VIRKNINGSTIDSPUNKT
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
@@ -96,6 +97,7 @@ class SatsTopologyTest {
             """.trimIndent()
         val packet = Packet(jsonString)
         packet.putValue(VIRKNINGSTIDSPUNKT, LocalDate.now())
+        packet.putValue(BEREGNINGSDATO, LocalDate.now())
         packet.putValue(Application.ANTALL_BARN, 0)
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
@@ -126,6 +128,7 @@ class SatsTopologyTest {
 
         val packet = Packet()
         packet.putValue(VIRKNINGSTIDSPUNKT, LocalDate.now())
+        packet.putValue(BEREGNINGSDATO, LocalDate.now())
         packet.putValue("grunnlagResultat", "ERROR")
         packet.putValue("antallBarn", "ERROR")
 

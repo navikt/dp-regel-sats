@@ -30,6 +30,7 @@ class Application(
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
         const val VIRKNINGSTIDSPUNKT = "virkningstidspunkt"
+        const val BEREGNINGSDATO = "beregningsdato"
         const val LÆRLING = "lærling"
     }
 
@@ -38,7 +39,8 @@ class Application(
             Predicate { _, packet -> !packet.hasField(SATS_RESULTAT) },
             Predicate { _, packet -> packet.hasField(GRUNNLAG_RESULTAT) },
             Predicate { _, packet -> packet.hasField(ANTALL_BARN) },
-            Predicate { _, packet -> packet.hasField(VIRKNINGSTIDSPUNKT) }
+            Predicate { _, packet -> packet.hasField(VIRKNINGSTIDSPUNKT) },
+            Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) }
         )
     }
 
@@ -46,12 +48,13 @@ class Application(
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val virkningstidspunkt = packet.getLocalDate(VIRKNINGSTIDSPUNKT)
+        val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
 
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
-            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(virkningstidspunkt)
+            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
         )
 
         val satsResult = sats.forDato(
