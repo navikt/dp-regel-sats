@@ -31,7 +31,8 @@ private val devProperties = ConfigurationMap(
         "kafka.topic" to TOPIC,
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.DEV.toString(),
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "feature.gjustering" to true.toString()
     )
 )
 private val prodProperties = ConfigurationMap(
@@ -91,6 +92,7 @@ data class Configuration(
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
         val httpPort: Int = 8080
     )
+
     val features = mapOf(
         "gjustering" to config().getOrElse(Key("feature.gjustering", booleanType), false)
     )
