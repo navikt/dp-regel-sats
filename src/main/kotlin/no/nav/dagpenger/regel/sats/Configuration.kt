@@ -31,7 +31,8 @@ private val devProperties = ConfigurationMap(
         "kafka.topic" to TOPIC,
         "kafka.reset.policy" to "earliest",
         "application.profile" to Profile.DEV.toString(),
-        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name,
+        "feature.gjustering" to true.toString(),
+        "behov.topic" to Topics.DAGPENGER_BEHOV_PACKET_EVENT.name
     )
 )
 private val prodProperties = ConfigurationMap(
