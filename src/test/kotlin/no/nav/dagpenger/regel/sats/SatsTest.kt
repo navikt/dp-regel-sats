@@ -38,14 +38,14 @@ internal class SatsTest {
     }
 
     @Test
-    fun `beregningsdato for 1 April 2021 gir ordinære regler`() {
-        // utløper automatisk 31. mars 2021
-        assertTrue(sats.forDato(LocalDate.of(2021, Month.APRIL, 1)) is OrdinærBeregning)
+    fun `beregningsdato for 1 Oktober 2021 gir ordinære regler`() {
+        // utløper automatisk 30. september 2021
+        assertTrue(sats.forDato(LocalDate.of(2021, Month.OCTOBER, 1)) is OrdinærBeregning)
     }
 
     @Test
     fun `vi teller hvilken regel som blir brukt`() {
-        sats.forDato(LocalDate.of(2021, Month.JANUARY, 1))
+        sats.forDato(LocalDate.of(2022, Month.JANUARY, 1))
         assert(CollectorRegistry.defaultRegistry.getSampleValue(satsBeregningBruktName, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0)
     }
 }
