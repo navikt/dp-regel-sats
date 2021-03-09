@@ -24,10 +24,10 @@ class Sats() {
     private val koronaBeregning = KoronaBeregning()
     private val koronaLærlingBeregning = KoronaLærlingBeregning()
 
-    fun forDato(beregningsdato: LocalDate, lærling: Boolean = false): Beregning =
+    fun forDato(beregningsdato: LocalDate, lærling: Boolean = false, regelverksdato: LocalDate? = null): Beregning =
         instrument {
             return@instrument when {
-                koronaBeregning.isActive(beregningsdato) && !lærling -> koronaBeregning
+                koronaBeregning.isActive(beregningsdato, regelverksdato) && !lærling -> koronaBeregning
                 koronaLærlingBeregning.isActive(beregningsdato) && lærling -> koronaLærlingBeregning
                 else -> ordinærBeregning
             }
@@ -42,7 +42,7 @@ fun instrument(handler: () -> Beregning): Beregning =
     }
 
 interface Beregning {
-    fun isActive(beregningstidspunkt: LocalDate): Boolean
+    fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate? = null): Boolean
     fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult
 }
 

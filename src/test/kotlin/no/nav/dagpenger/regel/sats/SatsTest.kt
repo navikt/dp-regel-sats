@@ -48,4 +48,10 @@ internal class SatsTest {
         sats.forDato(LocalDate.of(2022, Month.JANUARY, 1))
         assert(CollectorRegistry.defaultRegistry.getSampleValue(satsBeregningBruktName, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0)
     }
+
+    @Test
+    fun `beregningsdato før 20 mars 2020 og regelverksdato etter 1 februar 2021 gir koronaberegning`() {
+        val beregning = sats.forDato(LocalDate.of(2020, Month.MARCH, 19), regelverksdato = LocalDate.of(2021, Month.FEBRUARY, 2))
+        assertTrue(beregning is KoronaBeregning)
+    }
 }

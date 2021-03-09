@@ -10,6 +10,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 import java.time.LocalDate
+import java.time.Month
 
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
 
@@ -19,7 +20,9 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
 
-    override fun isActive(beregningstidspunkt: LocalDate): Boolean = beregningstidspunkt.erKoronaPeriode()
+    override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate?): Boolean =
+        beregningsdato.erKoronaPeriode()
+            || (beregningsdato.isBefore(LocalDate.of(2020, Month.MARCH, 20)) && regelverksdato?.isAfter(LocalDate.of(2021, Month.FEBRUARY, 1)) ?: false)
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 3.0)
