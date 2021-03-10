@@ -5,23 +5,18 @@ import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.regel.sats.Application.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.streams.Topics.DAGPENGER_BEHOV_PACKET_EVENT
 import org.apache.kafka.streams.StreamsConfig
+import org.apache.kafka.streams.TestInputTopic
+import org.apache.kafka.streams.TestOutputTopic
 import org.apache.kafka.streams.TopologyTestDriver
-import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.net.URI
 import java.time.LocalDate
 import java.util.Properties
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class SatsTopologyTest {
     companion object {
-        val factory = ConsumerRecordFactory<String, Packet>(
-            DAGPENGER_BEHOV_PACKET_EVENT.name,
-            DAGPENGER_BEHOV_PACKET_EVENT.keySerde.serializer(),
-            DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.serializer()
-        )
 
         val config = Properties().apply {
             this[StreamsConfig.APPLICATION_ID_CONFIG] = "test"
@@ -42,15 +37,8 @@ class SatsTopologyTest {
         val packet = Packet("{}")
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(packet)
-            topologyTestDriver.pipeInput(inputRecord)
-
-            val ut = topologyTestDriver.readOutput(
-                DAGPENGER_BEHOV_PACKET_EVENT.name,
-                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
-                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
-            )
-            assertNull(ut)
+            topologyTestDriver.behovInputTopic().also { it.pipeInput(packet) }
+            assertTrue { topologyTestDriver.behovOutputTopic().isEmpty }
         }
     }
 
@@ -66,15 +54,8 @@ class SatsTopologyTest {
         packet.putValue(Application.SATS_RESULTAT, 1)
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(packet)
-            topologyTestDriver.pipeInput(inputRecord)
-
-            val ut = topologyTestDriver.readOutput(
-                DAGPENGER_BEHOV_PACKET_EVENT.name,
-                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
-                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
-            )
-            assertNull(ut)
+            topologyTestDriver.behovInputTopic().also { it.pipeInput(packet) }
+            assertTrue { topologyTestDriver.behovOutputTopic().isEmpty }
         }
     }
 
@@ -99,19 +80,14 @@ class SatsTopologyTest {
         packet.putValue(Application.ANTALL_BARN, 0)
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(packet)
-            topologyTestDriver.pipeInput(inputRecord)
+            topologyTestDriver.behovInputTopic().also { it.pipeInput(packet) }
 
-            val ut = topologyTestDriver.readOutput(
-                DAGPENGER_BEHOV_PACKET_EVENT.name,
-                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
-                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
-            )
+            val ut = topologyTestDriver.behovOutputTopic().readValue()
 
-            assertTrue("SatsSubsumsjon should be added") { ut.value().hasField(Application.SATS_RESULTAT) }
+            assertTrue("SatsSubsumsjon should be added") { ut.hasField(Application.SATS_RESULTAT) }
             assertEquals(
                 Application.REGELIDENTIFIKATOR,
-                ut.value().getMapValue(Application.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR]
+                ut.getMapValue(Application.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR]
             )
         }
     }
@@ -130,18 +106,26 @@ class SatsTopologyTest {
         packet.putValue("antallBarn", "ERROR")
 
         TopologyTestDriver(minsteinntekt.buildTopology(), config).use { topologyTestDriver ->
-            val inputRecord = factory.create(packet)
-            topologyTestDriver.pipeInput(inputRecord)
+            topologyTestDriver.behovInputTopic().also { it.pipeInput(packet) }
 
-            val ut = topologyTestDriver.readOutput(
-                DAGPENGER_BEHOV_PACKET_EVENT.name,
-                DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
-                DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
-            )
-
-            assert(ut.value().hasProblem())
-            assertEquals(URI("urn:dp:error:regel"), ut.value().getProblem()!!.type)
-            assertEquals(URI("urn:dp:regel:sats"), ut.value().getProblem()!!.instance)
+            val ut = topologyTestDriver.behovOutputTopic().readValue()
+            assert(ut.hasProblem())
+            assertEquals(URI("urn:dp:error:regel"), ut.getProblem()!!.type)
+            assertEquals(URI("urn:dp:regel:sats"), ut.getProblem()!!.instance)
         }
     }
+
+    private fun TopologyTestDriver.behovInputTopic(): TestInputTopic<String, Packet> =
+        this.createInputTopic(
+            DAGPENGER_BEHOV_PACKET_EVENT.name,
+            DAGPENGER_BEHOV_PACKET_EVENT.keySerde.serializer(),
+            DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.serializer()
+        )
+
+    private fun TopologyTestDriver.behovOutputTopic(): TestOutputTopic<String, Packet> =
+        this.createOutputTopic(
+            DAGPENGER_BEHOV_PACKET_EVENT.name,
+            DAGPENGER_BEHOV_PACKET_EVENT.keySerde.deserializer(),
+            DAGPENGER_BEHOV_PACKET_EVENT.valueSerde.deserializer()
+        )
 }

@@ -4,10 +4,8 @@ import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.HealthCheck
-import no.nav.dagpenger.streams.HealthStatus
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.streamConfig
-import no.nav.helse.rapids_rivers.RapidsConnection
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
@@ -110,42 +108,4 @@ fun main(args: Array<String>) {
         sats = sats,
         healthChecks = emptyList()
     ).start()
-
-    // RapidApplication.create(
-    //     Configuration().rapidApplication
-    // ).apply {
-    //     LøsningService(
-    //         this,
-    //         sats = sats,
-    //         features = Features(configuration.features),
-    //         instrumentation = instrumentation
-    //     )
-    // }.also {
-    //     it.register(RapidHealthCheck)
-    // }.start()
-}
-
-object RapidHealthCheck : RapidsConnection.StatusListener, HealthCheck {
-    var healthy: Boolean = false
-
-    override fun onStartup(rapidsConnection: RapidsConnection) {
-        healthy = true
-    }
-
-    override fun onReady(rapidsConnection: RapidsConnection) {
-        healthy = true
-    }
-
-    override fun onNotReady(rapidsConnection: RapidsConnection) {
-        healthy = false
-    }
-
-    override fun onShutdown(rapidsConnection: RapidsConnection) {
-        healthy = false
-    }
-
-    override fun status(): HealthStatus = when (healthy) {
-        true -> HealthStatus.UP
-        false -> HealthStatus.DOWN
-    }
 }

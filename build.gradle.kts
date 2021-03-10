@@ -21,7 +21,6 @@ apply {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("http://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
@@ -53,8 +52,6 @@ dependencies {
     implementation(Dagpenger.Events)
     implementation(Dagpenger.Biblioteker.grunnbeløp)
 
-    implementation(RapidAndRivers)
-
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
     implementation(Moshi.moshiKotlin)
@@ -76,7 +73,10 @@ dependencies {
     // unleash
     implementation("no.finn.unleash:unleash-client-java:3.3.1")
 
-    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation(Log4j2.api)
+    implementation(Log4j2.core)
+    implementation(Log4j2.slf4j)
+    implementation(Log4j2.Logstash.logstashLayout)
 
     implementation(Kotlin.Logging.kotlinLogging)
 
@@ -88,7 +88,6 @@ dependencies {
     testRuntimeOnly(Junit5.vintageEngine)
 
     testImplementation(Kafka.streamTestUtils)
-    testImplementation(KafkaEmbedded.env)
     testImplementation(Wiremock.standalone)
     testImplementation(Mockk.mockk)
 }
