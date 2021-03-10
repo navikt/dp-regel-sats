@@ -24,6 +24,7 @@ class Application(
     private val ulidGenerator = ULID()
 
     companion object {
+        const val REGELVERKSDATO = "regelverksdato"
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val AVKORTET_GRUNNLAG = "avkortet"
         const val ANTALL_BARN = "antallBarn"
@@ -48,6 +49,7 @@ class Application(
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
+        val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO)
 
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
@@ -56,7 +58,8 @@ class Application(
 
         val satsResult = sats.forDato(
             beregningsdato = beregningsdato,
-            lærling = erLærling
+            lærling = erLærling,
+            regelverksdato = regelverksdato
         ).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(
