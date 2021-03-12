@@ -37,4 +37,18 @@ class OnPacketTest {
             outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString()
         )
     }
+
+    @Test
+    fun `bruker koronaregler når regelverksdato er fom 1 februar 2021, og beregningsdato er før 20 mars 2020`() {
+
+        val packet = Packet("""{"grunnlagResultat": { "avkortet": 100000 }}""").apply {
+            this.putValue(Application.ANTALL_BARN, 0)
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 3, 19))
+            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2021, 4, 1))
+        }
+
+        val outPacket = service.onPacket(packet)
+
+        assertEquals("KORONA", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
+    }
 }

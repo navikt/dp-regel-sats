@@ -27,7 +27,7 @@ class KoronaLærlingBeregning : Beregning {
 
     private val dagsatsfaktorUnder1Komma5G = Dekningsgrad(dekningsgrad = 100.0).getDagSatsFaktor()
     private val dagsatsfaktorOver1Komma5G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
-    override fun isActive(beregningstidspunkt: LocalDate): Boolean = beregningstidspunkt in periode
+    override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate?): Boolean = beregningsdato in periode
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 1.5)
