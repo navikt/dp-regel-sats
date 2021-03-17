@@ -45,7 +45,7 @@ class Application(
     }
 
     override fun onPacket(packet: Packet): Packet {
-        sikkerlogg.info("Mottok packet: $packet")
+        sikkerlogg.info("Mottok packet: ${packet.toJson()}")
 
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
@@ -81,7 +81,7 @@ class Application(
             regelIdentifikator = REGELIDENTIFIKATOR,
             brukt90ProsentRegel = satsResult.brukt90ProsentRegel
         )
-        sikkerlogg.info("Løst behov: $packet")
+        sikkerlogg.info("Løst behov: ${packet.toJson()}")
         return packet
     }
 
