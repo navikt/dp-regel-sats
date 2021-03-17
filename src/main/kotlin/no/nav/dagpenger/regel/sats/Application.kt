@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
+import mu.KotlinLogging
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.HealthCheck
@@ -10,6 +11,8 @@ import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
 import java.net.URI
 import java.util.Properties
+
+private val sikkerlogg = KotlinLogging.logger("tjenestekall")
 
 class Application(
     private val configuration: Configuration,
@@ -42,6 +45,8 @@ class Application(
     }
 
     override fun onPacket(packet: Packet): Packet {
+        sikkerlogg.info("Mottok packet: ", packet)
+
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
@@ -76,7 +81,7 @@ class Application(
             regelIdentifikator = REGELIDENTIFIKATOR,
             brukt90ProsentRegel = satsResult.brukt90ProsentRegel
         )
-
+        sikkerlogg.info("Løst behov: ", packet)
         return packet
     }
 
