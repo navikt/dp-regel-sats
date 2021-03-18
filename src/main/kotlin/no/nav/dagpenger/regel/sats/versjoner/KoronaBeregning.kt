@@ -22,7 +22,7 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
 
     override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate?): Boolean =
         beregningsdato.erKoronaPeriode() ||
-            (beregningsdato.isBefore(LocalDate.of(2020, Month.MARCH, 20)) && regelverksdato?.isAfter(LocalDate.of(2021, Month.FEBRUARY, 1)) ?: false)
+            (beregningsdato.isBefore(LocalDate.of(2020, Month.MARCH, 20)) && regelverksdato?.isAfter(LocalDate.of(2021, Month.JANUARY, 31)) ?: false)
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 3.0)
