@@ -15,6 +15,7 @@ import no.nav.dagpenger.streams.Topics
 private val localProperties = ConfigurationMap(
     mapOf(
         "kafka.bootstrap.servers" to "localhost:9092",
+        "KAFKA_BROKERS" to "localhost:9092",
         "kafka.reset.policy" to "earliest",
         "nav.truststore.path" to "",
         "nav.truststore.password" to "changeme",
@@ -54,9 +55,11 @@ data class Configuration(
     val behovTopic: Topic<String, Packet> = Topics.DAGPENGER_BEHOV_PACKET_EVENT.copy(
         name = config()[Key("behov.topic", stringType)]
     ),
+    val regelTopic: Topic<String, Packet> = behovTopic.copy("teamdagpenger.regel.v1")
 ) {
     data class Kafka(
         val brokers: String = config()[Key("kafka.bootstrap.servers", stringType)],
+        val aivenBrokers: String = config()[Key("KAFKA_BROKERS", stringType)],
         val user: String? = config().getOrNull(
             Key(
                 "srvdp.regel.sats.username",
