@@ -19,7 +19,7 @@ private val satsBeregningBrukt = Counter.build()
     .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
     .register()
 
-class Sats() {
+class Sats {
     private val ordinærBeregning = OrdinærBeregning()
     private val koronaBeregning = KoronaBeregning()
     private val koronaLærlingBeregning = KoronaLærlingBeregning()
