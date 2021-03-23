@@ -51,4 +51,33 @@ class OnPacketTest {
 
         assertEquals("KORONA", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
     }
+
+    @Test
+    fun `G-en blir bestemt utifra regelverksdato`() {
+
+        val packet = Packet("""{"grunnlagResultat": { "avkortet": 304053 }}""").apply {
+            this.putValue(Application.ANTALL_BARN, 0)
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 4, 30))
+            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2020, 5, 1))
+        }
+
+        val outPacket = service.onPacket(packet)
+
+        assertEquals("936", outPacket.getMapValue(Application.SATS_RESULTAT)["dagsats"].toString())
+        assertEquals("KORONA", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
+    }
+
+    @Test
+    fun `Regelverksdato settes til beregningsdato hvis regelverksdato er null`() {
+
+        val packet = Packet("""{"grunnlagResultat": { "avkortet": 304053 }}""").apply {
+            this.putValue(Application.ANTALL_BARN, 0)
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 4, 30))
+        }
+
+        val outPacket = service.onPacket(packet)
+
+        assertEquals("933", outPacket.getMapValue(Application.SATS_RESULTAT)["dagsats"].toString())
+        assertEquals("KORONA", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
+    }
 }

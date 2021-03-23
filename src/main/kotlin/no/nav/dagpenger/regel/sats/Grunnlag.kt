@@ -19,15 +19,13 @@ class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
 }
 
 internal class GjeldendeGrunnbeløp(private val features: Features) {
-    internal fun grunnbeløp(beregningsdato: LocalDate): BigDecimal = when {
-        isThisGjusteringTest(beregningsdato) -> Grunnbeløp.GjusteringsTest
-        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(beregningsdato)
+    internal fun grunnbeløp(regelverksdato: LocalDate): BigDecimal = when {
+        isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
+        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(regelverksdato)
     }.verdi
 
-    private fun isThisGjusteringTest(
-        beregningsdato: LocalDate
-    ): Boolean {
-        val isBeregningsDatoAfterGjustering = beregningsdato.isAfter(LocalDate.of(2020, 9, 1).minusDays(1))
+    private fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {
+        val isBeregningsDatoAfterGjustering = regelverksdato.isAfter(LocalDate.of(2020, 9, 1).minusDays(1))
         return features.isEnabled("gjustering") && isBeregningsDatoAfterGjustering
     }
 }

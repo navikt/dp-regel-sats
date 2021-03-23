@@ -56,11 +56,11 @@ open class Application(
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
-        val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO)
+        val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO) ?: beregningsdato
 
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
-            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(regelverksdato)
         )
 
         val satsResult = sats.forDato(
