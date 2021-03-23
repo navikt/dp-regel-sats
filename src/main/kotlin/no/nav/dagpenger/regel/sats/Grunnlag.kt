@@ -25,7 +25,8 @@ internal class GjeldendeGrunnbeløp(private val features: Features) {
     }.verdi
 
     private fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {
-        val isBeregningsDatoAfterGjustering = regelverksdato.isAfter(LocalDate.of(2020, 9, 1).minusDays(1))
+        val gVirkning = LocalDate.of(2021, 3, 1)
+        val isBeregningsDatoAfterGjustering = regelverksdato.isAfter(gVirkning.minusDays(1))
         return features.isEnabled("gjustering") && isBeregningsDatoAfterGjustering
     }
 }
