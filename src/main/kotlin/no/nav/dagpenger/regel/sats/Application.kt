@@ -8,7 +8,6 @@ import no.nav.dagpenger.streams.HealthCheck
 import no.nav.dagpenger.streams.KafkaAivenCredentials
 import no.nav.dagpenger.streams.River
 import no.nav.dagpenger.streams.Topic
-import no.nav.dagpenger.streams.streamConfig
 import no.nav.dagpenger.streams.streamConfigAiven
 import org.apache.kafka.streams.kstream.Predicate
 import java.math.BigDecimal
@@ -17,12 +16,12 @@ import java.util.Properties
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall")
 
-open class Application(
+class Application(
     private val configuration: Configuration,
     private val instrumentation: SatsInstrumentation,
     private val sats: Sats,
     public override val healthChecks: List<HealthCheck> = listOf(),
-    topic: Topic<String, Packet> = configuration.behovTopic
+    topic: Topic<String, Packet> = configuration.kafka.regelTopic
 ) : River(topic) {
     override val SERVICE_APP_ID: String = configuration.application.id
     override val HTTP_PORT: Int = configuration.application.httpPort
@@ -90,10 +89,10 @@ open class Application(
     }
 
     override fun getConfig(): Properties {
-        return streamConfig(
+        return streamConfigAiven(
             appId = SERVICE_APP_ID,
-            bootStapServerUrl = configuration.kafka.brokers,
-            credential = configuration.kafka.credential()
+            bootStapServerUrl = configuration.kafka.aivenBrokers,
+            aivenCredentials = KafkaAivenCredentials()
         )
     }
 
@@ -109,24 +108,6 @@ open class Application(
     }
 }
 
-class AivenSats(
-    val configuration: Configuration,
-    instrumentation: SatsInstrumentation,
-    sats: Sats,
-    healthChecks: List<HealthCheck> = listOf()
-) : Application(configuration, instrumentation, sats, healthChecks, configuration.regelTopic) {
-    override val withHealthChecks: Boolean
-        get() = false
-
-    override fun getConfig(): Properties {
-        return streamConfigAiven(
-            appId = SERVICE_APP_ID,
-            bootStapServerUrl = configuration.kafka.aivenBrokers,
-            aivenCredentials = KafkaAivenCredentials()
-        )
-    }
-}
-
 fun main(args: Array<String>) {
     val configuration = Configuration()
     val instrumentation = SatsInstrumentation()
@@ -137,11 +118,5 @@ fun main(args: Array<String>) {
         instrumentation = instrumentation,
         sats = sats,
         healthChecks = emptyList()
-    ).start()
-
-    AivenSats(
-        configuration = configuration,
-        instrumentation = instrumentation,
-        sats = sats,
     ).start()
 }
