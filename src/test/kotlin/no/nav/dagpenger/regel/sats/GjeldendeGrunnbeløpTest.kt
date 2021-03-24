@@ -10,7 +10,7 @@ internal class GjeldendeGrunnbeløpTest {
     fun ` under g-justeringstest`() {
 
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(mapOf("gjustering" to true)))
-        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 105000.toBigDecimal()
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 103500.toBigDecimal()
     }
 
     @Test
