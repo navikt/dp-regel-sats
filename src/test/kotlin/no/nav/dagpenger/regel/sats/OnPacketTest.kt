@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 class OnPacketTest {
-    val service = Application(Configuration(), mockk(relaxed = true), Sats())
+    val service = Application(mockk(relaxed = true), Sats())
     @Test
     fun `bruker lærling-koronaregler når lærling er satt til true på pakka og dato er innenfor koronaperiode`() {
 

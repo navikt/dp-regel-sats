@@ -28,7 +28,6 @@ class SatsTopologyTest {
     @Test
     fun `Should ignore packet without grunnlag and antallBarn`() {
         val sats = Application(
-            Configuration(),
             fakeSatsInstrumentation,
             Sats()
         )
@@ -44,7 +43,6 @@ class SatsTopologyTest {
     @Test
     fun `Should ignore packet with satsresultat`() {
         val sats = Application(
-            Configuration(),
             fakeSatsInstrumentation,
             Sats()
         )
@@ -61,7 +59,6 @@ class SatsTopologyTest {
     @Test
     fun `Should add SatsSubsumsjon to packet with grunnlag and antallBarn `() {
         val sats = Application(
-            Configuration(),
             fakeSatsInstrumentation,
             Sats()
         )
@@ -94,7 +91,6 @@ class SatsTopologyTest {
     @Test
     fun ` Should add problem on failure`() {
         val minsteinntekt = Application(
-            Configuration(),
             fakeSatsInstrumentation,
             Sats()
         )

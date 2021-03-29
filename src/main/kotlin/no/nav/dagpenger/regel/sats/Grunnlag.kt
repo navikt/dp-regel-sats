@@ -4,6 +4,7 @@ import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
+import no.nav.dagpenger.regel.sats.Application.Companion.unleash
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -18,7 +19,7 @@ class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
     }
 }
 
-internal class GjeldendeGrunnbeløp(private val features: Features) {
+internal class GjeldendeGrunnbeløp() {
     internal fun grunnbeløp(regelverksdato: LocalDate): BigDecimal = when {
         isThisGjusteringTest(regelverksdato) -> Grunnbeløp.GjusteringsTest
         else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(regelverksdato)
@@ -27,6 +28,6 @@ internal class GjeldendeGrunnbeløp(private val features: Features) {
     private fun isThisGjusteringTest(regelverksdato: LocalDate): Boolean {
         val gVirkning = LocalDate.of(2021, 3, 1)
         val isBeregningsDatoAfterGjustering = regelverksdato.isAfter(gVirkning.minusDays(1))
-        return features.isEnabled("gjustering") && isBeregningsDatoAfterGjustering
+        return unleash.isEnabled(GJUSTERING_TEST) && isBeregningsDatoAfterGjustering
     }
 }

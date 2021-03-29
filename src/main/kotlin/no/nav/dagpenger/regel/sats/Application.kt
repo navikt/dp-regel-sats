@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
+import no.finn.unleash.Unleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.HealthCheck
@@ -15,16 +16,16 @@ import java.net.URI
 import java.util.Properties
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall")
+private val config = Configuration()
 
 class Application(
-    private val configuration: Configuration,
     private val instrumentation: SatsInstrumentation,
     private val sats: Sats,
     public override val healthChecks: List<HealthCheck> = listOf(),
-    topic: Topic<String, Packet> = configuration.kafka.regelTopic
+    topic: Topic<String, Packet> = config.kafka.regelTopic
 ) : River(topic) {
-    override val SERVICE_APP_ID: String = configuration.application.id
-    override val HTTP_PORT: Int = configuration.application.httpPort
+    override val SERVICE_APP_ID: String = config.application.id
+    override val HTTP_PORT: Int = config.application.httpPort
     private val ulidGenerator = ULID()
 
     companion object {
@@ -36,6 +37,7 @@ class Application(
         const val REGELIDENTIFIKATOR = "Sats.v1"
         const val BEREGNINGSDATO = "beregningsDato"
         const val LÆRLING = "lærling"
+        var unleash: Unleash = setupUnleash(config.application.unleashUrl)
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
@@ -54,7 +56,7 @@ class Application(
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
-        val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(Features(configuration.features))
+        val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
         val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO) ?: beregningsdato
 
         val grunnlag = Grunnlag(
@@ -91,7 +93,7 @@ class Application(
     override fun getConfig(): Properties {
         return streamConfigAiven(
             appId = SERVICE_APP_ID,
-            bootStapServerUrl = configuration.kafka.aivenBrokers,
+            bootStapServerUrl = config.kafka.aivenBrokers,
             aivenCredentials = KafkaAivenCredentials()
         )
     }
@@ -109,12 +111,10 @@ class Application(
 }
 
 fun main(args: Array<String>) {
-    val configuration = Configuration()
     val instrumentation = SatsInstrumentation()
     val sats = Sats()
 
     Application(
-        configuration = configuration,
         instrumentation = instrumentation,
         sats = sats,
         healthChecks = emptyList()

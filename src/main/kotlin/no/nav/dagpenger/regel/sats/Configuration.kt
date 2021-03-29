@@ -4,7 +4,6 @@ import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.natpryce.konfig.Key
-import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 import no.nav.dagpenger.events.Packet
@@ -16,18 +15,21 @@ import org.apache.kafka.common.serialization.Serdes
 private val localProperties = ConfigurationMap(
     mapOf(
         "KAFKA_BROKERS" to "localhost:9092",
-        "application.profile" to Profile.LOCAL.toString()
+        "application.profile" to Profile.LOCAL.toString(),
+        "unleash.url" to "https://localhost"
     )
 )
 private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.DEV.toString(),
-        "feature.gjustering" to false.toString()
+        "feature.gjustering" to false.toString(),
+        "unleash.url" to "https://unleash.nais.io/api/"
     )
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
-        "application.profile" to Profile.PROD.toString()
+        "application.profile" to Profile.PROD.toString(),
+        "unleash.url" to "https://unleash.nais.io/api/"
     )
 )
 
@@ -58,11 +60,8 @@ data class Configuration(
     data class Application(
         val id: String = config().getOrElse(Key("application.id", stringType), "dagpenger-regel-sats"),
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
-        val httpPort: Int = 8080
-    )
-
-    val features = mapOf(
-        "gjustering" to config().getOrElse(Key("feature.gjustering", booleanType), false)
+        val httpPort: Int = 8080,
+        val unleashUrl: String = config()[Key("unleash.url", stringType)]
     )
 }
 
