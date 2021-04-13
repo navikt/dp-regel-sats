@@ -12,40 +12,42 @@ import java.time.Month
 internal class SatsTest {
     private val sats = Sats()
 
+    private val beregningsdato = LocalDate.of(2021, 1, 1)
+
     @Test
-    fun `beregningsdato for 1 Januar 2020 gir ordinære regler`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.JANUARY, 1)) is OrdinærBeregning)
+    fun `regelverksdato for 1 Januar 2020 gir ordinære regler`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2020, Month.JANUARY, 1)) is OrdinærBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Mars 2020 gir korona ordinære regler når feature er på`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), false) is KoronaBeregning)
+    fun `regelverksdato for 20 Mars 2020 gir korona ordinære regler når feature er på`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2020, Month.MARCH, 20), false) is KoronaBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Juli 2020 gir korona ordinære regler når feature er på`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), false) is KoronaBeregning)
+    fun `regelverksdato for 20 Juli 2020 gir korona ordinære regler når feature er på`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2020, Month.JULY, 20), false) is KoronaBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Mars 2020 gir korona lærling regler når feature er på`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.MARCH, 20), true) is KoronaLærlingBeregning)
+    fun `regelverksdato for 20 Mars 2020 gir korona lærling regler når feature er på`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2020, Month.MARCH, 20), true) is KoronaLærlingBeregning)
     }
 
     @Test
-    fun `beregningsdato for 20 Juli 2020 gir korona lærling regler når feature er på`() {
-        assertTrue(sats.forDato(LocalDate.of(2020, Month.JULY, 20), true) is KoronaLærlingBeregning)
+    fun `regelverksdato for 20 Juli 2020 gir korona lærling regler når feature er på`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2020, Month.JULY, 20), true) is KoronaLærlingBeregning)
     }
 
     @Test
-    fun `beregningsdato for 1 Oktober 2021 gir ordinære regler`() {
+    fun `regelverksdato for 1 Oktober 2021 gir ordinære regler`() {
         // utløper automatisk 30. september 2021
-        assertTrue(sats.forDato(LocalDate.of(2021, Month.OCTOBER, 1)) is OrdinærBeregning)
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2021, Month.OCTOBER, 1)) is OrdinærBeregning)
     }
 
     @Test
     fun `vi teller hvilken regel som blir brukt`() {
-        sats.forDato(LocalDate.of(2022, Month.JANUARY, 1))
+        sats.forDato(beregningsdato, LocalDate.of(2022, Month.JANUARY, 1))
         assert(CollectorRegistry.defaultRegistry.getSampleValue(satsBeregningBruktName, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0)
     }
 }

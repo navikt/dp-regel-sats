@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 val sats = Sats()
 
 fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
-    return sats.forDato(LocalDate.of(2020, 1, 1)).beregn(
+    return sats.forDato(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 1)).beregn(
         grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi),
         antallBarn = antallBarn
     )

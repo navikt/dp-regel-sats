@@ -76,9 +76,10 @@ internal class KoronaLærlingBeregningTest {
 
     @Test
     fun `er aktiv til fra 20 mars 2020 til 31 desember 2021`() {
-        assertTrue(sats.isActive(LocalDate.of(2020, 3, 20)))
-        assertTrue(sats.isActive(LocalDate.of(2021, 12, 31)))
-        assertFalse(sats.isActive(LocalDate.of(2020, 2, 29)))
-        assertFalse(sats.isActive(LocalDate.of(2022, 1, 1)))
+        val beregningsdato = LocalDate.of(2021, 1, 1)
+        assertTrue(sats.isActive(beregningsdato, LocalDate.of(2020, 3, 20)))
+        assertTrue(sats.isActive(beregningsdato, LocalDate.of(2021, 12, 31)))
+        assertFalse(sats.isActive(beregningsdato, LocalDate.of(2020, 2, 29)))
+        assertFalse(sats.isActive(beregningsdato, LocalDate.of(2022, 1, 1)))
     }
 }

@@ -16,7 +16,7 @@ class OrdinærBeregning : Beregning {
     // 62.4% dekning/ 260 dager / 100
     private val dagSatsFaktor = BigDecimal(0.0024)
 
-    override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate?): Boolean = true
+    override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate): Boolean = true
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val dagSats = (grunnlag.grunnlag * dagSatsFaktor).setScale(
