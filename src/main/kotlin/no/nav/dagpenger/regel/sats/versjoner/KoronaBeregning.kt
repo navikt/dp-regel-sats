@@ -43,6 +43,5 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     )
 
     private fun LocalDate.erForhøyetSatsPeriode() = this in
-        LocalDate.of(2021, Month.FEBRUARY, 1)..
-        LocalDate.of(2021, Month.SEPTEMBER, 30)
+        LocalDate.of(2021, Month.FEBRUARY, 1)..LocalDate.of(2021, Month.SEPTEMBER, 30)
 }
