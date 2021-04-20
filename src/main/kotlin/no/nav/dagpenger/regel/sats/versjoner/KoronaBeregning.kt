@@ -21,8 +21,8 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
 
     override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate): Boolean =
-        regelverksdato.erKoronaPeriode() ||
-            (beregningsdato.isBefore(LocalDate.of(2020, Month.MARCH, 20)) && regelverksdato.isAfter(LocalDate.of(2021, Month.JANUARY, 31)))
+        regelverksdato.erKoronaPeriode() && beregningsdato.isAfter(LocalDate.of(2020, Month.MARCH, 19)) ||
+            (beregningsdato.isBefore(LocalDate.of(2020, Month.MARCH, 20)) && regelverksdato.erForhøyetSatsPeriode())
 
     override fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
         val andelNedre = grunnlag.getGrunnlagMellom(0.0, 3.0)
@@ -41,4 +41,8 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
             antallDesimaler
         )
     )
+
+    private fun LocalDate.erForhøyetSatsPeriode() = this in
+        LocalDate.of(2021, Month.FEBRUARY, 1)..
+        LocalDate.of(2021, Month.SEPTEMBER, 30)
 }
