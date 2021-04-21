@@ -61,13 +61,13 @@ class Application(
 
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
-            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(regelverksdato)
+            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
         )
 
         val satsResult = sats.forDato(
             beregningsdato = beregningsdato,
-            lærling = erLærling,
-            regelverksdato = regelverksdato
+            regelverksdato = regelverksdato,
+            lærling = erLærling
         ).beregn(grunnlag, antallBarn)
 
         val satsResultat = SatsSubsumsjon(

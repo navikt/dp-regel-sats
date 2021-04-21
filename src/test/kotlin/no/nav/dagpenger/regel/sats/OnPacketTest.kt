@@ -53,12 +53,12 @@ class OnPacketTest {
     }
 
     @Test
-    fun `G-en blir bestemt utifra regelverksdato`() {
+    fun `G-en blir bestemt utifra beregningsdato`() {
 
         val packet = Packet("""{"grunnlagResultat": { "avkortet": 304053 }}""").apply {
             this.putValue(Application.ANTALL_BARN, 0)
-            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 4, 30))
-            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2020, 5, 1))
+            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2020, 4, 30))
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 5, 1))
         }
 
         val outPacket = service.onPacket(packet)
