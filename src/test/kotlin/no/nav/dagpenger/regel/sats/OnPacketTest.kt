@@ -53,12 +53,27 @@ class OnPacketTest {
     }
 
     @Test
-    fun `G-en blir bestemt utifra beregningsdato`() {
+    fun `G-en blir som hovedregel bestemt utifra beregningsdato`() {
 
         val packet = Packet("""{"grunnlagResultat": { "avkortet": 304053 }}""").apply {
             this.putValue(Application.ANTALL_BARN, 0)
             this.putValue(Application.REGELVERKSDATO, LocalDate.of(2020, 4, 30))
             this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 5, 1))
+        }
+
+        val outPacket = service.onPacket(packet)
+
+        assertEquals("936", outPacket.getMapValue(Application.SATS_RESULTAT)["dagsats"].toString())
+        assertEquals("KORONA", outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString())
+    }
+
+    @Test
+    fun `G-en blir bestemt utifra regelverksdato når grunnlag ble satt pga verneplikt`() {
+
+        val packet = Packet("""{"grunnlagResultat": { "avkortet": 304053, "beregningsregel": "Verneplikt" }}""").apply {
+            this.putValue(Application.ANTALL_BARN, 0)
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 4, 30))
+            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2020, 5, 1))
         }
 
         val outPacket = service.onPacket(packet)

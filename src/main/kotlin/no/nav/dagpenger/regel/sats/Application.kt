@@ -32,6 +32,8 @@ class Application(
         const val REGELVERKSDATO = "regelverksdato"
         const val GRUNNLAG_RESULTAT = "grunnlagResultat"
         const val AVKORTET_GRUNNLAG = "avkortet"
+        const val GRUNNLAG_BEREGNINGSREGEL = "beregningsregel"
+        const val GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT = "Verneplikt"
         const val ANTALL_BARN = "antallBarn"
         const val SATS_RESULTAT = "satsResultat"
         const val REGELIDENTIFIKATOR = "Sats.v1"
@@ -53,15 +55,21 @@ class Application(
         sikkerlogg.info("Mottok packet: ${packet.toJson()}")
 
         val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
+        val grunnlagBeregningsregel = packet.getMapValue(GRUNNLAG_RESULTAT)[GRUNNLAG_BEREGNINGSREGEL].toString()
         val antallBarn = packet.getIntValue(ANTALL_BARN)
         val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
         val erLærling = packet.getNullableBoolean(LÆRLING) == true
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
         val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO) ?: beregningsdato
 
+        val grunnbeløp = when (grunnlagBeregningsregel) {
+            GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT -> gjeldendeGrunnbeløp.grunnbeløp(regelverksdato)
+            else -> gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+        }
+
         val grunnlag = Grunnlag(
             grunnlag = avkortetGrunnlag,
-            grunnbeløp = gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+            grunnbeløp = grunnbeløp
         )
 
         val satsResult = sats.forDato(
