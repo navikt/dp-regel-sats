@@ -12,7 +12,7 @@ internal class GjeldendeGrunnbeløpTest {
 
         Application.unleash = FakeUnleash().also { it.enableAll() }
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
-        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2021,5,24)) shouldBe 106399.toBigDecimal()
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2021, 5, 24)) shouldBe 106399.toBigDecimal()
     }
 
     @Test
