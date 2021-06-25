@@ -12,7 +12,7 @@ val ukerPerÅr = BigDecimal(52)
 
 internal const val antallDesimaler: Int = 20
 
-const val satsBeregningBruktName = "sats_beregning_brukt"
+const val satsBeregningBruktName = "sats_beregning_brukt_total"
 private val satsBeregningBrukt = Counter.build()
     .name(satsBeregningBruktName)
     .labelNames("navn")
