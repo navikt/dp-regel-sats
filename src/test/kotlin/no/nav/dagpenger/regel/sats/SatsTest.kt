@@ -40,9 +40,13 @@ internal class SatsTest {
     }
 
     @Test
-    fun `regelverksdato for 1 Oktober 2021 gir ordinære regler`() {
-        // utløper automatisk 30. september 2021
-        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2021, Month.OCTOBER, 1)) is OrdinærBeregning)
+    fun `regelverksdato for 20 Juli 2020 gir korona regler `() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2021, Month.OCTOBER, 31)) is KoronaBeregning)
+    }
+
+    @Test
+    fun `regelverksdato for 1 november 2021 gir ordinære regler`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2021, Month.NOVEMBER, 1)) is OrdinærBeregning)
     }
 
     @Test
