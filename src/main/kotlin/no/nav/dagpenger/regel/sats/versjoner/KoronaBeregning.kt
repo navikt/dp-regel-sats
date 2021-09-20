@@ -12,8 +12,17 @@ import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.Month
 
-// Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368
+private val fom = LocalDate.of(2020, Month.MARCH, 20)
+private val tom = LocalDate.of(2021, Month.OCTOBER, 31)
+private val periode = fom..tom
 
+private val forhøyetSatsFom = LocalDate.of(2021, Month.FEBRUARY, 1)
+private val forhøyetSatsPeriode = forhøyetSatsFom..tom
+
+private fun LocalDate.erForhøyetSatsPeriode() = this in forhøyetSatsPeriode
+private fun LocalDate.erKoronaPeriode() = this in periode
+
+// Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368\
 internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
     private val REGEL_NAVN = Beregningsregel.KORONA
 
@@ -41,7 +50,4 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
             antallDesimaler
         )
     )
-
-    private fun LocalDate.erForhøyetSatsPeriode() = this in
-        LocalDate.of(2021, Month.FEBRUARY, 1)..LocalDate.of(2021, Month.SEPTEMBER, 30)
 }

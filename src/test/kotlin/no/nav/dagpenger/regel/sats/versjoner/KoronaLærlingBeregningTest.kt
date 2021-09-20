@@ -66,7 +66,7 @@ internal class KoronaLærlingBeregningTest {
 
     @Test
     fun ` Skal ikke  avrunde del satsene men avrunde når delsatsene summeres `() {
-        val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
+        val (dagSats, ukeSats) = sats.beregn(
             grunnlag = Grunnlag(BigDecimal(239987), BigDecimal(99858)),
             antallBarn = 0
         )

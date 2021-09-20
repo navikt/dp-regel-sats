@@ -43,8 +43,8 @@ class OnPacketTest {
 
         val packet = Packet("""{"grunnlagResultat": { "avkortet": 100000 }}""").apply {
             this.putValue(Application.ANTALL_BARN, 0)
-            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 3, 19))
-            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2021, 9, 20))
+            this.putValue(Application.BEREGNINGSDATO, LocalDate.of(2020, 3, 3))
+            this.putValue(Application.REGELVERKSDATO, LocalDate.of(2021, 10, 1))
         }
 
         val outPacket = service.onPacket(packet)
