@@ -6,8 +6,11 @@ import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 import java.time.Month
+import kotlin.test.assertEquals
 
 internal class SatsTest {
     private val sats = Sats()
@@ -47,6 +50,17 @@ internal class SatsTest {
     @Test
     fun `regelverksdato for 1 november 2021 gir ordinære regler`() {
         assertTrue(sats.forDato(beregningsdato, LocalDate.of(2021, Month.NOVEMBER, 1)) is OrdinærBeregning)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "2021-10-31, 2020-11-25, KoronaBeregning",
+        "2020-03-19, 2020-11-25, OrdinærBeregning",
+        "2021-11-01, 2020-03-19, OrdinærBeregning",
+        "2021-10-31, 2020-03-19, KoronaBeregning"
+    )
+    fun `Forhøyet sats regelverk`(regelverksdato: String, beregningsdato: String, regel: String) {
+        assertEquals(regel, sats.forDato(LocalDate.parse(beregningsdato), LocalDate.parse(regelverksdato)).javaClass.simpleName)
     }
 
     @Test
