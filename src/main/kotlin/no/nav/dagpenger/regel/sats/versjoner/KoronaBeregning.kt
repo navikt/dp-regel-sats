@@ -13,7 +13,7 @@ import java.time.LocalDate
 import java.time.Month
 
 private val fom = LocalDate.of(2020, Month.MARCH, 20)
-private val tom = LocalDate.of(2021, Month.OCTOBER, 31)
+private val tom = LocalDate.of(2021, Month.DECEMBER, 31)
 private val periode = fom..tom
 
 private val forhøyetSatsFom = LocalDate.of(2021, Month.FEBRUARY, 1)
@@ -24,7 +24,7 @@ private fun LocalDate.erKoronaPeriode() = this in periode
 
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368\
 internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
-    private val REGEL_NAVN = Beregningsregel.KORONA
+    private val beregningsregel = Beregningsregel.KORONA
 
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
@@ -41,7 +41,7 @@ internal class KoronaBeregning() : Beregning, BarnetilleggBeregning() {
         val dagSatsOver3G = getDagSats(andelØvre, dagSatsFaktorOver3G)
         val dagSats = (dagSatsUnder3G + dagSatsOver3G).setScale(0, RoundingMode.HALF_UP)
 
-        return inkluderBarnetillegg(antallBarn, dagSats, grunnlag, REGEL_NAVN)
+        return inkluderBarnetillegg(antallBarn, dagSats, grunnlag, beregningsregel)
     }
 
     private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(
