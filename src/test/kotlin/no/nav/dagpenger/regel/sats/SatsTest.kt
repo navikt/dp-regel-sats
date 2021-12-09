@@ -48,15 +48,16 @@ internal class SatsTest {
     }
 
     @Test
-    fun `regelverksdato for 1 januar 2022 gir ordinære regler`() {
-        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2022, Month.JANUARY, 1)) is OrdinærBeregning)
+    fun `regelverksdato for 1 februar 2022 gir ordinære regler`() {
+        assertTrue(sats.forDato(beregningsdato, LocalDate.of(2022, Month.FEBRUARY, 1)) is OrdinærBeregning)
     }
 
     @ParameterizedTest
     @CsvSource(
         "2021-10-31, 2020-11-25, KoronaBeregning",
         "2020-03-19, 2020-11-25, OrdinærBeregning",
-        "2022-01-01, 2020-03-19, OrdinærBeregning",
+        "2022-01-01, 2020-03-19, KoronaBeregning",
+        "2022-02-01, 2020-03-19, OrdinærBeregning",
         "2021-10-31, 2020-03-19, KoronaBeregning"
     )
     fun `Forhøyet sats regelverk`(regelverksdato: String, beregningsdato: String, regel: String) {

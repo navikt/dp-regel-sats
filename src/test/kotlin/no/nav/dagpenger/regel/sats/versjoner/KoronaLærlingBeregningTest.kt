@@ -25,13 +25,11 @@ internal class KoronaLærlingBeregningTest {
 
     @Test
     fun `gir 100 % av grunnlaget under 1,5G og 62,4 % av grunnlaget opp til 6G `() {
-        val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
-            grunnlag = Grunnlag(grunnlag = 200_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
-            antallBarn = 0
+        val (dagSats, _, _) = sats.beregn(
+            grunnlag = Grunnlag(grunnlag = 599097.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2020.verdi),
+            antallBarn = 3
         )
-        assertEquals(697, dagSats)
-        assertEquals(697 * 5, ukeSats)
-        assertFalse(used90ProsentRegel)
+        assertEquals(1658, dagSats)
     }
 
     @Test
@@ -75,11 +73,11 @@ internal class KoronaLærlingBeregningTest {
     }
 
     @Test
-    fun `er aktiv til fra 20 mars 2020 til 31 desember 2021`() {
+    fun `er aktiv til fra 20 mars 2020 til 31 januar 2022`() {
         val beregningsdato = LocalDate.of(2021, 1, 1)
         assertTrue(sats.isActive(beregningsdato, LocalDate.of(2020, 3, 20)))
-        assertTrue(sats.isActive(beregningsdato, LocalDate.of(2021, 12, 31)))
+        assertTrue(sats.isActive(beregningsdato, LocalDate.of(2022, 1, 31)))
         assertFalse(sats.isActive(beregningsdato, LocalDate.of(2020, 2, 29)))
-        assertFalse(sats.isActive(beregningsdato, LocalDate.of(2022, 1, 1)))
+        assertFalse(sats.isActive(beregningsdato, LocalDate.of(2022, 2, 1)))
     }
 }
