@@ -25,13 +25,11 @@ internal class KoronaLærlingBeregningTest {
 
     @Test
     fun `gir 100 % av grunnlaget under 1,5G og 62,4 % av grunnlaget opp til 6G `() {
-        val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
-            grunnlag = Grunnlag(grunnlag = 200_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
-            antallBarn = 0
+        val (dagSats, _, _) = sats.beregn(
+            grunnlag = Grunnlag(grunnlag = 599097.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2020.verdi),
+            antallBarn = 3
         )
-        assertEquals(697, dagSats)
-        assertEquals(697 * 5, ukeSats)
-        assertFalse(used90ProsentRegel)
+        assertEquals(1658, dagSats)
     }
 
     @Test
