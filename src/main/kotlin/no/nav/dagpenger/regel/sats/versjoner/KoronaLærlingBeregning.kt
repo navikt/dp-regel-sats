@@ -19,7 +19,7 @@ class KoronaLærlingBeregning : Beregning {
 
     companion object {
         private val fom = LocalDate.of(2020, Month.MARCH, 20)
-        private val tom = LocalDate.of(2021, Month.DECEMBER, 31)
+        private val tom = LocalDate.of(2022, Month.JANUARY, 31)
         private val periode = fom..tom
     }
 
