@@ -20,6 +20,6 @@ internal class GjeldendeGrunnbeløpTest {
     fun ` ikke g-justeringstest`() {
 
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
-        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 106399.toBigDecimal()
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 111477.toBigDecimal()
     }
 }
