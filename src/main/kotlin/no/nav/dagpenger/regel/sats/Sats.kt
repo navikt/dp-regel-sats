@@ -41,11 +41,6 @@ fun instrument(handler: () -> Beregning): Beregning =
             .inc()
     }
 
-interface Beregning {
-    fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate): Boolean
-    fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult
-}
-
 data class SatsResult(
     val dagSats: Int,
     val ukeSats: Int,

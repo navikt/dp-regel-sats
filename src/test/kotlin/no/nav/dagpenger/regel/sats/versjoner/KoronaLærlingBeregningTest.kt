@@ -54,11 +54,12 @@ internal class KoronaLærlingBeregningTest {
 
     @Test
     fun `lærlinger kvalifiserer ikke til barnetillegg`() {
-        val (dagSats, _, used90ProsentRegel) = sats.beregn(
+        val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
             grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
             antallBarn = 5
         )
         assertEquals(385, dagSats)
+        assertEquals(1925, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
