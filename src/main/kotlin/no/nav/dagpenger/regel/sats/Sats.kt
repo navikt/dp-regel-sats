@@ -23,7 +23,7 @@ class Sats {
 
     fun forDato(beregningsdato: LocalDate, regelverksdato: LocalDate, lærling: Boolean = false): Beregning =
         instrument {
-            val barnetillegg = Barnetillegg.forDato(beregningsdato, regelverksdato)
+            val barnetillegg = Barnetillegg.forDato(regelverksdato)
             when {
                 KoronaBeregning(barnetillegg).isActive(beregningsdato, regelverksdato) && !lærling -> KoronaBeregning(
                     barnetillegg

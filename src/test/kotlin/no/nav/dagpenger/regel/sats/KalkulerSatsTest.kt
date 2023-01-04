@@ -3,7 +3,11 @@ package no.nav.dagpenger.regel.sats
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
+import no.nav.dagpenger.regel.sats.helpers.februar
+import no.nav.dagpenger.regel.sats.helpers.januar
+import no.nav.dagpenger.regel.sats.helpers.mars
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
+import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -14,7 +18,7 @@ import kotlin.test.assertEquals
 val sats = Sats()
 
 fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
-    return sats.forDato(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 1)).beregn(
+    return sats.forDato(1.januar, 1.januar).beregn(
         grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi),
         antallBarn = antallBarn
     )
@@ -52,8 +56,33 @@ class KalkulerSatsTest {
     }
 
     @Test
+    fun `Skal bruke ny sats for barnetillegg fra og med første februar 2023`() {
+        OrdinærBeregning(Barnetillegg.forDato(1.februar(2023))).beregn(
+            grunnlag = Grunnlag(
+                BigDecimal(100000),
+                getGrunnbeløpForRegel(Regel.Grunnlag).forDato(1.februar(2023)).verdi
+            ),
+            4
+        ).also { (dagSats, ukeSats) ->
+            assertEquals(240, dagSats)
+            assertEquals(1731, ukeSats)
+        }
+
+        OrdinærBeregning(Barnetillegg.forDato(1.januar(2023))).beregn(
+            grunnlag = Grunnlag(
+                BigDecimal(100000),
+                getGrunnbeløpForRegel(Regel.Grunnlag).forDato(1.januar(2023)).verdi
+            ),
+            4
+        ).also { (dagSats, ukeSats) ->
+            assertEquals(240, dagSats)
+            assertEquals(1540, ukeSats)
+        }
+    }
+
+    @Test
     fun `Skal regne ut korrekte satser i Koronatider`() {
-        val dayInTheKorona = LocalDate.of(2020, 3, 21)
+        val dayInTheKorona = 21.mars
         val grunnlag = BigDecimal(180374)
 
         val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning(BigDecimal(17)).beregn(
