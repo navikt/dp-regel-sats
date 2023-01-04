@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 internal class KoronaBeregningTest {
-    private val satsKoronaberegning = KoronaBeregning()
+    private val satsKoronaberegning = KoronaBeregning(BigDecimal(17))
 
     @Test
     fun `gir økt dagsats for de under 3G`() {

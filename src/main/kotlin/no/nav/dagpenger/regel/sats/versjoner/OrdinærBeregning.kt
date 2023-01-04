@@ -8,7 +8,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 
-class OrdinærBeregning : Beregning() {
+class OrdinærBeregning(private val barneTillegg: BigDecimal) : Beregning() {
 
     // 62.4% dekning/ 260 dager / 100
     private val dagSatsFaktor = BigDecimal(0.0024)

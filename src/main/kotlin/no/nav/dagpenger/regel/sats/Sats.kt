@@ -20,16 +20,17 @@ private val satsBeregningBrukt = Counter.build()
     .register()
 
 class Sats {
-    private val ordinærBeregning = OrdinærBeregning()
-    private val koronaBeregning = KoronaBeregning()
-    private val koronaLærlingBeregning = KoronaLærlingBeregning()
 
     fun forDato(beregningsdato: LocalDate, regelverksdato: LocalDate, lærling: Boolean = false): Beregning =
         instrument {
-            return@instrument when {
-                koronaBeregning.isActive(beregningsdato, regelverksdato) && !lærling -> koronaBeregning
-                koronaLærlingBeregning.isActive(beregningsdato, regelverksdato) && lærling -> koronaLærlingBeregning
-                else -> ordinærBeregning
+            val barnetillegg = Barnetillegg.forDato(beregningsdato, regelverksdato)
+            when {
+                KoronaBeregning(barnetillegg).isActive(beregningsdato, regelverksdato) && !lærling -> KoronaBeregning(
+                    barnetillegg
+                )
+
+                KoronaLærlingBeregning().isActive(beregningsdato, regelverksdato) && lærling -> KoronaLærlingBeregning()
+                else -> OrdinærBeregning(barnetillegg)
             }
         }
 }
@@ -45,7 +46,7 @@ data class SatsResult(
     val dagSats: Int,
     val ukeSats: Int,
     val brukt90ProsentRegel: Boolean,
-    val beregningsregel: Beregningsregel
+    val beregningsregel: Beregningsregel,
 )
 
 enum class Beregningsregel {

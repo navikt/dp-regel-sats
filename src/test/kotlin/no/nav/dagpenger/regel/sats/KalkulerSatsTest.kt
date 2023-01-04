@@ -56,7 +56,7 @@ class KalkulerSatsTest {
         val dayInTheKorona = LocalDate.of(2020, 3, 21)
         val grunnlag = BigDecimal(180374)
 
-        val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning().beregn(
+        val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning(BigDecimal(17)).beregn(
             grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi),
             antallBarn = 0
         )
