@@ -2,6 +2,7 @@ package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
+import mu.withLoggingContext
 import no.finn.unleash.Unleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
@@ -15,6 +16,7 @@ import java.math.BigDecimal
 import java.net.URI
 import java.util.Properties
 
+private val logger = KotlinLogging.logger {}
 private val sikkerlogg = KotlinLogging.logger("tjenestekall")
 private val config = Configuration()
 
@@ -52,50 +54,54 @@ class Application(
     }
 
     override fun onPacket(packet: Packet): Packet {
-        sikkerlogg.info("Mottok packet: ${packet.toJson()}")
+        val behovId = packet.getStringValue("behovId")
 
-        val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
-        val grunnlagBeregningsregel = packet.getMapValue(GRUNNLAG_RESULTAT)[GRUNNLAG_BEREGNINGSREGEL].toString()
-        val antallBarn = packet.getIntValue(ANTALL_BARN)
-        val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
-        val erLærling = packet.getNullableBoolean(LÆRLING) == true
-        val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
-        val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO) ?: beregningsdato
+        withLoggingContext(
+            "behovId" to behovId
+        ) {
+            sikkerlogg.info("Mottok packet: ${packet.toJson()}")
+            val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
+            val grunnlagBeregningsregel = packet.getMapValue(GRUNNLAG_RESULTAT)[GRUNNLAG_BEREGNINGSREGEL].toString()
+            val antallBarn = packet.getIntValue(ANTALL_BARN)
+            val beregningsdato = packet.getLocalDate(BEREGNINGSDATO)
+            val erLærling = packet.getNullableBoolean(LÆRLING) == true
+            val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
+            val regelverksdato = packet.getNullableLocalDate(REGELVERKSDATO) ?: beregningsdato
+            val grunnbeløp = when (grunnlagBeregningsregel) {
+                GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT -> gjeldendeGrunnbeløp.grunnbeløp(regelverksdato)
+                else -> gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+            }
+            val grunnlag = Grunnlag(
+                grunnlag = avkortetGrunnlag,
+                grunnbeløp = grunnbeløp
+            )
+            val satsResult = sats.forDato(
+                beregningsdato = beregningsdato,
+                regelverksdato = regelverksdato,
+                lærling = erLærling
+            ).beregn(grunnlag, antallBarn)
 
-        val grunnbeløp = when (grunnlagBeregningsregel) {
-            GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT -> gjeldendeGrunnbeløp.grunnbeløp(regelverksdato)
-            else -> gjeldendeGrunnbeløp.grunnbeløp(beregningsdato)
+            logger.info { "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato, lærling=$erLærling, antallBarn=$antallBarn] [DagSats=${satsResult.dagSats}, UkeSats=${satsResult.ukeSats}] via regel=${satsResult.beregningsregel}" }
+            val satsResultat = SatsSubsumsjon(
+                ulidGenerator.nextULID(),
+                ulidGenerator.nextULID(),
+                REGELIDENTIFIKATOR,
+                satsResult.dagSats,
+                satsResult.ukeSats,
+                satsResult.brukt90ProsentRegel,
+                satsResult.beregningsregel
+            )
+
+            packet.putValue(SATS_RESULTAT, satsResultat.toMap())
+
+            instrumentation.satsBeregnet(
+                regelIdentifikator = REGELIDENTIFIKATOR,
+                brukt90ProsentRegel = satsResult.brukt90ProsentRegel
+            )
+
+            sikkerlogg.info("Løst behov: ${packet.toJson()}")
+            return packet
         }
-
-        val grunnlag = Grunnlag(
-            grunnlag = avkortetGrunnlag,
-            grunnbeløp = grunnbeløp
-        )
-
-        val satsResult = sats.forDato(
-            beregningsdato = beregningsdato,
-            regelverksdato = regelverksdato,
-            lærling = erLærling
-        ).beregn(grunnlag, antallBarn)
-
-        val satsResultat = SatsSubsumsjon(
-            ulidGenerator.nextULID(),
-            ulidGenerator.nextULID(),
-            REGELIDENTIFIKATOR,
-            satsResult.dagSats,
-            satsResult.ukeSats,
-            satsResult.brukt90ProsentRegel,
-            satsResult.beregningsregel
-        )
-
-        packet.putValue(SATS_RESULTAT, satsResultat.toMap())
-
-        instrumentation.satsBeregnet(
-            regelIdentifikator = REGELIDENTIFIKATOR,
-            brukt90ProsentRegel = satsResult.brukt90ProsentRegel
-        )
-        sikkerlogg.info("Løst behov: ${packet.toJson()}")
-        return packet
     }
 
     override fun getConfig(): Properties {

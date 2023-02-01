@@ -74,6 +74,7 @@ class SatsTopologyTest {
         val packet = Packet(jsonString)
         packet.putValue(BEREGNINGSDATO, LocalDate.now())
         packet.putValue(Application.ANTALL_BARN, 0)
+        packet.putValue("behovId", "ULID")
 
         TopologyTestDriver(sats.buildTopology(), config).use { topologyTestDriver ->
             topologyTestDriver.behovInputTopic().also { it.pipeInput(packet) }
