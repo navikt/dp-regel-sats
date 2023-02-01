@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
 import io.prometheus.client.Counter
+import mu.KotlinLogging
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
@@ -9,21 +10,21 @@ import java.time.LocalDate
 
 val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
-
 internal const val antallDesimaler: Int = 20
-
 const val satsBeregningBruktName = "sats_beregning_brukt_total"
 private val satsBeregningBrukt = Counter.build()
     .name(satsBeregningBruktName)
     .labelNames("navn")
     .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
     .register()
+private val logger = KotlinLogging.logger { }
 
 class Sats {
-
     fun forDato(beregningsdato: LocalDate, regelverksdato: LocalDate, lærling: Boolean = false): Beregning =
         instrument {
-            val barnetillegg = Barnetillegg.forDato(regelverksdato)
+            val barnetillegg = Barnetillegg.forDato(regelverksdato).also {
+                logger.info { "Fastsatte $it som sats for barnetillegg med dato=$regelverksdato" }
+            }
             when {
                 KoronaBeregning(barnetillegg).isActive(beregningsdato, regelverksdato) && !lærling -> KoronaBeregning(
                     barnetillegg
@@ -46,7 +47,7 @@ data class SatsResult(
     val dagSats: Int,
     val ukeSats: Int,
     val brukt90ProsentRegel: Boolean,
-    val beregningsregel: Beregningsregel,
+    val beregningsregel: Beregningsregel
 )
 
 enum class Beregningsregel {
