@@ -17,7 +17,6 @@ import java.net.URI
 import java.util.Properties
 
 private val logger = KotlinLogging.logger {}
-private val sikkerlogg = KotlinLogging.logger("tjenestekall")
 private val config = Configuration()
 
 class Application(
@@ -59,7 +58,6 @@ class Application(
         withLoggingContext(
             "behovId" to behovId
         ) {
-            sikkerlogg.info("Mottok packet: ${packet.toJson()}")
             val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
             val grunnlagBeregningsregel = packet.getMapValue(GRUNNLAG_RESULTAT)[GRUNNLAG_BEREGNINGSREGEL].toString()
             val antallBarn = packet.getIntValue(ANTALL_BARN)
@@ -99,7 +97,6 @@ class Application(
                 brukt90ProsentRegel = satsResult.brukt90ProsentRegel
             )
 
-            sikkerlogg.info("Løst behov: ${packet.toJson()}")
             return packet
         }
     }
