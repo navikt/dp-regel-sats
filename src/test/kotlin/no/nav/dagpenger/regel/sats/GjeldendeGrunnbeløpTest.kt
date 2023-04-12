@@ -13,7 +13,7 @@ internal class GjeldendeGrunnbeløpTest {
 
         Application.unleash = FakeUnleash().also { it.enableAll() }
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
-        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2022, 4, 24)) shouldBe Grunnbeløp.GjusteringsTest.verdi
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2023, 4, 24)) shouldBe Grunnbeløp.GjusteringsTest.verdi
     }
 
     @Test
