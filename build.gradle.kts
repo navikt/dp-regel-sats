@@ -55,15 +55,11 @@ dependencies {
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
     implementation(Moshi.moshiKotlin)
-    implementation(Moshi.moshiKtor)
-
     implementation(Ulid.ulid)
 
     implementation(Prometheus.common)
     implementation(Prometheus.hotspot)
     implementation(Prometheus.log4j2)
-
-    implementation(Ktor.serverNetty)
 
     implementation(Kafka.clients)
     implementation(Kafka.streams)
@@ -71,7 +67,7 @@ dependencies {
     implementation(Konfig.konfig)
 
     // unleash
-    implementation("no.finn.unleash:unleash-client-java:3.3.1")
+    implementation("io.getunleash:unleash-client-java:8.0.0")
 
     implementation(Log4j2.api)
     implementation(Log4j2.core)

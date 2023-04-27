@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.sats
 
 import de.huxhorn.sulky.ulid.ULID
+import io.getunleash.Unleash
 import mu.KotlinLogging
 import mu.withLoggingContext
-import no.finn.unleash.Unleash
 import no.nav.dagpenger.events.Packet
 import no.nav.dagpenger.events.Problem
 import no.nav.dagpenger.streams.HealthCheck
