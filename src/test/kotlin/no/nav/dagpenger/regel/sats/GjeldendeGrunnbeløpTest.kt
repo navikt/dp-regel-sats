@@ -3,6 +3,9 @@ package no.nav.dagpenger.regel.sats
 import io.getunleash.FakeUnleash
 import io.kotest.matchers.shouldBe
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
+import no.nav.dagpenger.grunnbelop.Regel
+import no.nav.dagpenger.grunnbelop.forDato
+import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -18,6 +21,6 @@ internal class GjeldendeGrunnbeløpTest {
     @Test
     fun ` ikke g-justeringstest`() {
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
-        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe 111477.toBigDecimal()
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.now()) shouldBe getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi
     }
 }
