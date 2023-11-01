@@ -121,10 +121,10 @@ class Application(
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
+    logger.info { "Unleash strategy(dp-g-justeringstest) er  ${Configuration().unleash.isEnabled("dp-g-justeringstest")} " }
     val instrumentation = SatsInstrumentation()
     val sats = Sats()
-
     Application(
         instrumentation = instrumentation,
         sats = sats,
