@@ -4,7 +4,7 @@ import io.getunleash.DefaultUnleash
 import io.getunleash.strategy.Strategy
 import io.getunleash.util.UnleashConfig
 
-const val GJUSTERING_TEST = "dp-g-justeringstest"
+const val GJUSTERING_TEST = "dp-g-justeringstest-test"
 
 fun setupUnleash(unleashApiUrl: String): DefaultUnleash {
     val appName = "dp-regel-sats"
