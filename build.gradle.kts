@@ -61,8 +61,7 @@ dependencies {
 
     implementation(Konfig.konfig)
 
-    // unleash
-    implementation("io.getunleash:unleash-client-java:8.0.0")
+    implementation("io.getunleash:unleash-client-java:8.4.0")
 
     implementation(Log4j2.api)
     implementation(Log4j2.core)
