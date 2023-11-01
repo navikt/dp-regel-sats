@@ -29,13 +29,11 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.DEV.toString(),
         "feature.gjustering" to false.toString(),
-        "unleash.url" to "https://unleash.nais.io/api/"
     )
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.PROD.toString(),
-        "unleash.url" to "https://unleash.nais.io/api/"
     )
 )
 
@@ -72,8 +70,8 @@ data class Configuration(
 
     private val unleashConfig: UnleashConfig by lazy {
         UnleashConfig.builder()
-            .appName("dp-regel-periode")
-            .instanceId(runCatching { InetAddress.getLocalHost().hostName }.getOrElse { "dp-regel-periode" + System.currentTimeMillis() })
+            .appName("dp-regel-sats")
+            .instanceId(runCatching { InetAddress.getLocalHost().hostName }.getOrElse { "dp-regel-sats" + System.currentTimeMillis() })
             .unleashAPI(config()[Key("UNLEASH_SERVER_API_URL", stringType)] + "/api/")
             .apiKey(config()[Key("UNLEASH_SERVER_API_TOKEN", stringType)])
             .environment(
