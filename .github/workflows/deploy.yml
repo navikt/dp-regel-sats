@@ -61,8 +61,8 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
-          RESOURCE: nais/unleash-apitoken.yaml, nais/dev/nais.yaml
-          VARS: nais/vars.yaml
+          RESOURCE: nais/unleash-apitoken.yaml, nais/nais.yaml
+          VARS: nais/dev-vars.yaml
           PRINT_PAYLOAD: true
 
 
@@ -83,6 +83,6 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
-          RESOURCE: nais/unleash-apitoken.yaml, nais/prod/nais.yaml
-          VARS: nais/vars.yaml
+          RESOURCE: nais/unleash-apitoken.yaml, nais/nais.yaml
+          VARS: nais/prod-vars.yaml
           PRINT_PAYLOAD: true
