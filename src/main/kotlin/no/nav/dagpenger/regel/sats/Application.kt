@@ -40,7 +40,7 @@ class Application(
         const val REGELIDENTIFIKATOR = "Sats.v1"
         const val BEREGNINGSDATO = "beregningsDato"
         const val LÆRLING = "lærling"
-        var unleash: Unleash = setupUnleash(config.application.unleashUrl)
+        var unleash: Unleash = config.unleash
     }
 
     override fun filterPredicates(): List<Predicate<String, Packet>> {
