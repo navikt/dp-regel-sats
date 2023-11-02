@@ -34,7 +34,7 @@ spec:
       enabled: true
   webproxy: true
   envFrom:
-    - secret: dp-regel-minsteinntekt-unleash-api-token
+    - secret: dp-regel-sats-unleash-api-token
   accessPolicy:
     outbound:
       external:
