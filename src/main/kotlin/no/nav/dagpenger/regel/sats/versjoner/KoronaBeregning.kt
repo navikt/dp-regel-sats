@@ -1,10 +1,10 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import no.nav.dagpenger.regel.sats.ANTALL_DESIMALER
 import no.nav.dagpenger.regel.sats.Beregning
 import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Dekningsgrad
 import no.nav.dagpenger.regel.sats.Grunnlag
-import no.nav.dagpenger.regel.sats.antallDesimaler
 import no.nav.dagpenger.regel.sats.dagerPerUke
 import java.math.BigDecimal
 import java.math.MathContext
@@ -50,7 +50,7 @@ internal class KoronaBeregning(private val barneTillegg: BigDecimal) : Beregning
     private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(
         dagSatsFaktor,
         MathContext(
-            antallDesimaler
-        )
+            ANTALL_DESIMALER,
+        ),
     )
 }

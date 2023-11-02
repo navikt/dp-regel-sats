@@ -1,10 +1,10 @@
 package no.nav.dagpenger.regel.sats.versjoner
 
+import no.nav.dagpenger.regel.sats.ANTALL_DESIMALER
 import no.nav.dagpenger.regel.sats.Beregning
 import no.nav.dagpenger.regel.sats.Beregningsregel
 import no.nav.dagpenger.regel.sats.Dekningsgrad
 import no.nav.dagpenger.regel.sats.Grunnlag
-import no.nav.dagpenger.regel.sats.antallDesimaler
 import no.nav.dagpenger.regel.sats.dagerPerUke
 import java.math.BigDecimal
 import java.math.MathContext
@@ -41,5 +41,5 @@ class KoronaLærlingBeregning : Beregning() {
         return (dagSatsUnder1komma5G + dagSatsOver1komma5G).setScale(0, RoundingMode.HALF_UP)
     }
 
-    private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(antallDesimaler))
+    private fun getDagSats(grunnlag: BigDecimal, dagSatsFaktor: BigDecimal): BigDecimal = grunnlag.multiply(dagSatsFaktor, MathContext(ANTALL_DESIMALER))
 }

@@ -10,10 +10,11 @@ import java.time.LocalDate
 
 val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
-internal const val antallDesimaler: Int = 20
-const val satsBeregningBruktName = "sats_beregning_brukt_total"
+
+internal const val ANTALL_DESIMALER = 20
+const val SATS_BEREGNING_BRUKT_NAVN = "sats_beregning_brukt_total"
 private val satsBeregningBrukt = Counter.build()
-    .name(satsBeregningBruktName)
+    .name(SATS_BEREGNING_BRUKT_NAVN)
     .labelNames("navn")
     .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
     .register()
@@ -27,7 +28,7 @@ class Sats {
             }
             when {
                 KoronaBeregning(barnetillegg).isActive(beregningsdato, regelverksdato) && !lærling -> KoronaBeregning(
-                    barnetillegg
+                    barnetillegg,
                 )
 
                 KoronaLærlingBeregning().isActive(beregningsdato, regelverksdato) && lærling -> KoronaLærlingBeregning()
@@ -47,11 +48,11 @@ data class SatsResult(
     val dagSats: Int,
     val ukeSats: Int,
     val brukt90ProsentRegel: Boolean,
-    val beregningsregel: Beregningsregel
+    val beregningsregel: Beregningsregel,
 )
 
 enum class Beregningsregel {
     ORDINAER,
     KORONA,
-    KORONA_LAERLING
+    KORONA_LAERLING,
 }

@@ -23,9 +23,12 @@ class Application(
     private val instrumentation: SatsInstrumentation,
     private val sats: Sats,
     public override val healthChecks: List<HealthCheck> = listOf(),
-    topic: Topic<String, Packet> = config.kafka.regelTopic
+    topic: Topic<String, Packet> = config.kafka.regelTopic,
 ) : River(topic) {
+    @Suppress("ktlint:standard:property-naming")
     override val SERVICE_APP_ID: String = config.application.id
+
+    @Suppress("ktlint:standard:property-naming")
     override val HTTP_PORT: Int = config.application.httpPort
     private val ulidGenerator = ULID()
 
@@ -48,7 +51,7 @@ class Application(
             Predicate { _, packet -> !packet.hasField(SATS_RESULTAT) },
             Predicate { _, packet -> packet.hasField(GRUNNLAG_RESULTAT) },
             Predicate { _, packet -> packet.hasField(ANTALL_BARN) },
-            Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) }
+            Predicate { _, packet -> packet.hasField(BEREGNINGSDATO) },
         )
     }
 
@@ -56,7 +59,7 @@ class Application(
         val behovId = packet.getStringValue("behovId")
 
         withLoggingContext(
-            "behovId" to behovId
+            "behovId" to behovId,
         ) {
             val avkortetGrunnlag = BigDecimal(packet.getMapValue(GRUNNLAG_RESULTAT)[AVKORTET_GRUNNLAG].toString())
             val grunnlagBeregningsregel = packet.getMapValue(GRUNNLAG_RESULTAT)[GRUNNLAG_BEREGNINGSREGEL].toString()
@@ -71,12 +74,12 @@ class Application(
             }
             val grunnlag = Grunnlag(
                 grunnlag = avkortetGrunnlag,
-                grunnbeløp = grunnbeløp
+                grunnbeløp = grunnbeløp,
             )
             val satsResult = sats.forDato(
                 beregningsdato = beregningsdato,
                 regelverksdato = regelverksdato,
-                lærling = erLærling
+                lærling = erLærling,
             ).beregn(grunnlag, antallBarn)
 
             logger.info { "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato, lærling=$erLærling, antallBarn=$antallBarn] [DagSats=${satsResult.dagSats}, UkeSats=${satsResult.ukeSats}] via regel=${satsResult.beregningsregel}" }
@@ -87,14 +90,14 @@ class Application(
                 satsResult.dagSats,
                 satsResult.ukeSats,
                 satsResult.brukt90ProsentRegel,
-                satsResult.beregningsregel
+                satsResult.beregningsregel,
             )
 
             packet.putValue(SATS_RESULTAT, satsResultat.toMap())
 
             instrumentation.satsBeregnet(
                 regelIdentifikator = REGELIDENTIFIKATOR,
-                brukt90ProsentRegel = satsResult.brukt90ProsentRegel
+                brukt90ProsentRegel = satsResult.brukt90ProsentRegel,
             )
 
             return packet
@@ -105,7 +108,7 @@ class Application(
         return streamConfigAiven(
             appId = SERVICE_APP_ID,
             bootStapServerUrl = config.kafka.aivenBrokers,
-            aivenCredentials = KafkaAivenCredentials()
+            aivenCredentials = KafkaAivenCredentials(),
         )
     }
 
@@ -114,8 +117,8 @@ class Application(
             Problem(
                 type = URI("urn:dp:error:regel"),
                 title = "Ukjent feil ved bruk av satsregel",
-                instance = URI("urn:dp:regel:sats")
-            )
+                instance = URI("urn:dp:regel:sats"),
+            ),
         )
         return packet
     }
@@ -128,6 +131,6 @@ fun main() {
     Application(
         instrumentation = instrumentation,
         sats = sats,
-        healthChecks = emptyList()
+        healthChecks = emptyList(),
     ).start()
 }
