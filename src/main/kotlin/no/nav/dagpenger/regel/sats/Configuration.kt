@@ -65,7 +65,6 @@ data class Configuration(
         val id: String = config().getOrElse(Key("application.id", stringType), "dagpenger-regel-sats"),
         val profile: Profile,
         val httpPort: Int = 8080,
-        val unleashUrl: String = config()[Key("unleash.url", stringType)],
     )
 
     private val unleashConfig: UnleashConfig by lazy {
