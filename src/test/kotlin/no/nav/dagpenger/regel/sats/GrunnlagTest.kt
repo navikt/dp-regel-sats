@@ -11,19 +11,19 @@ internal class GrunnlagTest {
         val grunnlag = Grunnlag(500000.toBigDecimal(), 100000.toBigDecimal())
         var andelUnder075G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.0,
-            øvreGrense = 0.75
+            øvreGrense = 0.75,
         )
         var andelUnder3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.0,
-            øvreGrense = 3.0
+            øvreGrense = 3.0,
         )
         var andelMellom075Gog3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.75,
-            øvreGrense = 3.0
+            øvreGrense = 3.0,
         )
         var andelOver3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 3.0,
-            øvreGrense = 6.0
+            øvreGrense = 6.0,
         )
 
         assertEquals(75000.toBigDecimal(), andelUnder075G)
@@ -38,19 +38,19 @@ internal class GrunnlagTest {
 
         var andelUnder075G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.0,
-            øvreGrense = 0.75
+            øvreGrense = 0.75,
         )
         var andelUnder3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.0,
-            øvreGrense = 3.0
+            øvreGrense = 3.0,
         )
         var andelMellom075Gog3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.75,
-            øvreGrense = 3.0
+            øvreGrense = 3.0,
         )
         var andelOver3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 3.0,
-            øvreGrense = 6.0
+            øvreGrense = 6.0,
         )
 
         assertEquals(75000.toBigDecimal(), andelUnder075G)
@@ -65,15 +65,15 @@ internal class GrunnlagTest {
 
         var andelUnder075G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.0,
-            øvreGrense = 0.75
+            øvreGrense = 0.75,
         )
         var andelMellom075Gog3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 0.75,
-            øvreGrense = 3.0
+            øvreGrense = 3.0,
         )
         var andelOver3G = grunnlag.getGrunnlagMellom(
             nedreGrense = 3.0,
-            øvreGrense = 6.0
+            øvreGrense = 6.0,
         )
 
         assertEquals(20000.toBigDecimal(), andelUnder075G)

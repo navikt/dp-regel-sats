@@ -16,7 +16,7 @@ internal class KoronaLærlingBeregningTest {
     fun `gir 100 % av grunnlaget under 1,5G, og bruker dermed ikke 90 % regelen`() {
         val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
             grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
-            antallBarn = 0
+            antallBarn = 0,
         )
         assertEquals(385, dagSats)
         assertEquals(385 * 5, ukeSats)
@@ -27,7 +27,7 @@ internal class KoronaLærlingBeregningTest {
     fun `gir 100 % av grunnlaget under 1,5G og 62,4 % av grunnlaget opp til 6G `() {
         val (dagSats, _, _) = sats.beregn(
             grunnlag = Grunnlag(grunnlag = 599097.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2020.verdi),
-            antallBarn = 3
+            antallBarn = 3,
         )
         assertEquals(1658, dagSats)
     }
@@ -37,17 +37,17 @@ internal class KoronaLærlingBeregningTest {
         val (maksDagsats, _, _) = sats.beregn(
             grunnlag = Grunnlag(
                 grunnlag = Grunnbeløp.FastsattI2019.verdi.times(6.toBigDecimal()),
-                grunnbeløp = Grunnbeløp.FastsattI2019.verdi
+                grunnbeløp = Grunnbeløp.FastsattI2019.verdi,
             ),
-            antallBarn = 0
+            antallBarn = 0,
         )
 
         val (dagsatsMedGrunnlagOver6G, _, _) = sats.beregn(
             grunnlag = Grunnlag(
                 grunnlag = Grunnbeløp.FastsattI2019.verdi.times(10.toBigDecimal()),
-                grunnbeløp = Grunnbeløp.FastsattI2019.verdi
+                grunnbeløp = Grunnbeløp.FastsattI2019.verdi,
             ),
-            antallBarn = 0
+            antallBarn = 0,
         )
         assertEquals(maksDagsats, dagsatsMedGrunnlagOver6G)
     }
@@ -56,7 +56,7 @@ internal class KoronaLærlingBeregningTest {
     fun `lærlinger kvalifiserer ikke til barnetillegg`() {
         val (dagSats, ukeSats, used90ProsentRegel) = sats.beregn(
             grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
-            antallBarn = 5
+            antallBarn = 5,
         )
         assertEquals(385, dagSats)
         assertEquals(1925, ukeSats)
@@ -67,7 +67,7 @@ internal class KoronaLærlingBeregningTest {
     fun ` Skal ikke  avrunde del satsene men avrunde når delsatsene summeres `() {
         val (dagSats, ukeSats) = sats.beregn(
             grunnlag = Grunnlag(BigDecimal(239987), BigDecimal(99858)),
-            antallBarn = 0
+            antallBarn = 0,
         )
         assertEquals(793, dagSats)
         assertEquals(3965, ukeSats)

@@ -34,7 +34,7 @@ class OnPacketTest {
 
         assertNotEquals(
             "KORONA_LAERLING",
-            outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString()
+            outPacket.getMapValue(Application.SATS_RESULTAT)["beregningsregel"].toString(),
         )
     }
 

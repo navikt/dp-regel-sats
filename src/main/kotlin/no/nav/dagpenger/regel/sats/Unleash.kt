@@ -4,7 +4,7 @@ import io.getunleash.DefaultUnleash
 import io.getunleash.strategy.Strategy
 import io.getunleash.util.UnleashConfig
 
-const val GJUSTERING_TEST = "dp-g-justeringstest"
+const val GJUSTERING_TEST = "dp-g-justeringstest-test"
 
 fun setupUnleash(unleashApiUrl: String): DefaultUnleash {
     val appName = "dp-regel-sats"
@@ -28,7 +28,10 @@ class ByClusterStrategy(private val currentCluster: Cluster) : Strategy {
 }
 
 enum class Cluster {
-    DEV_FSS, PROD_FSS, ANNET;
+    DEV_FSS,
+    PROD_FSS,
+    ANNET,
+    ;
 
     companion object {
         val current: Cluster by lazy {
