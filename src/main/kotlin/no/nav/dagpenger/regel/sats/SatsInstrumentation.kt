@@ -9,17 +9,17 @@ class SatsInstrumentation {
         .help("Antall ganger det er beregnet sats")
         .labelNames(
             "regelIdentifikator",
-            "brukt90ProsentRegel"
+            "brukt90ProsentRegel",
         )
         .register()
 
     fun satsBeregnet(
         regelIdentifikator: String,
-        brukt90ProsentRegel: Boolean
+        brukt90ProsentRegel: Boolean,
     ) {
         regelBrukt.labels(
             regelIdentifikator,
-            brukt90ProsentRegel.toString()
+            brukt90ProsentRegel.toString(),
         ).inc()
     }
 }

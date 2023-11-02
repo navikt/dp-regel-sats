@@ -23,18 +23,18 @@ private val localProperties = ConfigurationMap(
         "unleash.url" to "https://localhost",
         "UNLEASH_SERVER_API_URL" to "https://localhost:1234/api",
         "UNLEASH_SERVER_API_TOKEN" to "hunter2",
-    )
+    ),
 )
 private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.DEV.toString(),
         "feature.gjustering" to false.toString(),
-    )
+    ),
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to Profile.PROD.toString(),
-    )
+    ),
 )
 
 private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getProperty("NAIS_CLUSTER_NAME")) {
@@ -48,7 +48,7 @@ private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getPro
 val REGEL_TOPIC: Topic<String, Packet> = Topic(
     "teamdagpenger.regel.v1",
     keySerde = Serdes.String(),
-    valueSerde = Serdes.serdeFrom(PacketSerializer(), PacketDeserializer())
+    valueSerde = Serdes.serdeFrom(PacketSerializer(), PacketDeserializer()),
 )
 
 data class Configuration(
@@ -86,5 +86,7 @@ data class Configuration(
 }
 
 enum class Profile {
-    LOCAL, DEV, PROD
+    LOCAL,
+    DEV,
+    PROD,
 }

@@ -7,7 +7,7 @@ data class SatsSubsumsjon(
     val dagSats: Int,
     val ukeSats: Int,
     val benyttet90ProsentRegel: Boolean,
-    val beregningsregel: Beregningsregel
+    val beregningsregel: Beregningsregel,
 ) {
 
     companion object {
@@ -28,7 +28,7 @@ data class SatsSubsumsjon(
             DAGSATS to dagSats,
             UKESATS to ukeSats,
             BENYTTET_90PROSENT_REGEL to benyttet90ProsentRegel,
-            BEREGNINGSREGEL to beregningsregel
+            BEREGNINGSREGEL to beregningsregel,
         )
     }
 }

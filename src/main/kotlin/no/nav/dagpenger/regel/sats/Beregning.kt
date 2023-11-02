@@ -24,7 +24,7 @@ abstract class Beregning {
                 dagSats = dagSats.toInt(),
                 ukeSats = redusertUkeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
                 brukt90ProsentRegel = true,
-                beregningsregel = regelBrukt
+                beregningsregel = regelBrukt,
             )
         }
 
@@ -32,7 +32,7 @@ abstract class Beregning {
             dagSats = dagSats.toInt(),
             ukeSats = ukeSats.setScale(0, RoundingMode.HALF_UP).toInt(),
             brukt90ProsentRegel = false,
-            beregningsregel = regelBrukt
+            beregningsregel = regelBrukt,
         )
     }
 

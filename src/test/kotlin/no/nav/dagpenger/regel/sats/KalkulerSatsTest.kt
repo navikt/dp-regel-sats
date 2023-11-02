@@ -20,7 +20,7 @@ val sats = Sats()
 fun calculateSats(grunnlag: BigDecimal, antallBarn: Int): SatsResult {
     return sats.forDato(1.januar, 1.januar).beregn(
         grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(LocalDate.now()).verdi),
-        antallBarn = antallBarn
+        antallBarn = antallBarn,
     )
 }
 
@@ -30,7 +30,7 @@ class KalkulerSatsTest {
     fun `brukt90prosentregel er true når dagpenger med barnetillegg utgjør mer enn 90 prosent av grunnlag`() {
         val (_, _, brukt90ProsentRegel) = calculateSats(
             BigDecimal(70000),
-            7
+            7,
         )
         assertTrue(brukt90ProsentRegel)
     }
@@ -39,7 +39,7 @@ class KalkulerSatsTest {
     fun `brukt90prosentregel er false når dagpenger med barnetillegg utgjør mindre enn 90 prosent av grunnlag`() {
         val (_, _, brukt90ProsentRegel) = calculateSats(
             BigDecimal(120000),
-            7
+            7,
         )
         assertFalse(brukt90ProsentRegel)
     }
@@ -48,7 +48,7 @@ class KalkulerSatsTest {
     fun `Skal regne ut korrekte satser uten barnetillegg`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(
             BigDecimal(100000),
-            0
+            0,
         )
         assertEquals(240, dagSats)
         assertEquals(1200, ukeSats)
@@ -60,9 +60,9 @@ class KalkulerSatsTest {
         OrdinærBeregning(Barnetillegg.forDato(1.februar(2023))).beregn(
             grunnlag = Grunnlag(
                 BigDecimal(100000),
-                getGrunnbeløpForRegel(Regel.Grunnlag).forDato(1.februar(2023)).verdi
+                getGrunnbeløpForRegel(Regel.Grunnlag).forDato(1.februar(2023)).verdi,
             ),
-            4
+            4,
         ).also { (dagSats, ukeSats) ->
             assertEquals(240, dagSats)
             assertEquals(1731, ukeSats)
@@ -71,9 +71,9 @@ class KalkulerSatsTest {
         OrdinærBeregning(Barnetillegg.forDato(1.januar(2023))).beregn(
             grunnlag = Grunnlag(
                 BigDecimal(100000),
-                getGrunnbeløpForRegel(Regel.Grunnlag).forDato(1.januar(2023)).verdi
+                getGrunnbeløpForRegel(Regel.Grunnlag).forDato(1.januar(2023)).verdi,
             ),
-            4
+            4,
         ).also { (dagSats, ukeSats) ->
             assertEquals(240, dagSats)
             assertEquals(1540, ukeSats)
@@ -87,7 +87,7 @@ class KalkulerSatsTest {
 
         val (dagSats, ukeSats, used90ProsentRegel) = KoronaBeregning(BigDecimal(17)).beregn(
             grunnlag = Grunnlag(grunnlag, getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dayInTheKorona).verdi),
-            antallBarn = 0
+            antallBarn = 0,
         )
 
         assertEquals(555, dagSats)
@@ -99,7 +99,7 @@ class KalkulerSatsTest {
     fun `Skal runde av dagsats før ukesats`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(
             BigDecimal(111111),
-            0
+            0,
         )
         assertEquals(267, dagSats)
         assertEquals(1335, ukeSats)
@@ -110,7 +110,7 @@ class KalkulerSatsTest {
     fun ` Skal inkludere korrekt barnetillegg til ukesats`() {
         val (dagSats, ukeSats, used90ProsentRegel) = calculateSats(
             BigDecimal(100000),
-            3
+            3,
         )
         assertEquals(240, dagSats)
         assertEquals(1455, ukeSats)
@@ -121,7 +121,7 @@ class KalkulerSatsTest {
     fun `Skal nedjustere uksesats for 90-prosent regel`() {
         val (dagSats, ukeSats, brukt90ProsentRegel) = calculateSats(
             BigDecimal(100000),
-            10
+            10,
         )
         assertEquals(240, dagSats)
         assertEquals(1731, ukeSats)
@@ -132,7 +132,7 @@ class KalkulerSatsTest {
     fun `Test grenseverdier for 90-prosentregel`() {
         val (dagSats1, ukeSats1, brukt90ProsentRegel1) = calculateSats(
             BigDecimal(100000),
-            6
+            6,
         )
         assertEquals(240, dagSats1)
         assertEquals(1710, ukeSats1)
@@ -140,7 +140,7 @@ class KalkulerSatsTest {
 
         val (dagSats2, ukeSats2, brukt90ProsentRegel2) = calculateSats(
             BigDecimal(100000),
-            7
+            7,
         )
         assertEquals(240, dagSats2)
         assertEquals(1731, ukeSats2)

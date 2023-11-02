@@ -25,7 +25,7 @@ class OrdinærBeregning(private val barneTillegg: BigDecimal) : Beregning() {
     override fun dagSats(grunnlag: Grunnlag): BigDecimal {
         return (grunnlag.grunnlag * dekningsgrad.getDagSatsFaktor()).setScale(
             0,
-            RoundingMode.HALF_UP
+            RoundingMode.HALF_UP,
         )
     }
 }

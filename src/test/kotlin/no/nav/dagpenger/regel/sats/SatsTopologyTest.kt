@@ -29,7 +29,7 @@ class SatsTopologyTest {
     fun `Should ignore packet without grunnlag and antallBarn`() {
         val sats = Application(
             fakeSatsInstrumentation,
-            Sats()
+            Sats(),
         )
 
         val packet = Packet("{}")
@@ -44,7 +44,7 @@ class SatsTopologyTest {
     fun `Should ignore packet with satsresultat`() {
         val sats = Application(
             fakeSatsInstrumentation,
-            Sats()
+            Sats(),
         )
 
         val packet = Packet("{}")
@@ -60,7 +60,7 @@ class SatsTopologyTest {
     fun `Should add SatsSubsumsjon to packet with grunnlag and antallBarn `() {
         val sats = Application(
             fakeSatsInstrumentation,
-            Sats()
+            Sats(),
         )
 
         val jsonString =
@@ -84,7 +84,7 @@ class SatsTopologyTest {
             assertTrue("SatsSubsumsjon should be added") { ut.hasField(Application.SATS_RESULTAT) }
             assertEquals(
                 Application.REGELIDENTIFIKATOR,
-                ut.getMapValue(Application.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR]
+                ut.getMapValue(Application.SATS_RESULTAT)[SatsSubsumsjon.REGELIDENTIFIKATOR],
             )
         }
     }
@@ -93,7 +93,7 @@ class SatsTopologyTest {
     fun ` Should add problem on failure`() {
         val minsteinntekt = Application(
             fakeSatsInstrumentation,
-            Sats()
+            Sats(),
         )
 
         val packet = Packet()
@@ -115,13 +115,13 @@ class SatsTopologyTest {
         this.createInputTopic(
             REGEL_TOPIC.name,
             REGEL_TOPIC.keySerde.serializer(),
-            REGEL_TOPIC.valueSerde.serializer()
+            REGEL_TOPIC.valueSerde.serializer(),
         )
 
     private fun TopologyTestDriver.behovOutputTopic(): TestOutputTopic<String, Packet> =
         this.createOutputTopic(
             REGEL_TOPIC.name,
             REGEL_TOPIC.keySerde.deserializer(),
-            REGEL_TOPIC.valueSerde.deserializer()
+            REGEL_TOPIC.valueSerde.deserializer(),
         )
 }
