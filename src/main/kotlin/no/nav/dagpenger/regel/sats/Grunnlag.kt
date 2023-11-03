@@ -19,6 +19,8 @@ class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
     }
 }
 
+const val GJUSTERING_TEST_TOGGLE = "dp-g-justeringstest"
+
 internal class GjeldendeGrunnbeløp() {
     internal fun grunnbeløp(dato: LocalDate): BigDecimal = when {
         isThisGjusteringTest(dato) -> Grunnbeløp.GjusteringsTest
@@ -28,6 +30,6 @@ internal class GjeldendeGrunnbeløp() {
     private fun isThisGjusteringTest(dato: LocalDate): Boolean {
         val gVirkning = LocalDate.of(2023, 4, 17)
         val isRegelverksdatoAfterGjustering = dato.isAfter(gVirkning.minusDays(1))
-        return unleash.isEnabled(GJUSTERING_TEST) && isRegelverksdatoAfterGjustering
+        return unleash.isEnabled(GJUSTERING_TEST_TOGGLE) && isRegelverksdatoAfterGjustering
     }
 }

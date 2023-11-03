@@ -125,7 +125,7 @@ class Application(
 }
 
 fun main() {
-    logger.info { "Unleash strategy(dp-g-justeringstest) er  ${Configuration().unleash.isEnabled("dp-g-justeringstest")} " }
+    logger.info { "Unleash strategy(dp-g-justeringstest) er  ${Configuration().unleash.isEnabled(GJUSTERING_TEST_TOGGLE)}" }
     val instrumentation = SatsInstrumentation()
     val sats = Sats()
     Application(
