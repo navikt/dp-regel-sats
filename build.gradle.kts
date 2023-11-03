@@ -43,7 +43,7 @@ dependencies {
     implementation("io.prometheus:simpleclient_hotspot:0.16.0")
     implementation("no.nav:nare-prometheus:0b41ab4")
 
-    implementation("org.apache.kafka:kafka-streams:3.3.1")
+    implementation("org.apache.kafka:kafka-streams:7.5.1-ce")
     implementation("org.apache.kafka:kafka-clients:3.3.1")
 
     implementation(libs.konfig)
@@ -61,7 +61,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation("org.junit.jupiter:junit-jupiter-params:${libs.versions.junit.get()}")
 
-    testImplementation("org.apache.kafka:kafka-streams-test-utils:3.3.1")
+    testImplementation("org.apache.kafka:kafka-streams-test-utils:7.5.1-ce")
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
