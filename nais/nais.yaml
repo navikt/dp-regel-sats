@@ -32,7 +32,6 @@ spec:
   azure:
     application:
       enabled: true
-  webproxy: true
   envFrom:
     - secret: dp-regel-sats-unleash-api-token
   accessPolicy:
