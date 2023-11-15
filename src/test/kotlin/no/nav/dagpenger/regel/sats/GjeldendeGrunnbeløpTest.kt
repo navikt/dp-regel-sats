@@ -13,8 +13,8 @@ internal class GjeldendeGrunnbeløpTest {
 
     @Test
     fun ` under g-justeringstest`() {
-        Application.unleash = FakeUnleash().also { it.enableAll() }
-        val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp()
+        val fakeUnleash = FakeUnleash().also { it.enableAll() }
+        val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(fakeUnleash)
         gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2023, 4, 24)) shouldBe Grunnbeløp.GjusteringsTest.verdi
     }
 

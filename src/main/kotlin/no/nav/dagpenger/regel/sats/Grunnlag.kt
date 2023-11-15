@@ -1,10 +1,10 @@
 package no.nav.dagpenger.regel.sats
 
+import io.getunleash.Unleash
 import no.nav.dagpenger.grunnbelop.Grunnbeløp
 import no.nav.dagpenger.grunnbelop.Regel
 import no.nav.dagpenger.grunnbelop.forDato
 import no.nav.dagpenger.grunnbelop.getGrunnbeløpForRegel
-import no.nav.dagpenger.regel.sats.Application.Companion.unleash
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -21,7 +21,7 @@ class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
 
 const val GJUSTERING_TEST_TOGGLE = "dp-g-justeringstest"
 
-internal class GjeldendeGrunnbeløp() {
+internal class GjeldendeGrunnbeløp(private val unleash: Unleash = Config.unleash) {
     internal fun grunnbeløp(dato: LocalDate): BigDecimal = when {
         isThisGjusteringTest(dato) -> Grunnbeløp.GjusteringsTest
         else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dato)
