@@ -34,10 +34,7 @@ class SatsBehovløser(
         const val LÆRLING = "lærling"
         const val BEHOV_ID = "behovId"
         const val PROBLEM = "system_problem"
-    }
-
-    init {
-        River(rapidsConnection).apply {
+        val rapidFilter: River.() -> Unit = {
             validate { it.requireKey(BEHOV_ID) }
             validate {
                 it.requireKey(
@@ -56,7 +53,11 @@ class SatsBehovløser(
             validate {
                 it.rejectKey(SATS_RESULTAT)
             }
-        }.register(this)
+        }
+    }
+
+    init {
+        River(rapidsConnection).apply(rapidFilter).register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
