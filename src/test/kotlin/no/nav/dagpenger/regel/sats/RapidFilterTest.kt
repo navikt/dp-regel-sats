@@ -1,6 +1,10 @@
 package no.nav.dagpenger.regel.sats
 
 import io.kotest.matchers.shouldBe
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.MessageProblems
@@ -8,39 +12,22 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 
 class RapidFilterTest {
     private val testRapid = TestRapid()
 
-    fun testMessage(
-        behovId: String = "behovId",
-        beregningsdato: LocalDate = LocalDate.MAX,
-        antallBarn: Int? = 0,
-        avkortetGrunnlag: String,
-    ): String {
-        return """
-          {
-            "behovId": "$behovId",
-            "beregningsDato": "$beregningsdato",
-            "antallBarn": $antallBarn,
-            "grunnlagResultat": {
-              "avkortet": $avkortetGrunnlag
-            }
-          } 
-        """.trimIndent()
-    }
+    private val testMessage = mapOf(
+        GRUNNLAG_RESULTAT to mapOf(SatsBehovløser.AVKORTET_GRUNNLAG to "error"),
+        ANTALL_BARN to "0",
+        BEREGNINGSDATO to "2020-04-30",
+        BEHOV_ID to "ULID",
+    )
 
-    private val gyldigTestMessage = """
-            {
-            "behovId": "behovId",
-            "beregningsDato": "beregningsdato",
-            "antallBarn": 0,
-            "grunnlagResultat": {
-              "avkortet": 123
-              }
-            }
-        """
+    fun Map<String, Any>.muterOgKonverterToJsonString(block: (map: MutableMap<String, Any>) -> Unit): String {
+        val mutableMap = this.toMutableMap()
+        block.invoke(mutableMap)
+        return JsonMessage.newMessage(mutableMap).toJson()
+    }
 
     @Test
     fun `Trenger alle required keys`() {
@@ -50,33 +37,46 @@ class RapidFilterTest {
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
-            """{"behovId": "behovId", "beregningsDato": "beregningsdato", 
-            "grunnlagResultat": {"avkortet": 123}}""",
+            testMessage.muterOgKonverterToJsonString { it.remove(ANTALL_BARN) },
+        )
+
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage(
+            JsonMessage.newMessage(testMessage.toMutableMap().also { it.remove(BEHOV_ID) }).toJson(),
         )
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
-            """{"antallBarn": 0, "beregningsDato": "beregningsdato",
-            "grunnlagResultat": {"avkortet": 123}}""",
-        )
-        testListener.onPacketCalled shouldBe false
-
-        testRapid.sendTestMessage("""{"behovId": "behovId", "beregningsDato": "beregningsdato", "antallBarn": 0}""")
-        testListener.onPacketCalled shouldBe false
-
-        testRapid.sendTestMessage("""{"behovId": "behovId","antallBarn": 0, "grunnlagResultat": {"avkortet": 123}}""")
-        testListener.onPacketCalled shouldBe false
-
-        testRapid.sendTestMessage(
-            """{"behovId": "behovId", "beregningsDato": "beregningsdato", "antallBarn": 0,
-            "grunnlagResultat": {"mikkeMus": 123}}""",
+            JsonMessage.newMessage(
+                testMessage.toMutableMap().also { it.remove(GRUNNLAG_RESULTAT) },
+            ).toJson(),
         )
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
-            gyldigTestMessage,
+            JsonMessage.newMessage(testMessage.toMutableMap().also { it.remove(BEREGNINGSDATO) }).toJson(),
+        )
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage(
+            testMessage.muterOgKonverterToJsonString { it[GRUNNLAG_RESULTAT] = mapOf("MikkeMus" to 34) },
+        )
+
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage(
+            JsonMessage.newMessage(testMessage).toJson(),
         )
         testListener.onPacketCalled shouldBe true
+    }
+
+    @Test
+    fun `Skal ikke behandle pakker som allerede har en løsning`() {
+        val testListener = TestListener(testRapid)
+
+        testRapid.sendTestMessage("{}")
+        testListener.onPacketCalled shouldBe false
     }
 
     private class TestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
