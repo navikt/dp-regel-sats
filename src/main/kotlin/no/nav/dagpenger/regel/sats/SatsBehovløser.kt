@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.sats
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import mu.withLoggingContext
+import no.nav.dagpenger.regel.sats.FaktaMapper.avkortetGrunnlag
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -39,6 +40,7 @@ class SatsBehovløser(
             validate {
                 it.requireKey(
                     GRUNNLAG_RESULTAT,
+                    "$GRUNNLAG_RESULTAT.$AVKORTET_GRUNNLAG",
                     ANTALL_BARN,
                     BEREGNINGSDATO,
                 )
@@ -63,7 +65,7 @@ class SatsBehovløser(
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         withLoggingContext("behovId" to packet["behovId"].asText()) {
             try {
-                val avkortetGrunnlag = packet[GRUNNLAG_RESULTAT][AVKORTET_GRUNNLAG].asText().toBigDecimal()
+                val avkortetGrunnlag = packet.avkortetGrunnlag()
                 val antallBarn = packet[ANTALL_BARN].asInt()
                 val beregningsdato = packet[BEREGNINGSDATO].asLocalDate()
                 val erLærling = when (packet.harVerdi(LÆRLING)) {

@@ -6,12 +6,10 @@ import io.mockk.mockk
 import no.nav.dagpenger.regel.sats.Beregningsregel.KORONA
 import no.nav.dagpenger.regel.sats.Beregningsregel.KORONA_LAERLING
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
-import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.AVKORTET_GRUNNLAG
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_BEREGNINGSREGEL
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT
-import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.PROBLEM
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.REGELVERKSDATO
@@ -35,7 +33,7 @@ class SatsBehovløserTest {
     fun `bruker lærling-koronaregler når lærling er satt til true og dato er innenfor koronaperiode`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to 100000.0),
+                "grunnlagResultat" to mapOf("avkortet" to 100000.0),
                 ANTALL_BARN to 0,
                 BEREGNINGSDATO to "2020-03-21",
                 LÆRLING to true,
@@ -53,7 +51,7 @@ class SatsBehovløserTest {
     fun `bruker ikke lærling-koronaregel når lærling ikke er satt`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to 100000.0),
+                "grunnlagResultat" to mapOf("avkortet" to 100000.0),
                 ANTALL_BARN to 0,
                 BEREGNINGSDATO to "2020-03-21",
                 BEHOV_ID to "ULID",
@@ -70,7 +68,7 @@ class SatsBehovløserTest {
     fun `bruker koronaregler når regelverksdato er fom 1 februar 2021, og beregningsdato er før 20 mars 2020`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to 100000.0),
+                "grunnlagResultat" to mapOf("avkortet" to 100000.0),
                 ANTALL_BARN to 0,
                 BEREGNINGSDATO to "2020-03-19",
                 REGELVERKSDATO to "2021-02-01",
@@ -89,7 +87,7 @@ class SatsBehovløserTest {
     fun `G-en blir som hovedregel bestemt utifra beregningsdato`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to 304053.0),
+                "grunnlagResultat" to mapOf("avkortet" to 304053.0),
                 ANTALL_BARN to 0,
                 BEREGNINGSDATO to "2020-05-01",
                 REGELVERKSDATO to "2020-04-30",
@@ -108,7 +106,10 @@ class SatsBehovløserTest {
     fun `G-en blir bestemt av regelverksdato når beregningsregel for grunnlag er Verneplikt`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to 304053.0, GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT),
+                "grunnlagResultat" to mapOf(
+                    "avkortet" to 304053.0,
+                    GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+                ),
                 ANTALL_BARN to 0,
                 BEREGNINGSDATO to "2020-04-30",
                 REGELVERKSDATO to "2020-05-01",
@@ -127,7 +128,10 @@ class SatsBehovløserTest {
     fun `Regelverksdato settes til beregningsdato hvis regelverksdato er null`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to 304053.0, GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT),
+                "grunnlagResultat" to mapOf(
+                    "avkortet" to 304053.0,
+                    GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+                ),
                 ANTALL_BARN to 0,
                 BEREGNINGSDATO to "2020-04-30",
                 BEHOV_ID to "ULID",
@@ -145,7 +149,7 @@ class SatsBehovløserTest {
     fun `Problem publiseres og appen krasjer når feil oppstår i applikasjonen`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                GRUNNLAG_RESULTAT to "error",
+                "grunnlagResultat" to "error",
                 ANTALL_BARN to "error",
                 BEREGNINGSDATO to "2020-04-30",
                 BEHOV_ID to "ULID",
