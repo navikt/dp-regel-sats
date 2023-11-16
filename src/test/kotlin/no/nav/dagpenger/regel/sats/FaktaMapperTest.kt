@@ -14,24 +14,6 @@ import java.time.LocalDate
 class FaktaMapperTest {
     private val testRapid = TestRapid()
 
-    fun testMessage(
-        behovId: String = "behovId",
-        beregningsdato: LocalDate = LocalDate.MAX,
-        antallBarn: Int? = 0,
-        avkortetGrunnlag: String,
-    ): String {
-        return """
-          {
-            "behovId": "$behovId",
-            "beregningsDato": "$beregningsdato",
-            "antallBarn": $antallBarn,
-            "grunnlagResultat": {
-              "avkortet": $avkortetGrunnlag
-            }
-          } 
-        """.trimIndent()
-    }
-
     @Test
     fun `mapper avkortet grunnlag riktg`() {
         val behovløser = OnPacketTestListener(testRapid)
@@ -69,6 +51,24 @@ class FaktaMapperTest {
 
     @Test
     fun grunnlagBeregningsregel() {
+    }
+
+    private fun testMessage(
+        behovId: String = "behovId",
+        beregningsdato: LocalDate = LocalDate.MAX,
+        antallBarn: Int? = 0,
+        avkortetGrunnlag: String,
+    ): String {
+        return """
+          {
+            "behovId": "$behovId",
+            "beregningsDato": "$beregningsdato",
+            "antallBarn": $antallBarn,
+            "grunnlagResultat": {
+              "avkortet": $avkortetGrunnlag
+            }
+          } 
+        """.trimIndent()
     }
 
     private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {

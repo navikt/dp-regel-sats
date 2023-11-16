@@ -6,10 +6,12 @@ import io.mockk.mockk
 import no.nav.dagpenger.regel.sats.Beregningsregel.KORONA
 import no.nav.dagpenger.regel.sats.Beregningsregel.KORONA_LAERLING
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.AVKORTET_GRUNNLAG
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_BEREGNINGSREGEL
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.PROBLEM
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.REGELVERKSDATO
@@ -149,7 +151,7 @@ class SatsBehovløserTest {
     fun `Problem publiseres og appen krasjer når feil oppstår i applikasjonen`() {
         val testMessage = JsonMessage.newMessage(
             map = mapOf(
-                "grunnlagResultat" to "error",
+                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to "error"),
                 ANTALL_BARN to "error",
                 BEREGNINGSDATO to "2020-04-30",
                 BEHOV_ID to "ULID",

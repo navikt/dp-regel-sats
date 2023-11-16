@@ -50,20 +50,33 @@ class RapidFilterTest {
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
+            """{"behovId": "behovId", "beregningsDato": "beregningsdato", 
+            "grunnlagResultat": {"avkortet": 123}}""",
+        )
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage(
+            """{"antallBarn": 0, "beregningsDato": "beregningsdato",
+            "grunnlagResultat": {"avkortet": 123}}""",
+        )
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage("""{"behovId": "behovId", "beregningsDato": "beregningsdato", "antallBarn": 0}""")
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage("""{"behovId": "behovId","antallBarn": 0, "grunnlagResultat": {"avkortet": 123}}""")
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage(
+            """{"behovId": "behovId", "beregningsDato": "beregningsdato", "antallBarn": 0,
+            "grunnlagResultat": {"mikkeMus": 123}}""",
+        )
+        testListener.onPacketCalled shouldBe false
+
+        testRapid.sendTestMessage(
             gyldigTestMessage,
         )
         testListener.onPacketCalled shouldBe true
-
-//        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":false}""")
-//        mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
-//
-//        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
-//        mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
-//
-//        shouldThrow<IllegalArgumentException> {
-//            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":1}""")
-//            mapToFaktaFrom(behovløser.packet!!)
-//        }
     }
 
     private class TestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
