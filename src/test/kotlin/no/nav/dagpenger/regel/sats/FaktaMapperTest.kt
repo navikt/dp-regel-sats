@@ -29,16 +29,11 @@ class FaktaMapperTest {
     private val testRapid = TestRapid()
 
     private companion object {
-        val defaultverdiAntallBarn = 0
-        val defaultverdiAvkortetGrunnlag = 100000
-        val defaultverdiBehovId = "behovId"
-        val defaultverdiBeregningsdato = LocalDate.MAX
-
         private fun testMessage(
-            behovId: String = defaultverdiBehovId,
-            beregningsdato: LocalDate = defaultverdiBeregningsdato,
-            antallBarn: Int = defaultverdiAntallBarn,
-            avkortetGrunnlag: Number = defaultverdiAvkortetGrunnlag,
+            behovId: String = "behovId",
+            beregningsdato: LocalDate = LocalDate.MAX,
+            antallBarn: Int = 0,
+            avkortetGrunnlag: Number = 100000,
             lærling: Boolean? = null,
             regelverksdato: LocalDate? = null,
             grunnlagBeregningsregel: String? = null,
