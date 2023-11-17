@@ -1,7 +1,20 @@
 package no.nav.dagpenger.regel.sats
 
 import io.kotest.matchers.shouldBe
+import no.nav.dagpenger.regel.sats.FaktaMapper.antallBarn
 import no.nav.dagpenger.regel.sats.FaktaMapper.avkortetGrunnlag
+import no.nav.dagpenger.regel.sats.FaktaMapper.beregningsdato
+import no.nav.dagpenger.regel.sats.FaktaMapper.grunnlagBeregningsregel
+import no.nav.dagpenger.regel.sats.FaktaMapper.lærling
+import no.nav.dagpenger.regel.sats.FaktaMapper.regelverksdato
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.AVKORTET_GRUNNLAG
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_BEREGNINGSREGEL
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.LÆRLING
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.REGELVERKSDATO
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.MessageProblems
@@ -9,66 +22,110 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import java.time.LocalDate
 
 class FaktaMapperTest {
     private val testRapid = TestRapid()
 
+    private companion object {
+        val defaultverdiAntallBarn = 0
+        val defaultverdiAvkortetGrunnlag = 100000
+        val defaultverdiBehovId = "behovId"
+        val defaultverdiBeregningsdato = LocalDate.MAX
+
+        private fun testMessage(
+            behovId: String = defaultverdiBehovId,
+            beregningsdato: LocalDate = defaultverdiBeregningsdato,
+            antallBarn: Int = defaultverdiAntallBarn,
+            avkortetGrunnlag: Number = defaultverdiAvkortetGrunnlag,
+            lærling: Boolean? = null,
+            regelverksdato: LocalDate? = null,
+            grunnlagBeregningsregel: String? = null,
+        ): String {
+            val testMap = mutableMapOf(
+                BEHOV_ID to behovId,
+                BEREGNINGSDATO to beregningsdato,
+                ANTALL_BARN to antallBarn,
+                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to avkortetGrunnlag),
+            )
+            lærling?.let {
+                testMap[LÆRLING] = lærling
+            }
+            regelverksdato?.let {
+                testMap[REGELVERKSDATO] = regelverksdato
+            }
+            grunnlagBeregningsregel?.let {
+                testMap[GRUNNLAG_RESULTAT] = mapOf(
+                    AVKORTET_GRUNNLAG to avkortetGrunnlag,
+                    GRUNNLAG_BEREGNINGSREGEL to grunnlagBeregningsregel,
+                )
+            }
+
+            return JsonMessage.newMessage(testMap).toJson()
+        }
+    }
+
     @Test
     fun `mapper avkortet grunnlag riktg`() {
         val behovløser = OnPacketTestListener(testRapid)
 
-        testRapid.sendTestMessage(testMessage(avkortetGrunnlag = "123"))
-        behovløser.packet!!.avkortetGrunnlag() shouldBe 123.toBigDecimal()
-
-//        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":false}""")
-//        mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
-//
-//        testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}"}""")
-//        mapToFaktaFrom(behovløser.packet!!).fangstOgFiske shouldBe false
-//
-//        shouldThrow<IllegalArgumentException> {
-//            testRapid.sendTestMessage("""{"$BEREGNINGSDATO":"${LocalDate.now()}","$FANGST_OG_FISKE":1}""")
-//            mapToFaktaFrom(behovløser.packet!!)
-//        }
+        testRapid.sendTestMessage(testMessage(avkortetGrunnlag = 200000))
+        behovløser.packet!!.avkortetGrunnlag() shouldBe BigDecimal(200000)
     }
 
     @Test
     fun antallBarn() {
+        val behovløser = OnPacketTestListener(testRapid)
+
+        testRapid.sendTestMessage(testMessage(antallBarn = 3))
+        behovløser.packet!!.antallBarn() shouldBe 3
     }
 
     @Test
     fun beregningsdato() {
+        val behovløser = OnPacketTestListener(testRapid)
+
+        testRapid.sendTestMessage(testMessage(beregningsdato = LocalDate.MIN))
+        behovløser.packet!!.beregningsdato() shouldBe LocalDate.MIN
     }
 
     @Test
     fun lærling() {
+        val behovløser = OnPacketTestListener(testRapid)
+        testRapid.sendTestMessage(testMessage(lærling = true))
+        behovløser.packet!!.lærling() shouldBe true
+
+        testRapid.sendTestMessage(testMessage(lærling = false))
+        behovløser.packet!!.lærling() shouldBe false
+
+        testRapid.sendTestMessage(testMessage(lærling = null))
+        behovløser.packet!!.lærling() shouldBe false
     }
 
     @Test
     fun regelverksdato() {
+        val behovløser = OnPacketTestListener(testRapid)
+        testRapid.sendTestMessage(testMessage(regelverksdato = LocalDate.MIN))
+        behovløser.packet!!.regelverksdato() shouldBe LocalDate.MIN
+
+        testRapid.sendTestMessage(
+            testMessage(
+                regelverksdato = null,
+                beregningsdato = LocalDate.MIN,
+            ),
+        )
+        behovløser.packet!!.regelverksdato() shouldBe LocalDate.MIN
     }
 
     @Test
     fun grunnlagBeregningsregel() {
-    }
+        val behovløser = OnPacketTestListener(testRapid)
+        testRapid.sendTestMessage(testMessage(grunnlagBeregningsregel = "Langbein"))
+        behovløser.packet!!.grunnlagBeregningsregel() shouldBe "Langbein"
 
-    private fun testMessage(
-        behovId: String = "behovId",
-        beregningsdato: LocalDate = LocalDate.MAX,
-        antallBarn: Int? = 0,
-        avkortetGrunnlag: String,
-    ): String {
-        return """
-          {
-            "behovId": "$behovId",
-            "beregningsDato": "$beregningsdato",
-            "antallBarn": $antallBarn,
-            "grunnlagResultat": {
-              "avkortet": $avkortetGrunnlag
-            }
-          } 
-        """.trimIndent()
+        testRapid.sendTestMessage(testMessage(grunnlagBeregningsregel = null))
+        behovløser.packet!!.grunnlagBeregningsregel() shouldBe null
     }
 
     private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {

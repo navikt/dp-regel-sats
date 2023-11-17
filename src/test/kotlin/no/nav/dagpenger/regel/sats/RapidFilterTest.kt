@@ -25,7 +25,16 @@ class RapidFilterTest {
     )
 
     @Test
-    fun `Trenger alle required keys`() {
+    fun `Skal behandle pakker med alle required keys uten løsning`() {
+        val testListener = TestListener(testRapid)
+        testRapid.sendTestMessage(
+            JsonMessage.newMessage(testMessage).toJson(),
+        )
+        testListener.onPacketCalled shouldBe true
+    }
+
+    @Test
+    fun `Skal ikke behanlde pakker som mangler required keys`() {
         val testListener = TestListener(testRapid)
 
         testRapid.sendTestMessage("{}")
@@ -58,11 +67,6 @@ class RapidFilterTest {
             testMessage.muterOgKonverterToJsonString { it[GRUNNLAG_RESULTAT] = mapOf("MikkeMus" to 34) },
         )
         testListener.onPacketCalled shouldBe false
-
-        testRapid.sendTestMessage(
-            JsonMessage.newMessage(testMessage).toJson(),
-        )
-        testListener.onPacketCalled shouldBe true
     }
 
     @Test

@@ -3,12 +3,16 @@ package no.nav.dagpenger.regel.sats
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import mu.withLoggingContext
+import no.nav.dagpenger.regel.sats.FaktaMapper.antallBarn
 import no.nav.dagpenger.regel.sats.FaktaMapper.avkortetGrunnlag
+import no.nav.dagpenger.regel.sats.FaktaMapper.beregningsdato
+import no.nav.dagpenger.regel.sats.FaktaMapper.grunnlagBeregningsregel
+import no.nav.dagpenger.regel.sats.FaktaMapper.lærling
+import no.nav.dagpenger.regel.sats.FaktaMapper.regelverksdato
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.asLocalDate
 import no.nav.helse.rapids_rivers.isMissingOrNull
 import java.net.URI
 
@@ -66,20 +70,11 @@ class SatsBehovløser(
         withLoggingContext("behovId" to packet["behovId"].asText()) {
             try {
                 val avkortetGrunnlag = packet.avkortetGrunnlag()
-                val antallBarn = packet[ANTALL_BARN].asInt()
-                val beregningsdato = packet[BEREGNINGSDATO].asLocalDate()
-                val erLærling = when (packet.harVerdi(LÆRLING)) {
-                    true -> packet[LÆRLING].asBoolean()
-                    false -> false
-                }
-                val regelverksdato = when (packet.harVerdi(REGELVERKSDATO)) {
-                    true -> packet[REGELVERKSDATO].asLocalDate()
-                    false -> beregningsdato
-                }
-                val grunnlagBeregningsregel = when (packet.harVerdi("$GRUNNLAG_RESULTAT.$GRUNNLAG_BEREGNINGSREGEL")) {
-                    true -> packet[GRUNNLAG_RESULTAT][GRUNNLAG_BEREGNINGSREGEL].asText()
-                    false -> null
-                }
+                val antallBarn = packet.antallBarn()
+                val beregningsdato = packet.beregningsdato()
+                val erLærling = packet.lærling()
+                val regelverksdato = packet.regelverksdato()
+                val grunnlagBeregningsregel = packet.grunnlagBeregningsregel()
                 val grunnbeløp = when (grunnlagBeregningsregel) {
                     GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT -> GjeldendeGrunnbeløp().grunnbeløp(regelverksdato)
                     else -> GjeldendeGrunnbeløp().grunnbeløp(beregningsdato)
