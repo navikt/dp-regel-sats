@@ -5,6 +5,7 @@ import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.SATS_RESULTAT
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.MessageProblems
@@ -17,7 +18,7 @@ class RapidFilterTest {
     private val testRapid = TestRapid()
 
     private val testMessage = mapOf(
-        GRUNNLAG_RESULTAT to mapOf(SatsBehovløser.AVKORTET_GRUNNLAG to "error"),
+        GRUNNLAG_RESULTAT to mapOf(SatsBehovløser.AVKORTET_GRUNNLAG to 300000),
         ANTALL_BARN to "0",
         BEREGNINGSDATO to "2020-04-30",
         BEHOV_ID to "ULID",
@@ -62,7 +63,6 @@ class RapidFilterTest {
         testRapid.sendTestMessage(
             testMessage.muterOgKonverterToJsonString { it[GRUNNLAG_RESULTAT] = mapOf("MikkeMus" to 34) },
         )
-
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
@@ -75,7 +75,9 @@ class RapidFilterTest {
     fun `Skal ikke behandle pakker som allerede har en løsning`() {
         val testListener = TestListener(testRapid)
 
-        testRapid.sendTestMessage("{}")
+        testRapid.sendTestMessage(
+            testMessage.muterOgKonverterToJsonString { it[SATS_RESULTAT] = "satsresultat" },
+        )
         testListener.onPacketCalled shouldBe false
     }
 
