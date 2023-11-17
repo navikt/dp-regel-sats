@@ -32,7 +32,7 @@ class FaktaMapperTest {
         private fun testMessage(
             behovId: String = "behovId",
             beregningsdato: LocalDate = LocalDate.MAX,
-            antallBarn: Int = 0,
+            antallBarn: Number = 0,
             avkortetGrunnlag: Number = 100000,
             lærling: Boolean? = null,
             regelverksdato: LocalDate? = null,
@@ -75,6 +75,12 @@ class FaktaMapperTest {
 
         testRapid.sendTestMessage(testMessage(antallBarn = 3))
         behovløser.packet.antallBarn() shouldBe 3
+
+        testRapid.sendTestMessage(testMessage(antallBarn = 0.0))
+        behovløser.packet.antallBarn() shouldBe 0
+
+        testRapid.sendTestMessage(testMessage(antallBarn = 1.2))
+        behovløser.packet.antallBarn() shouldBe 1
     }
 
     @Test

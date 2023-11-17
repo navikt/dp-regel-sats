@@ -14,7 +14,7 @@ object FaktaMapper {
     fun JsonMessage.avkortetGrunnlag(): BigDecimal =
         this[GRUNNLAG_RESULTAT][AVKORTET_GRUNNLAG].asText().toBigDecimal()
 
-    fun JsonMessage.antallBarn() = this[ANTALL_BARN].asText().toInt()
+    fun JsonMessage.antallBarn() = this[ANTALL_BARN].asText().toDouble().toInt()
     fun JsonMessage.beregningsdato() = this[BEREGNINGSDATO].asLocalDate()
     fun JsonMessage.lærling() = when (this.harVerdi(SatsBehovløser.LÆRLING)) {
         true -> this[SatsBehovløser.LÆRLING].asBooleanStrict()
