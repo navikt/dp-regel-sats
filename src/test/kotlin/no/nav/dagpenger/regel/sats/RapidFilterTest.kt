@@ -24,12 +24,6 @@ class RapidFilterTest {
         BEHOV_ID to "ULID",
     )
 
-    fun Map<String, Any>.muterOgKonverterToJsonString(block: (map: MutableMap<String, Any>) -> Unit): String {
-        val mutableMap = this.toMutableMap()
-        block.invoke(mutableMap)
-        return JsonMessage.newMessage(mutableMap).toJson()
-    }
-
     @Test
     fun `Trenger alle required keys`() {
         val testListener = TestListener(testRapid)
@@ -79,6 +73,12 @@ class RapidFilterTest {
             testMessage.muterOgKonverterToJsonString { it[SATS_RESULTAT] = "satsresultat" },
         )
         testListener.onPacketCalled shouldBe false
+    }
+
+    private fun Map<String, Any>.muterOgKonverterToJsonString(block: (map: MutableMap<String, Any>) -> Unit): String {
+        val mutableMap = this.toMutableMap()
+        block.invoke(mutableMap)
+        return JsonMessage.newMessage(mutableMap).toJson()
     }
 
     private class TestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
