@@ -66,7 +66,7 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         testRapid.sendTestMessage(testMessage(avkortetGrunnlag = 200000))
-        behovløser.packet!!.avkortetGrunnlag() shouldBe BigDecimal(200000)
+        behovløser.packet.avkortetGrunnlag() shouldBe BigDecimal(200000)
     }
 
     @Test
@@ -74,7 +74,7 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         testRapid.sendTestMessage(testMessage(antallBarn = 3))
-        behovløser.packet!!.antallBarn() shouldBe 3
+        behovløser.packet.antallBarn() shouldBe 3
     }
 
     @Test
@@ -82,27 +82,27 @@ class FaktaMapperTest {
         val behovløser = OnPacketTestListener(testRapid)
 
         testRapid.sendTestMessage(testMessage(beregningsdato = LocalDate.MIN))
-        behovløser.packet!!.beregningsdato() shouldBe LocalDate.MIN
+        behovløser.packet.beregningsdato() shouldBe LocalDate.MIN
     }
 
     @Test
     fun lærling() {
         val behovløser = OnPacketTestListener(testRapid)
         testRapid.sendTestMessage(testMessage(lærling = true))
-        behovløser.packet!!.lærling() shouldBe true
+        behovløser.packet.lærling() shouldBe true
 
         testRapid.sendTestMessage(testMessage(lærling = false))
-        behovløser.packet!!.lærling() shouldBe false
+        behovløser.packet.lærling() shouldBe false
 
         testRapid.sendTestMessage(testMessage(lærling = null))
-        behovløser.packet!!.lærling() shouldBe false
+        behovløser.packet.lærling() shouldBe false
     }
 
     @Test
     fun regelverksdato() {
         val behovløser = OnPacketTestListener(testRapid)
         testRapid.sendTestMessage(testMessage(regelverksdato = LocalDate.MIN))
-        behovløser.packet!!.regelverksdato() shouldBe LocalDate.MIN
+        behovløser.packet.regelverksdato() shouldBe LocalDate.MIN
 
         testRapid.sendTestMessage(
             testMessage(
@@ -110,22 +110,22 @@ class FaktaMapperTest {
                 beregningsdato = LocalDate.MIN,
             ),
         )
-        behovløser.packet!!.regelverksdato() shouldBe LocalDate.MIN
+        behovløser.packet.regelverksdato() shouldBe LocalDate.MIN
     }
 
     @Test
     fun grunnlagBeregningsregel() {
         val behovløser = OnPacketTestListener(testRapid)
         testRapid.sendTestMessage(testMessage(grunnlagBeregningsregel = "Langbein"))
-        behovløser.packet!!.grunnlagBeregningsregel() shouldBe "Langbein"
+        behovløser.packet.grunnlagBeregningsregel() shouldBe "Langbein"
 
         testRapid.sendTestMessage(testMessage(grunnlagBeregningsregel = null))
-        behovløser.packet!!.grunnlagBeregningsregel() shouldBe null
+        behovløser.packet.grunnlagBeregningsregel() shouldBe null
     }
 
     private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
         var problems: MessageProblems? = null
-        var packet: JsonMessage? = null
+        lateinit var packet: JsonMessage
 
         init {
             River(rapidsConnection).apply(
