@@ -47,19 +47,17 @@ class RapidFilterTest {
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
-            JsonMessage.newMessage(testMessage.toMutableMap().also { it.remove(BEHOV_ID) }).toJson(),
+            testMessage.muterOgKonverterToJsonString { it.remove(BEHOV_ID) },
         )
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
-            JsonMessage.newMessage(
-                testMessage.toMutableMap().also { it.remove(GRUNNLAG_RESULTAT) },
-            ).toJson(),
+            testMessage.muterOgKonverterToJsonString { it.remove(GRUNNLAG_RESULTAT) },
         )
         testListener.onPacketCalled shouldBe false
 
         testRapid.sendTestMessage(
-            JsonMessage.newMessage(testMessage.toMutableMap().also { it.remove(BEREGNINGSDATO) }).toJson(),
+            testMessage.muterOgKonverterToJsonString { it.remove(BEREGNINGSDATO) },
         )
         testListener.onPacketCalled shouldBe false
 
