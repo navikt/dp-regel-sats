@@ -9,7 +9,6 @@ data class SatsSubsumsjon(
     val benyttet90ProsentRegel: Boolean,
     val beregningsregel: Beregningsregel,
 ) {
-
     companion object {
         val SPORINGSID = "sporingsId"
         val SUBSUMSJONSID = "subsumsjonsId"

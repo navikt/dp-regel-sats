@@ -38,12 +38,13 @@ class FaktaMapperTest {
             regelverksdato: LocalDate? = null,
             grunnlagBeregningsregel: String? = null,
         ): String {
-            val testMap = mutableMapOf(
-                BEHOV_ID to behovId,
-                BEREGNINGSDATO to beregningsdato,
-                ANTALL_BARN to antallBarn,
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to avkortetGrunnlag),
-            )
+            val testMap =
+                mutableMapOf(
+                    BEHOV_ID to behovId,
+                    BEREGNINGSDATO to beregningsdato,
+                    ANTALL_BARN to antallBarn,
+                    GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to avkortetGrunnlag),
+                )
             lærling?.let {
                 testMap[LÆRLING] = lærling
             }
@@ -51,10 +52,11 @@ class FaktaMapperTest {
                 testMap[REGELVERKSDATO] = regelverksdato
             }
             grunnlagBeregningsregel?.let {
-                testMap[GRUNNLAG_RESULTAT] = mapOf(
-                    AVKORTET_GRUNNLAG to avkortetGrunnlag,
-                    GRUNNLAG_BEREGNINGSREGEL to grunnlagBeregningsregel,
-                )
+                testMap[GRUNNLAG_RESULTAT] =
+                    mapOf(
+                        AVKORTET_GRUNNLAG to avkortetGrunnlag,
+                        GRUNNLAG_BEREGNINGSREGEL to grunnlagBeregningsregel,
+                    )
             }
 
             return JsonMessage.newMessage(testMap).toJson()
@@ -139,11 +141,17 @@ class FaktaMapperTest {
             ).register(this)
         }
 
-        override fun onPacket(packet: JsonMessage, context: MessageContext) {
+        override fun onPacket(
+            packet: JsonMessage,
+            context: MessageContext,
+        ) {
             this.packet = packet
         }
 
-        override fun onError(problems: MessageProblems, context: MessageContext) {
+        override fun onError(
+            problems: MessageProblems,
+            context: MessageContext,
+        ) {
             this.problems = problems
         }
     }

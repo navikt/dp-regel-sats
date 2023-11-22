@@ -12,7 +12,6 @@ import io.getunleash.util.UnleashConfig
 import java.net.InetAddress
 
 object Config {
-
     private val defaultProperties =
         ConfigurationMap(
             mapOf(

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 internal class GjeldendeGrunnbeløpTest {
-
     @Test
     fun ` under g-justeringstest`() {
         val fakeUnleash = FakeUnleash().also { it.enableAll() }

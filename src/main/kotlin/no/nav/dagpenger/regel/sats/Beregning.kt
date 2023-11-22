@@ -7,11 +7,22 @@ import java.time.LocalDate
 abstract class Beregning {
     abstract val regelBrukt: Beregningsregel
 
-    abstract fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate): Boolean
-    abstract fun ukeSats(dagSats: BigDecimal, antallBarn: Int): BigDecimal
+    abstract fun isActive(
+        beregningsdato: LocalDate,
+        regelverksdato: LocalDate,
+    ): Boolean
+
+    abstract fun ukeSats(
+        dagSats: BigDecimal,
+        antallBarn: Int,
+    ): BigDecimal
+
     abstract fun dagSats(grunnlag: Grunnlag): BigDecimal
 
-    fun beregn(grunnlag: Grunnlag, antallBarn: Int): SatsResult {
+    fun beregn(
+        grunnlag: Grunnlag,
+        antallBarn: Int,
+    ): SatsResult {
         val dagSats = dagSats(grunnlag)
         val ukeSats = ukeSats(dagSats(grunnlag), antallBarn)
 
@@ -36,6 +47,8 @@ abstract class Beregning {
         )
     }
 
-    protected open fun skalReduseres(årligDagpenger: BigDecimal, nittProsentAvGrunnlag: BigDecimal) =
-        årligDagpenger > nittProsentAvGrunnlag
+    protected open fun skalReduseres(
+        årligDagpenger: BigDecimal,
+        nittProsentAvGrunnlag: BigDecimal,
+    ) = årligDagpenger > nittProsentAvGrunnlag
 }

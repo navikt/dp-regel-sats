@@ -10,8 +10,10 @@ import java.math.RoundingMode
 import java.time.LocalDate
 
 class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
-
-    fun getGrunnlagMellom(nedreGrense: Double, øvreGrense: Double): BigDecimal {
+    fun getGrunnlagMellom(
+        nedreGrense: Double,
+        øvreGrense: Double,
+    ): BigDecimal {
         val nedreTerskel = grunnbeløp.times(nedreGrense.toBigDecimal())
         val øvreTerskel = grunnbeløp.times(øvreGrense.toBigDecimal())
 
@@ -22,10 +24,11 @@ class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
 const val GJUSTERING_TEST_TOGGLE = "dp-g-justeringstest"
 
 internal class GjeldendeGrunnbeløp(private val unleash: Unleash = Config.unleash) {
-    internal fun grunnbeløp(dato: LocalDate): BigDecimal = when {
-        isThisGjusteringTest(dato) -> Grunnbeløp.GjusteringsTest
-        else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dato)
-    }.verdi
+    internal fun grunnbeløp(dato: LocalDate): BigDecimal =
+        when {
+            isThisGjusteringTest(dato) -> Grunnbeløp.GjusteringsTest
+            else -> getGrunnbeløpForRegel(Regel.Grunnlag).forDato(dato)
+        }.verdi
 
     private fun isThisGjusteringTest(dato: LocalDate): Boolean {
         val gVirkning = LocalDate.of(2023, 4, 17)

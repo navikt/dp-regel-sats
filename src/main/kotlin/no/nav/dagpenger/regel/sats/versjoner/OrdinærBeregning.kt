@@ -10,14 +10,19 @@ import java.math.RoundingMode
 import java.time.LocalDate
 
 class OrdinærBeregning(private val barneTillegg: BigDecimal) : Beregning() {
-
     // 62.4% dekning/ 260 dager / 100
     private val dekningsgrad = Dekningsgrad(62.4)
     override val regelBrukt: Beregningsregel = Beregningsregel.ORDINAER
 
-    override fun isActive(beregningsdato: LocalDate, regelverksdato: LocalDate): Boolean = true
+    override fun isActive(
+        beregningsdato: LocalDate,
+        regelverksdato: LocalDate,
+    ): Boolean = true
 
-    override fun ukeSats(dagSats: BigDecimal, antallBarn: Int): BigDecimal {
+    override fun ukeSats(
+        dagSats: BigDecimal,
+        antallBarn: Int,
+    ): BigDecimal {
         val barnetillegg = BigDecimal(antallBarn) * barneTillegg
         return (dagSats + barnetillegg) * dagerPerUke
     }

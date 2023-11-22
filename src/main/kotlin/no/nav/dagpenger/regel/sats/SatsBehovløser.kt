@@ -23,7 +23,6 @@ class SatsBehovløser(
     private val instrumentation: SatsInstrumentation,
     rapidsConnection: RapidsConnection,
 ) : River.PacketListener {
-
     private val ulidGenerator = ULID()
 
     companion object {
@@ -66,7 +65,10 @@ class SatsBehovløser(
         River(rapidsConnection).apply(rapidFilter).register(this)
     }
 
-    override fun onPacket(packet: JsonMessage, context: MessageContext) {
+    override fun onPacket(
+        packet: JsonMessage,
+        context: MessageContext,
+    ) {
         withLoggingContext("behovId" to packet["behovId"].asText()) {
             try {
                 val avkortetGrunnlag = packet.avkortetGrunnlag()
@@ -75,31 +77,37 @@ class SatsBehovløser(
                 val erLærling = packet.lærling()
                 val regelverksdato = packet.regelverksdato()
                 val grunnlagBeregningsregel = packet.grunnlagBeregningsregel()
-                val grunnbeløp = when (grunnlagBeregningsregel) {
-                    GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT -> GjeldendeGrunnbeløp().grunnbeløp(regelverksdato)
-                    else -> GjeldendeGrunnbeløp().grunnbeløp(beregningsdato)
+                val grunnbeløp =
+                    when (grunnlagBeregningsregel) {
+                        GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT -> GjeldendeGrunnbeløp().grunnbeløp(regelverksdato)
+                        else -> GjeldendeGrunnbeløp().grunnbeløp(beregningsdato)
+                    }
+
+                val grunnlag =
+                    Grunnlag(
+                        grunnlag = avkortetGrunnlag,
+                        grunnbeløp = grunnbeløp,
+                    )
+                val satsResult =
+                    sats.forDato(
+                        beregningsdato = beregningsdato,
+                        regelverksdato = regelverksdato,
+                        lærling = erLærling,
+                    ).beregn(grunnlag, antallBarn)
+
+                logger.info {
+                    "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato, lærling=$erLærling, antallBarn=$antallBarn] [DagSats=${satsResult.dagSats}, UkeSats=${satsResult.ukeSats}] via regel=${satsResult.beregningsregel}"
                 }
-
-                val grunnlag = Grunnlag(
-                    grunnlag = avkortetGrunnlag,
-                    grunnbeløp = grunnbeløp,
-                )
-                val satsResult = sats.forDato(
-                    beregningsdato = beregningsdato,
-                    regelverksdato = regelverksdato,
-                    lærling = erLærling,
-                ).beregn(grunnlag, antallBarn)
-
-                logger.info { "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato, lærling=$erLærling, antallBarn=$antallBarn] [DagSats=${satsResult.dagSats}, UkeSats=${satsResult.ukeSats}] via regel=${satsResult.beregningsregel}" }
-                val satsResultat = SatsSubsumsjon(
-                    ulidGenerator.nextULID(),
-                    ulidGenerator.nextULID(),
-                    REGELIDENTIFIKATOR,
-                    satsResult.dagSats,
-                    satsResult.ukeSats,
-                    satsResult.brukt90ProsentRegel,
-                    satsResult.beregningsregel,
-                )
+                val satsResultat =
+                    SatsSubsumsjon(
+                        ulidGenerator.nextULID(),
+                        ulidGenerator.nextULID(),
+                        REGELIDENTIFIKATOR,
+                        satsResult.dagSats,
+                        satsResult.ukeSats,
+                        satsResult.brukt90ProsentRegel,
+                        satsResult.beregningsregel,
+                    )
 
                 packet[SATS_RESULTAT] = satsResultat.toMap()
 
@@ -110,11 +118,12 @@ class SatsBehovløser(
 
                 context.publish(packet.toJson())
             } catch (e: Exception) {
-                val problem = Problem(
-                    type = URI("urn:dp:error:regel"),
-                    title = "Ukjent feil ved bruk av satsregel",
-                    instance = URI("urn:dp:regel:sats"),
-                )
+                val problem =
+                    Problem(
+                        type = URI("urn:dp:error:regel"),
+                        title = "Ukjent feil ved bruk av satsregel",
+                        instance = URI("urn:dp:regel:sats"),
+                    )
                 packet[PROBLEM] = problem.toMap
                 context.publish(packet.toJson())
                 throw e

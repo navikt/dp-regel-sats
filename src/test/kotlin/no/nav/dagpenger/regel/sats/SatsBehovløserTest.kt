@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 class SatsBehovløserTest {
-
     private val testrapid = TestRapid()
     private val sats = Sats()
 
@@ -33,15 +32,17 @@ class SatsBehovløserTest {
 
     @Test
     fun `bruker lærling-koronaregler når lærling er satt til true og dato er innenfor koronaperiode`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                "grunnlagResultat" to mapOf("avkortet" to 100000.0),
-                ANTALL_BARN to 0,
-                BEREGNINGSDATO to "2020-03-21",
-                LÆRLING to true,
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 100000.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-03-21",
+                    LÆRLING to true,
+                    BEHOV_ID to "ULID",
+                ),
+            ).toJson()
 
         testrapid.sendTestMessage(testMessage)
 
@@ -51,14 +52,16 @@ class SatsBehovløserTest {
 
     @Test
     fun `bruker ikke lærling-koronaregel når lærling ikke er satt`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                "grunnlagResultat" to mapOf("avkortet" to 100000.0),
-                ANTALL_BARN to 0,
-                BEREGNINGSDATO to "2020-03-21",
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 100000.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-03-21",
+                    BEHOV_ID to "ULID",
+                ),
+            ).toJson()
 
         testrapid.sendTestMessage(testMessage)
 
@@ -68,15 +71,17 @@ class SatsBehovløserTest {
 
     @Test
     fun `bruker koronaregler når regelverksdato er fom 1 februar 2021, og beregningsdato er før 20 mars 2020`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                "grunnlagResultat" to mapOf("avkortet" to 100000.0),
-                ANTALL_BARN to 0,
-                BEREGNINGSDATO to "2020-03-19",
-                REGELVERKSDATO to "2021-02-01",
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 100000.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-03-19",
+                    REGELVERKSDATO to "2021-02-01",
+                    BEHOV_ID to "ULID",
+                ),
+            ).toJson()
 
         testrapid.sendTestMessage(testMessage)
 
@@ -87,15 +92,17 @@ class SatsBehovløserTest {
 
     @Test
     fun `G-en blir som hovedregel bestemt utifra beregningsdato`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                "grunnlagResultat" to mapOf("avkortet" to 304053.0),
-                ANTALL_BARN to 0,
-                BEREGNINGSDATO to "2020-05-01",
-                REGELVERKSDATO to "2020-04-30",
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 304053.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-05-01",
+                    REGELVERKSDATO to "2020-04-30",
+                    BEHOV_ID to "ULID",
+                ),
+            ).toJson()
 
         testrapid.sendTestMessage(testMessage)
 
@@ -106,18 +113,21 @@ class SatsBehovløserTest {
 
     @Test
     fun `G-en blir bestemt av regelverksdato når beregningsregel for grunnlag er Verneplikt`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                "grunnlagResultat" to mapOf(
-                    "avkortet" to 304053.0,
-                    GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    "grunnlagResultat" to
+                        mapOf(
+                            "avkortet" to 304053.0,
+                            GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+                        ),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-04-30",
+                    REGELVERKSDATO to "2020-05-01",
+                    BEHOV_ID to "ULID",
                 ),
-                ANTALL_BARN to 0,
-                BEREGNINGSDATO to "2020-04-30",
-                REGELVERKSDATO to "2020-05-01",
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+            ).toJson()
 
         testrapid.sendTestMessage(testMessage)
 
@@ -128,17 +138,20 @@ class SatsBehovløserTest {
 
     @Test
     fun `Regelverksdato settes til beregningsdato hvis regelverksdato er null`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                "grunnlagResultat" to mapOf(
-                    "avkortet" to 304053.0,
-                    GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    "grunnlagResultat" to
+                        mapOf(
+                            "avkortet" to 304053.0,
+                            GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+                        ),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-04-30",
+                    BEHOV_ID to "ULID",
                 ),
-                ANTALL_BARN to 0,
-                BEREGNINGSDATO to "2020-04-30",
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+            ).toJson()
 
         testrapid.sendTestMessage(testMessage)
 
@@ -149,14 +162,16 @@ class SatsBehovløserTest {
 
     @Test
     fun `Problem publiseres og appen krasjer når feil oppstår i applikasjonen`() {
-        val testMessage = JsonMessage.newMessage(
-            map = mapOf(
-                GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to "error"),
-                ANTALL_BARN to "error",
-                BEREGNINGSDATO to "2020-04-30",
-                BEHOV_ID to "ULID",
-            ),
-        ).toJson()
+        val testMessage =
+            JsonMessage.newMessage(
+                map =
+                mapOf(
+                    GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to "error"),
+                    ANTALL_BARN to "error",
+                    BEREGNINGSDATO to "2020-04-30",
+                    BEHOV_ID to "ULID",
+                ),
+            ).toJson()
 
         assertThrows<Exception> {
             testrapid.sendTestMessage(testMessage)

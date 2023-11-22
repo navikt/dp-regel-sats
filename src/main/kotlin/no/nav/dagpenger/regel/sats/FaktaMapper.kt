@@ -11,20 +11,23 @@ import no.nav.helse.rapids_rivers.isMissingOrNull
 import java.math.BigDecimal
 
 object FaktaMapper {
-    fun JsonMessage.avkortetGrunnlag(): BigDecimal =
-        this[GRUNNLAG_RESULTAT][AVKORTET_GRUNNLAG].asText().toBigDecimal()
+    fun JsonMessage.avkortetGrunnlag(): BigDecimal = this[GRUNNLAG_RESULTAT][AVKORTET_GRUNNLAG].asText().toBigDecimal()
 
     fun JsonMessage.antallBarn() = this[ANTALL_BARN].asText().toDouble().toInt()
-    fun JsonMessage.beregningsdato() = this[BEREGNINGSDATO].asLocalDate()
-    fun JsonMessage.lærling() = when (this.harVerdi(SatsBehovløser.LÆRLING)) {
-        true -> this[SatsBehovløser.LÆRLING].asBooleanStrict()
-        false -> false
-    }
 
-    fun JsonMessage.regelverksdato() = when (this.harVerdi(SatsBehovløser.REGELVERKSDATO)) {
-        true -> this[SatsBehovløser.REGELVERKSDATO].asLocalDate()
-        false -> this.beregningsdato()
-    }
+    fun JsonMessage.beregningsdato() = this[BEREGNINGSDATO].asLocalDate()
+
+    fun JsonMessage.lærling() =
+        when (this.harVerdi(SatsBehovløser.LÆRLING)) {
+            true -> this[SatsBehovløser.LÆRLING].asBooleanStrict()
+            false -> false
+        }
+
+    fun JsonMessage.regelverksdato() =
+        when (this.harVerdi(SatsBehovløser.REGELVERKSDATO)) {
+            true -> this[SatsBehovløser.REGELVERKSDATO].asLocalDate()
+            false -> this.beregningsdato()
+        }
 
     fun JsonMessage.grunnlagBeregningsregel() =
         when (this.harVerdi("$GRUNNLAG_RESULTAT.${SatsBehovløser.GRUNNLAG_BEREGNINGSREGEL}")) {
@@ -32,8 +35,7 @@ object FaktaMapper {
             false -> null
         }
 
-    private fun JsonNode.asBooleanStrict(): Boolean =
-        asText().toBooleanStrict()
+    private fun JsonNode.asBooleanStrict(): Boolean = asText().toBooleanStrict()
 
     private fun JsonMessage.harVerdi(field: String) = !this[field].isMissingOrNull()
 }

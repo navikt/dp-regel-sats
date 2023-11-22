@@ -60,13 +60,19 @@ internal class SatsTest {
         "2022-04-01, 2020-03-19, OrdinærBeregning",
         "2021-10-31, 2020-03-19, KoronaBeregning",
     )
-    fun `Forhøyet sats regelverk`(regelverksdato: String, beregningsdato: String, regel: String) {
+    fun `Forhøyet sats regelverk`(
+        regelverksdato: String,
+        beregningsdato: String,
+        regel: String,
+    ) {
         assertEquals(regel, sats.forDato(LocalDate.parse(beregningsdato), LocalDate.parse(regelverksdato)).javaClass.simpleName)
     }
 
     @Test
     fun `vi teller hvilken regel som blir brukt`() {
         sats.forDato(beregningsdato, LocalDate.of(2022, Month.JANUARY, 1))
-        assert(CollectorRegistry.defaultRegistry.getSampleValue(SATS_BEREGNING_BRUKT_NAVN, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0)
+        assert(
+            CollectorRegistry.defaultRegistry.getSampleValue(SATS_BEREGNING_BRUKT_NAVN, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0,
+        )
     }
 }

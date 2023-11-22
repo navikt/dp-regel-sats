@@ -17,12 +17,13 @@ import org.junit.jupiter.api.Test
 class RapidFilterTest {
     private val testRapid = TestRapid()
 
-    private val testMessage = mapOf(
-        GRUNNLAG_RESULTAT to mapOf(SatsBehovløser.AVKORTET_GRUNNLAG to 300000),
-        ANTALL_BARN to "0",
-        BEREGNINGSDATO to "2020-04-30",
-        BEHOV_ID to "ULID",
-    )
+    private val testMessage =
+        mapOf(
+            GRUNNLAG_RESULTAT to mapOf(SatsBehovløser.AVKORTET_GRUNNLAG to 300000),
+            ANTALL_BARN to "0",
+            BEREGNINGSDATO to "2020-04-30",
+            BEHOV_ID to "ULID",
+        )
 
     @Test
     fun `Skal behandle pakker med alle required keys uten løsning`() {
@@ -92,11 +93,17 @@ class RapidFilterTest {
             ).register(this)
         }
 
-        override fun onPacket(packet: JsonMessage, context: MessageContext) {
+        override fun onPacket(
+            packet: JsonMessage,
+            context: MessageContext,
+        ) {
             this.onPacketCalled = true
         }
 
-        override fun onError(problems: MessageProblems, context: MessageContext) {
+        override fun onError(
+            problems: MessageProblems,
+            context: MessageContext,
+        ) {
         }
     }
 }
