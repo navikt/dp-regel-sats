@@ -96,7 +96,9 @@ class SatsBehovløser(
                     ).beregn(grunnlag, antallBarn)
 
                 logger.info {
-                    "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato, lærling=$erLærling, antallBarn=$antallBarn] [DagSats=${satsResult.dagSats}, UkeSats=${satsResult.ukeSats}] via regel=${satsResult.beregningsregel}"
+                    "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato," +
+                        " lærling=$erLærling, antallBarn=$antallBarn] [DagSats=${satsResult.dagSats}, " +
+                        "UkeSats=${satsResult.ukeSats}] via regel=${satsResult.beregningsregel}"
                 }
                 val satsResultat =
                     SatsSubsumsjon(
