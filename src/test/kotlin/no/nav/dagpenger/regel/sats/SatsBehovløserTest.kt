@@ -35,13 +35,13 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        "grunnlagResultat" to mapOf("avkortet" to 100000.0),
-                        ANTALL_BARN to 0,
-                        BEREGNINGSDATO to "2020-03-21",
-                        LÆRLING to true,
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 100000.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-03-21",
+                    LÆRLING to true,
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         testrapid.sendTestMessage(testMessage)
@@ -55,12 +55,12 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        "grunnlagResultat" to mapOf("avkortet" to 100000.0),
-                        ANTALL_BARN to 0,
-                        BEREGNINGSDATO to "2020-03-21",
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 100000.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-03-21",
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         testrapid.sendTestMessage(testMessage)
@@ -74,13 +74,13 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        "grunnlagResultat" to mapOf("avkortet" to 100000.0),
-                        ANTALL_BARN to 0,
-                        BEREGNINGSDATO to "2020-03-19",
-                        REGELVERKSDATO to "2021-02-01",
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 100000.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-03-19",
+                    REGELVERKSDATO to "2021-02-01",
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         testrapid.sendTestMessage(testMessage)
@@ -95,13 +95,13 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        "grunnlagResultat" to mapOf("avkortet" to 304053.0),
-                        ANTALL_BARN to 0,
-                        BEREGNINGSDATO to "2020-05-01",
-                        REGELVERKSDATO to "2020-04-30",
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    "grunnlagResultat" to mapOf("avkortet" to 304053.0),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-05-01",
+                    REGELVERKSDATO to "2020-04-30",
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         testrapid.sendTestMessage(testMessage)
@@ -116,17 +116,17 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        "grunnlagResultat" to
-                            mapOf(
-                                "avkortet" to 304053.0,
-                                GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
-                            ),
-                        ANTALL_BARN to 0,
-                        BEREGNINGSDATO to "2020-04-30",
-                        REGELVERKSDATO to "2020-05-01",
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    "grunnlagResultat" to
+                        mapOf(
+                            "avkortet" to 304053.0,
+                            GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+                        ),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-04-30",
+                    REGELVERKSDATO to "2020-05-01",
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         testrapid.sendTestMessage(testMessage)
@@ -141,16 +141,16 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        "grunnlagResultat" to
-                            mapOf(
-                                "avkortet" to 304053.0,
-                                GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
-                            ),
-                        ANTALL_BARN to 0,
-                        BEREGNINGSDATO to "2020-04-30",
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    "grunnlagResultat" to
+                        mapOf(
+                            "avkortet" to 304053.0,
+                            GRUNNLAG_BEREGNINGSREGEL to GRUNNLAG_BEREGNINGSREGEL_VERNEPLIKT,
+                        ),
+                    ANTALL_BARN to 0,
+                    BEREGNINGSDATO to "2020-04-30",
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         testrapid.sendTestMessage(testMessage)
@@ -165,12 +165,12 @@ class SatsBehovløserTest {
         val testMessage =
             JsonMessage.newMessage(
                 map =
-                    mapOf(
-                        GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to "error"),
-                        ANTALL_BARN to "error",
-                        BEREGNINGSDATO to "2020-04-30",
-                        BEHOV_ID to "ULID",
-                    ),
+                mapOf(
+                    GRUNNLAG_RESULTAT to mapOf(AVKORTET_GRUNNLAG to "error"),
+                    ANTALL_BARN to "error",
+                    BEREGNINGSDATO to "2020-04-30",
+                    BEHOV_ID to "ULID",
+                ),
             ).toJson()
 
         assertThrows<Exception> {
