@@ -3,6 +3,8 @@ package no.nav.dagpenger.regel.sats
 import java.math.BigDecimal
 import java.time.LocalDate
 
+const val BARNETILLEGG_01_01_2024_TOGGLE = "barnetillegg-01-01-2024"
+
 object Barnetillegg {
     private val satser =
         TemporalCollection<BigDecimal>().apply {
