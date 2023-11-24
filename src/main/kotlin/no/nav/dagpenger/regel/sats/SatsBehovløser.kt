@@ -69,6 +69,7 @@ class SatsBehovløser(
         packet: JsonMessage,
         context: MessageContext,
     ) {
+        logger.info { "Toggle $BARNETILLEGG_01_01_2024_TOGGLE is enabled = " + Config.unleash.isEnabled(BARNETILLEGG_01_01_2024_TOGGLE) }
         withLoggingContext("behovId" to packet["behovId"].asText()) {
             try {
                 val avkortetGrunnlag = packet.avkortetGrunnlag()
