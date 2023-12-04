@@ -12,8 +12,9 @@ Gradle brukes som byggverktøy og er bundlet inn.
 
 # Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan rettes mot:
+Spørsmål knyttet til koden eller prosjektet kan rettes til:
 
+* Slack kanal #team-dagpenger-dev
 * André Roaldseth, andre.roaldseth@nav.no
 * Eller en annen måte for omverden å kontakte teamet på
 
