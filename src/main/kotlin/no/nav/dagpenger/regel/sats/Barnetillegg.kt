@@ -17,9 +17,10 @@ object Barnetillegg {
             put(LocalDate.of(2023, 2, 1), BigDecimal(35))
 
             if (Config.unleash.isEnabled(BARNETILLEGG_01_01_2024_TOGGLE)) {
-                logger.info { "Barnetillegg er 36kr fom 01-01-2024" }
-                put(LocalDate.of(2024, 1, 1), BigDecimal(36))
+                logger.info { "Barnetillegg er 36 kr fra og med 04-12-2023 (i DEV)" }
+                put(LocalDate.of(2023, 12, 4), BigDecimal(36))
             }
+            // put(LocalDate.of(2024, 1, 1), BigDecimal(36))
         }
 
     fun forDato(regelverksdato: LocalDate) = satser.get(regelverksdato)
