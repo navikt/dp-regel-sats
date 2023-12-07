@@ -13,10 +13,10 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.isMissingOrNull
 import java.net.URI
 
 private val logger = KotlinLogging.logger { }
+private val sikkerLogg = KotlinLogging.logger("tjenestekall")
 
 class SatsBehovløser(
     private val sats: Sats,
@@ -71,6 +71,7 @@ class SatsBehovløser(
     ) {
         logger.info { "Toggle $BARNETILLEGG_01_01_2024_TOGGLE is enabled = " + Config.unleash.isEnabled(BARNETILLEGG_01_01_2024_TOGGLE) }
         withLoggingContext("behovId" to packet["behovId"].asText()) {
+            sikkerLogg.info("Mottok behov: ${packet.toJson()}")
             try {
                 val avkortetGrunnlag = packet.avkortetGrunnlag()
                 val antallBarn = packet.antallBarn()
@@ -120,6 +121,7 @@ class SatsBehovløser(
                 )
 
                 context.publish(packet.toJson())
+                sikkerLogg.info { "Løste behov for satsberegning: $satsResultat" }
             } catch (e: Exception) {
                 val problem =
                     Problem(
@@ -134,5 +136,3 @@ class SatsBehovløser(
         }
     }
 }
-
-private fun JsonMessage.harVerdi(field: String) = !this[field].isMissingOrNull()
