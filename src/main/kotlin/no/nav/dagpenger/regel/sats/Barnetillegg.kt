@@ -16,7 +16,7 @@ object Barnetillegg {
             // Jira: https://jira.adeo.no/browse/ARENA-8016
             put(LocalDate.of(2023, 2, 1), BigDecimal(35))
 
-            if (Config.unleash.isEnabled(BARNETILLEGG_01_01_2024_TOGGLE)) {
+            if (System.getenv("NAIS_CLUSTER_NAME") == "dev-gcp") {
                 logger.info { "Barnetillegg er 36 kr fra og med 04-12-2023 (i DEV)" }
                 put(LocalDate.of(2023, 12, 4), BigDecimal(36))
             }
