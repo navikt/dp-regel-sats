@@ -39,20 +39,20 @@ internal class KoronaLærlingBeregningTest {
         val (maksDagsats, _, _) =
             sats.beregn(
                 grunnlag =
-                    Grunnlag(
-                        grunnlag = Grunnbeløp.FastsattI2019.verdi.times(6.toBigDecimal()),
-                        grunnbeløp = Grunnbeløp.FastsattI2019.verdi,
-                    ),
+                Grunnlag(
+                    grunnlag = Grunnbeløp.FastsattI2019.verdi.times(6.toBigDecimal()),
+                    grunnbeløp = Grunnbeløp.FastsattI2019.verdi,
+                ),
                 antallBarn = 0,
             )
 
         val (dagsatsMedGrunnlagOver6G, _, _) =
             sats.beregn(
                 grunnlag =
-                    Grunnlag(
-                        grunnlag = Grunnbeløp.FastsattI2019.verdi.times(10.toBigDecimal()),
-                        grunnbeløp = Grunnbeløp.FastsattI2019.verdi,
-                    ),
+                Grunnlag(
+                    grunnlag = Grunnbeløp.FastsattI2019.verdi.times(10.toBigDecimal()),
+                    grunnbeløp = Grunnbeløp.FastsattI2019.verdi,
+                ),
                 antallBarn = 0,
             )
         assertEquals(maksDagsats, dagsatsMedGrunnlagOver6G)
