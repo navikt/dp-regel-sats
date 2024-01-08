@@ -55,9 +55,8 @@ class SatsBehovløser(
                     "$GRUNNLAG_RESULTAT.$GRUNNLAG_BEREGNINGSREGEL",
                 )
             }
-            validate {
-                it.rejectKey(SATS_RESULTAT)
-            }
+            validate { it.rejectKey(SATS_RESULTAT) }
+            validate { it.rejectKey(PROBLEM) }
         }
     }
 

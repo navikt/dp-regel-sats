@@ -5,6 +5,7 @@ import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
+import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.PROBLEM
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.SATS_RESULTAT
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
@@ -74,6 +75,15 @@ class RapidFilterTest {
 
         testRapid.sendTestMessage(
             testMessage.muterOgKonverterToJsonString { it[SATS_RESULTAT] = "satsresultat" },
+        )
+        testListener.onPacketCalled shouldBe false
+    }
+
+    @Test
+    fun `Skal ikke behandle pakker med problem`() {
+        val testListener = TestListener(testRapid)
+        testRapid.sendTestMessage(
+            testMessage.muterOgKonverterToJsonString { it[PROBLEM] = "problem" },
         )
         testListener.onPacketCalled shouldBe false
     }
