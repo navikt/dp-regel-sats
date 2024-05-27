@@ -14,7 +14,7 @@ internal class GjeldendeGrunnbeløpTest {
     fun ` under g-justeringstest`() {
         val fakeUnleash = FakeUnleash().also { it.enableAll() }
         val gjeldendeGrunnbeløp = GjeldendeGrunnbeløp(fakeUnleash)
-        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2024, 4, 24)) shouldBe Grunnbeløp.GjusteringsTest.verdi
+        gjeldendeGrunnbeløp.grunnbeløp(LocalDate.of(2024, 5, 24)) shouldBe Grunnbeløp.GjusteringsTest.verdi
     }
 
     @Test
