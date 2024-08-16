@@ -19,7 +19,7 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     implementation(libs.rapids.and.rivers)
-    implementation("com.github.navikt:dp-grunnbelop:2024.08.08-12.23.560febaebe95")
+    implementation("com.github.navikt:dp-grunnbelop:20240812.99.7f2e69")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
