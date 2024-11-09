@@ -1,5 +1,11 @@
 package no.nav.dagpenger.regel.sats
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import io.kotest.matchers.shouldBe
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEHOV_ID
@@ -7,12 +13,6 @@ import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.PROBLEM
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.SATS_RESULTAT
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.MessageProblems
-import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 
 class RapidFilterTest {
@@ -94,13 +94,16 @@ class RapidFilterTest {
         return JsonMessage.newMessage(mutableMap).toJson()
     }
 
-    private class TestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
+    private class TestListener(
+        rapidsConnection: RapidsConnection,
+    ) : River.PacketListener {
         var onPacketCalled = false
 
         init {
-            River(rapidsConnection).apply(
-                SatsBehovløser.rapidFilter,
-            ).register(this)
+            River(rapidsConnection)
+                .apply(
+                    SatsBehovløser.rapidFilter,
+                ).register(this)
         }
 
         override fun onPacket(

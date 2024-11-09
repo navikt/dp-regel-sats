@@ -1,5 +1,9 @@
 package no.nav.dagpenger.regel.sats
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import de.huxhorn.sulky.ulid.ULID
 import mu.KotlinLogging
 import mu.withLoggingContext
@@ -9,10 +13,6 @@ import no.nav.dagpenger.regel.sats.FaktaMapper.beregningsdato
 import no.nav.dagpenger.regel.sats.FaktaMapper.grunnlagBeregningsregel
 import no.nav.dagpenger.regel.sats.FaktaMapper.lærling
 import no.nav.dagpenger.regel.sats.FaktaMapper.regelverksdato
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
 import java.net.URI
 
 private val logger = KotlinLogging.logger { }

@@ -1,5 +1,11 @@
 package no.nav.dagpenger.regel.sats
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import io.kotest.matchers.shouldBe
 import no.nav.dagpenger.regel.sats.FaktaMapper.antallBarn
 import no.nav.dagpenger.regel.sats.FaktaMapper.avkortetGrunnlag
@@ -15,12 +21,6 @@ import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_BEREGNINGS
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.LÆRLING
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.REGELVERKSDATO
-import no.nav.helse.rapids_rivers.JsonMessage
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.MessageProblems
-import no.nav.helse.rapids_rivers.RapidsConnection
-import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -131,14 +131,17 @@ class FaktaMapperTest {
         behovløser.packet.grunnlagBeregningsregel() shouldBe null
     }
 
-    private class OnPacketTestListener(rapidsConnection: RapidsConnection) : River.PacketListener {
+    private class OnPacketTestListener(
+        rapidsConnection: RapidsConnection,
+    ) : River.PacketListener {
         var problems: MessageProblems? = null
         lateinit var packet: JsonMessage
 
         init {
-            River(rapidsConnection).apply(
-                SatsBehovløser.rapidFilter,
-            ).register(this)
+            River(rapidsConnection)
+                .apply(
+                    SatsBehovløser.rapidFilter,
+                ).register(this)
         }
 
         override fun onPacket(
