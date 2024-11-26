@@ -3,8 +3,10 @@ package no.nav.dagpenger.regel.sats
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.River
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import de.huxhorn.sulky.ulid.ULID
+import io.micrometer.core.instrument.MeterRegistry
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.dagpenger.regel.sats.FaktaMapper.antallBarn
@@ -55,8 +57,8 @@ class SatsBehovløser(
                     "$GRUNNLAG_RESULTAT.$GRUNNLAG_BEREGNINGSREGEL",
                 )
             }
-            validate { it.rejectKey(SATS_RESULTAT) }
-            validate { it.rejectKey(PROBLEM) }
+            validate { it.forbid(SATS_RESULTAT) }
+            validate { it.forbid(PROBLEM) }
         }
     }
 
@@ -67,6 +69,8 @@ class SatsBehovløser(
     override fun onPacket(
         packet: JsonMessage,
         context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         withLoggingContext("behovId" to packet["behovId"].asText()) {
             sikkerLogg.info("Mottok behov: ${packet.toJson()}")

@@ -4,9 +4,11 @@ import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.River
 import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import io.kotest.matchers.shouldBe
+import io.micrometer.core.instrument.MeterRegistry
 import no.nav.dagpenger.regel.sats.FaktaMapper.antallBarn
 import no.nav.dagpenger.regel.sats.FaktaMapper.avkortetGrunnlag
 import no.nav.dagpenger.regel.sats.FaktaMapper.beregningsdato
@@ -147,6 +149,8 @@ class FaktaMapperTest {
         override fun onPacket(
             packet: JsonMessage,
             context: MessageContext,
+            metadata: MessageMetadata,
+            meterRegistry: MeterRegistry,
         ) {
             this.packet = packet
         }
@@ -154,6 +158,7 @@ class FaktaMapperTest {
         override fun onError(
             problems: MessageProblems,
             context: MessageContext,
+            metadata: MessageMetadata,
         ) {
             this.problems = problems
         }
