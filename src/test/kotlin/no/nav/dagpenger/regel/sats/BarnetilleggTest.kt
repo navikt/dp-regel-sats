@@ -1,13 +1,12 @@
 package no.nav.dagpenger.regel.sats
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 
 class BarnetilleggTest {
-    @Test @Disabled
+    @Test
     fun `etter 2025`() {
         val dato = LocalDate.of(2025, 1, 1)
         val result = Barnetillegg.forDato(dato)
