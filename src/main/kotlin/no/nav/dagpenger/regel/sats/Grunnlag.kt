@@ -32,7 +32,7 @@ internal class GjeldendeGrunnbeløp(private val unleash: Unleash = Config.unleas
 
     private fun isThisGjusteringTest(dato: LocalDate): Boolean {
         // Dette er G
-        val gVirkning = LocalDate.of(2025, 3, 27)
+        val gVirkning = LocalDate.of(2025, 5, 1)
         val isRegelverksdatoAfterGjustering = dato.isAfter(gVirkning.minusDays(1))
         return unleash.isEnabled(GJUSTERING_TEST_TOGGLE) && isRegelverksdatoAfterGjustering
     }
