@@ -93,11 +93,12 @@ class SatsBehovløser(
                         grunnbeløp = grunnbeløp,
                     )
                 val satsResult =
-                    sats.forDato(
-                        beregningsdato = beregningsdato,
-                        regelverksdato = regelverksdato,
-                        lærling = erLærling,
-                    ).beregn(grunnlag, antallBarn)
+                    sats
+                        .forDato(
+                            beregningsdato = beregningsdato,
+                            regelverksdato = regelverksdato,
+                            lærling = erLærling,
+                        ).beregn(grunnlag, antallBarn)
 
                 logger.info {
                     "Beregnet sats for [beregningsdato=$beregningsdato, regelverksdato=$regelverksdato," +

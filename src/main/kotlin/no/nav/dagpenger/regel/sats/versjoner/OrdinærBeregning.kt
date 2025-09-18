@@ -9,7 +9,9 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 
-class OrdinærBeregning(private val barneTillegg: BigDecimal) : Beregning() {
+class OrdinærBeregning(
+    private val barneTillegg: BigDecimal,
+) : Beregning() {
     // 62.4% dekning/ 260 dager / 100
     private val dekningsgrad = Dekningsgrad(62.4)
     override val regelBrukt: Beregningsregel = Beregningsregel.ORDINAER
@@ -27,10 +29,9 @@ class OrdinærBeregning(private val barneTillegg: BigDecimal) : Beregning() {
         return (dagSats + barnetillegg) * dagerPerUke
     }
 
-    override fun dagSats(grunnlag: Grunnlag): BigDecimal {
-        return (grunnlag.grunnlag * dekningsgrad.getDagSatsFaktor()).setScale(
+    override fun dagSats(grunnlag: Grunnlag): BigDecimal =
+        (grunnlag.grunnlag * dekningsgrad.getDagSatsFaktor()).setScale(
             0,
             RoundingMode.HALF_UP,
         )
-    }
 }

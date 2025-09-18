@@ -14,7 +14,8 @@ val ukerPerÅr = BigDecimal(52)
 internal const val ANTALL_DESIMALER = 20
 const val SATS_BEREGNING_BRUKT_NAVN = "sats_beregning_brukt_total"
 private val satsBeregningBrukt =
-    Counter.build()
+    Counter
+        .build()
         .name(SATS_BEREGNING_BRUKT_NAVN)
         .labelNames("navn")
         .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
