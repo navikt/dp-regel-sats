@@ -24,7 +24,9 @@ private fun LocalDate.erForhøyetSatsPeriode() = this in forhøyetSatsPeriode
 private fun LocalDate.erKoronaPeriode() = this in periode
 
 // Innført av https://lovdata.no/dokument/LTI/forskrift/2020-03-20-368\
-internal class KoronaBeregning(private val barneTillegg: BigDecimal) : Beregning() {
+internal class KoronaBeregning(
+    private val barneTillegg: BigDecimal,
+) : Beregning() {
     private val dagSatsFaktorUnder3G = Dekningsgrad(dekningsgrad = 80.0).getDagSatsFaktor()
     private val dagSatsFaktorOver3G = Dekningsgrad(dekningsgrad = 62.4).getDagSatsFaktor()
     override val regelBrukt: Beregningsregel = Beregningsregel.KORONA
