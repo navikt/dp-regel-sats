@@ -6,9 +6,9 @@ import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
 import de.huxhorn.sulky.ulid.ULID
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import io.micrometer.core.instrument.MeterRegistry
-import mu.KotlinLogging
-import mu.withLoggingContext
 import no.nav.dagpenger.regel.sats.FaktaMapper.antallBarn
 import no.nav.dagpenger.regel.sats.FaktaMapper.avkortetGrunnlag
 import no.nav.dagpenger.regel.sats.FaktaMapper.beregningsdato
@@ -73,7 +73,7 @@ class SatsBehovløser(
         meterRegistry: MeterRegistry,
     ) {
         withLoggingContext("behovId" to packet["behovId"].asText()) {
-            sikkerLogg.info("Mottok behov: ${packet.toJson()}")
+            sikkerLogg.info { "Mottok behov: ${packet.toJson()}" }
             try {
                 val avkortetGrunnlag = packet.avkortetGrunnlag()
                 val antallBarn = packet.antallBarn()
