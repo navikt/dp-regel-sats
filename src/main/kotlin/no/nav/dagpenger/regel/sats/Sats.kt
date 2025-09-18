@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.prometheus.client.Counter
-import mu.KotlinLogging
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
