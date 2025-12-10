@@ -15,7 +15,7 @@ object Barnetillegg {
             put(LocalDate.of(2024, 1, 1), BigDecimal(36))
             put(LocalDate.of(2025, 1, 1), BigDecimal(37))
             if (System.getenv("NAIS_CLUSTER_NAME") == "dev-gcp") {
-                val at = LocalDate.of(2025, 11, 13)
+                val at = LocalDate.of(2025, 12, 11)
                 logger.info { "Barnetillegg er 38 kr fra og med $at (i DEV)" }
                 put(at, BigDecimal(38))
             }
