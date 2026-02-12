@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.sats
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 internal class DekningsgradTest {
     @Test
@@ -15,8 +14,8 @@ internal class DekningsgradTest {
             )
 
         assertEquals(
-            BigDecimal(0.0024).setScale(4, RoundingMode.HALF_UP),
-            dekningsgrad.getDagSatsFaktor().setScale(4, RoundingMode.HALF_UP),
+            BigDecimal.valueOf(0.0024),
+            dekningsgrad.getDagSatsFaktor(),
         )
     }
 
@@ -29,8 +28,8 @@ internal class DekningsgradTest {
             )
 
         assertEquals(
-            BigDecimal(0.0031).setScale(4, RoundingMode.HALF_UP),
-            dekningsgrad.getDagSatsFaktor().setScale(4, RoundingMode.HALF_UP),
+            BigDecimal.valueOf(0.0031),
+            dekningsgrad.getDagSatsFaktor(),
         )
     }
 }
