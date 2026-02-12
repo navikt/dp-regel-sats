@@ -19,8 +19,8 @@ internal class KoronaLærlingBeregningTest {
                 grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
                 antallBarn = 0,
             )
-        assertEquals(385, dagSats)
-        assertEquals(385 * 5, ukeSats)
+        assertEquals(380, dagSats)
+        assertEquals(380 * 5, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -31,7 +31,7 @@ internal class KoronaLærlingBeregningTest {
                 grunnlag = Grunnlag(grunnlag = 599097.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2020.verdi),
                 antallBarn = 3,
             )
-        assertEquals(1658, dagSats)
+        assertEquals(1651, dagSats)
     }
 
     @Test
@@ -65,8 +65,8 @@ internal class KoronaLærlingBeregningTest {
                 grunnlag = Grunnlag(grunnlag = 100_000.toBigDecimal(), grunnbeløp = Grunnbeløp.FastsattI2019.verdi),
                 antallBarn = 5,
             )
-        assertEquals(385, dagSats)
-        assertEquals(1925, ukeSats)
+        assertEquals(380, dagSats)
+        assertEquals(1900, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -77,8 +77,8 @@ internal class KoronaLærlingBeregningTest {
                 grunnlag = Grunnlag(BigDecimal(239987), BigDecimal(99858)),
                 antallBarn = 0,
             )
-        assertEquals(793, dagSats)
-        assertEquals(3965, ukeSats)
+        assertEquals(786, dagSats)
+        assertEquals(3930, ukeSats)
     }
 
     @Test

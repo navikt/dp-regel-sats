@@ -34,13 +34,19 @@ class Sats {
                     logger.info { "Fastsatte $it som sats for barnetillegg med dato=$regelverksdato" }
                 }
             when {
-                KoronaBeregning(barnetillegg).isActive(beregningsdato, regelverksdato) && !lærling ->
+                KoronaBeregning(barnetillegg).isActive(beregningsdato, regelverksdato) && !lærling -> {
                     KoronaBeregning(
                         barnetillegg,
                     )
+                }
 
-                KoronaLærlingBeregning().isActive(beregningsdato, regelverksdato) && lærling -> KoronaLærlingBeregning()
-                else -> OrdinærBeregning(barnetillegg)
+                KoronaLærlingBeregning().isActive(beregningsdato, regelverksdato) && lærling -> {
+                    KoronaLærlingBeregning()
+                }
+
+                else -> {
+                    OrdinærBeregning(barnetillegg)
+                }
             }
         }
 }

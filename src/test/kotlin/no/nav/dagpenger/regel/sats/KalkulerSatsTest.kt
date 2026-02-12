@@ -99,8 +99,8 @@ class KalkulerSatsTest {
                 antallBarn = 0,
             )
 
-        assertEquals(555, dagSats)
-        assertEquals(2775, ukeSats)
+        assertEquals(559, dagSats)
+        assertEquals(2795, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -108,11 +108,11 @@ class KalkulerSatsTest {
     fun `Skal runde av dagsats før ukesats`() {
         val (dagSats, ukeSats, used90ProsentRegel) =
             calculateSats(
-                BigDecimal(111111),
+                BigDecimal(425625),
                 0,
             )
-        assertEquals(267, dagSats)
-        assertEquals(1335, ukeSats)
+        assertEquals(1022, dagSats)
+        assertEquals(5110, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 

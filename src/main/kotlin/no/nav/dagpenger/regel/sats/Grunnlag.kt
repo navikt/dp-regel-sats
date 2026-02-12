@@ -9,7 +9,10 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 
-class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
+class Grunnlag(
+    val grunnlag: BigDecimal,
+    private val grunnbeløp: BigDecimal,
+) {
     fun getGrunnlagMellom(
         nedreGrense: Double,
         øvreGrense: Double,
@@ -17,13 +20,19 @@ class Grunnlag(val grunnlag: BigDecimal, private val grunnbeløp: BigDecimal) {
         val nedreTerskel = grunnbeløp.times(nedreGrense.toBigDecimal())
         val øvreTerskel = grunnbeløp.times(øvreGrense.toBigDecimal())
 
-        return grunnlag.min(øvreTerskel).minus(nedreTerskel).max(BigDecimal.ZERO).setScale(0, RoundingMode.HALF_UP)
+        return grunnlag
+            .min(øvreTerskel)
+            .minus(nedreTerskel)
+            .max(BigDecimal.ZERO)
+            .setScale(0, RoundingMode.HALF_UP)
     }
 }
 
 const val GJUSTERING_TEST_TOGGLE = "dp-g-justeringstest"
 
-internal class GjeldendeGrunnbeløp(private val unleash: Unleash = Config.unleash) {
+internal class GjeldendeGrunnbeløp(
+    private val unleash: Unleash = Config.unleash,
+) {
     internal fun grunnbeløp(dato: LocalDate): BigDecimal =
         when {
             isThisGjusteringTest(dato) -> Grunnbeløp.GjusteringsTest

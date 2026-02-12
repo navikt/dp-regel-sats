@@ -16,8 +16,8 @@ internal class KoronaBeregningTest {
                 grunnlag = Grunnlag(BigDecimal(100000), BigDecimal(100000)),
                 antallBarn = 0,
             )
-        assertEquals(308, dagSats)
-        assertEquals(1540, ukeSats)
+        assertEquals(310, dagSats)
+        assertEquals(1550, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -28,8 +28,8 @@ internal class KoronaBeregningTest {
                 grunnlag = Grunnlag(BigDecimal(500000), BigDecimal(100000)),
                 antallBarn = 0,
             )
-        assertEquals(1403, dagSats)
-        assertEquals(7015, ukeSats)
+        assertEquals(1410, dagSats)
+        assertEquals(7050, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -40,8 +40,8 @@ internal class KoronaBeregningTest {
                 grunnlag = Grunnlag(BigDecimal(5000000), BigDecimal(100000)),
                 antallBarn = 0,
             )
-        assertEquals(1643, dagSats)
-        assertEquals(8215, ukeSats)
+        assertEquals(1650, dagSats)
+        assertEquals(8250, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 
@@ -52,8 +52,8 @@ internal class KoronaBeregningTest {
                 grunnlag = Grunnlag(BigDecimal(305650), BigDecimal(99858)),
                 antallBarn = 0,
             )
-        assertEquals(936, dagSats)
-        assertEquals(4680, ukeSats)
+        assertEquals(943, dagSats)
+        assertEquals(4715, ukeSats)
         assertFalse(used90ProsentRegel)
     }
 }

@@ -155,7 +155,7 @@ class SatsBehovløserTest {
 
         val resultatPacket = testrapid.inspektør.message(0)
         resultatPacket[SATS_RESULTAT][GRUNNLAG_BEREGNINGSREGEL].asText() shouldBe KORONA.name
-        resultatPacket[SATS_RESULTAT][DAGSATS].asInt() shouldBe 936
+        resultatPacket[SATS_RESULTAT][DAGSATS].asInt() shouldBe 943
     }
 
     @Test
@@ -181,7 +181,7 @@ class SatsBehovløserTest {
 
         val resultatPacket = testrapid.inspektør.message(0)
         resultatPacket[SATS_RESULTAT][GRUNNLAG_BEREGNINGSREGEL].asText() shouldBe KORONA.name
-        resultatPacket[SATS_RESULTAT][DAGSATS].asInt() shouldBe 936
+        resultatPacket[SATS_RESULTAT][DAGSATS].asInt() shouldBe 943
     }
 
     @Test
@@ -206,7 +206,7 @@ class SatsBehovløserTest {
 
         val resultatPacket = testrapid.inspektør.message(0)
         resultatPacket[SATS_RESULTAT][GRUNNLAG_BEREGNINGSREGEL].asText() shouldBe KORONA.name
-        resultatPacket[SATS_RESULTAT][DAGSATS].asInt() shouldBe 933
+        resultatPacket[SATS_RESULTAT][DAGSATS].asInt() shouldBe 939
     }
 
     @Test
