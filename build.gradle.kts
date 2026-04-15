@@ -6,7 +6,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
     maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
 }
 
@@ -19,7 +18,7 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     implementation(libs.rapids.and.rivers)
-    implementation("com.github.navikt:dp-grunnbelop:20250526.166.5b778c")
+    implementation("no.nav.dagpenger:dp-grunnbelop:20260415.272.a351d9")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
