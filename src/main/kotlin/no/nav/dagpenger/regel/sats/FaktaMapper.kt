@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.sats
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.asLocalDate
 import com.github.navikt.tbd_libs.rapids_and_rivers.isMissingOrNull
@@ -8,6 +7,7 @@ import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.ANTALL_BARN
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.AVKORTET_GRUNNLAG
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.BEREGNINGSDATO
 import no.nav.dagpenger.regel.sats.SatsBehovløser.Companion.GRUNNLAG_RESULTAT
+import tools.jackson.databind.JsonNode
 import java.math.BigDecimal
 
 object FaktaMapper {
