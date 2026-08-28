@@ -1,7 +1,6 @@
 plugins {
     id("common")
     application
-    alias(libs.plugins.shadow.jar)
 }
 
 repositories {
@@ -38,8 +37,4 @@ dependencies {
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.mockk)
     testImplementation("org.junit.jupiter:junit-jupiter-params:${libs.versions.junit.get()}")
-}
-
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    mergeServiceFiles()
 }
