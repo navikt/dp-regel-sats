@@ -19,8 +19,8 @@ data class SatsSubsumsjon(
         val BEREGNINGSREGEL = "beregningsregel"
     }
 
-    fun toMap(): Map<String, Any> {
-        return mapOf(
+    fun toMap(): Map<String, Any> =
+        mapOf(
             SPORINGSID to sporingsId,
             SUBSUMSJONSID to subsumsjonsId,
             REGELIDENTIFIKATOR to regelidentifikator,
@@ -29,5 +29,4 @@ data class SatsSubsumsjon(
             BENYTTET_90PROSENT_REGEL to benyttet90ProsentRegel,
             BEREGNINGSREGEL to beregningsregel,
         )
-    }
 }

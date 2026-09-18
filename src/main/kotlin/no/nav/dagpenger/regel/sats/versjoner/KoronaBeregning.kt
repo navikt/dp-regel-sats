@@ -35,7 +35,8 @@ internal class KoronaBeregning(
         beregningsdato: LocalDate,
         regelverksdato: LocalDate,
     ): Boolean =
-        regelverksdato.erKoronaPeriode() && beregningsdato.isAfter(LocalDate.of(2020, Month.MARCH, 19)) ||
+        regelverksdato.erKoronaPeriode() &&
+            beregningsdato.isAfter(LocalDate.of(2020, Month.MARCH, 19)) ||
             (beregningsdato.isBefore(LocalDate.of(2020, Month.MARCH, 20)) && regelverksdato.erForhøyetSatsPeriode())
 
     override fun ukeSats(
