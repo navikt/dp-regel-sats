@@ -9,7 +9,8 @@ class TemporalCollection<R> {
 
     fun get(date: LocalDateTime): R =
         milestones
-            .firstOrNull { it.isBefore(date) || it.isEqual(date) }?.let {
+            .firstOrNull { it.isBefore(date) || it.isEqual(date) }
+            ?.let {
                 contents[it]
             } ?: throw IllegalArgumentException("No records that early")
 
