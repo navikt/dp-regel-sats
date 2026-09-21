@@ -17,7 +17,7 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     implementation(libs.rapids.and.rivers)
-    implementation("no.nav.dagpenger:dp-grunnbelop:20260529.285.e99922")
+    implementation("no.nav.dagpenger:dp-grunnbelop:20260921.318.7235ed")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
