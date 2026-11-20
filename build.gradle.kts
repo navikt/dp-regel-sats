@@ -21,10 +21,7 @@ dependencies {
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
-    // prometheus
-    implementation("io.prometheus:simpleclient_common:0.16.0")
-    implementation("io.prometheus:simpleclient_hotspot:0.16.0")
-    implementation("no.nav:nare-prometheus:0b41ab4")
+    implementation("io.prometheus:prometheus-metrics-core:1.10.0")
 
     implementation(libs.konfig)
 

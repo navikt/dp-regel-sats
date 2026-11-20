@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.prometheus.client.Counter
+import io.prometheus.metrics.core.metrics.Counter
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
@@ -12,10 +12,10 @@ val dagerPerUke = BigDecimal(5)
 val ukerPerÅr = BigDecimal(52)
 
 internal const val ANTALL_DESIMALER = 20
-const val SATS_BEREGNING_BRUKT_NAVN = "sats_beregning_brukt_total"
+const val SATS_BEREGNING_BRUKT_NAVN = "sats_beregning_brukt"
 private val satsBeregningBrukt =
     Counter
-        .build()
+        .builder()
         .name(SATS_BEREGNING_BRUKT_NAVN)
         .labelNames("navn")
         .help("Hvilken beregningsmetode ble brukt for å regne ut sats")
@@ -54,7 +54,7 @@ class Sats {
 fun instrument(handler: () -> Beregning): Beregning =
     handler().also {
         satsBeregningBrukt
-            .labels(it.javaClass.simpleName.toString())
+            .labelValues(it.javaClass.simpleName.toString())
             .inc()
     }
 

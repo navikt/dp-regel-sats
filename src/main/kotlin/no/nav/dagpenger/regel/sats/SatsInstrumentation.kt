@@ -1,13 +1,12 @@
 package no.nav.dagpenger.regel.sats
 
-import io.prometheus.client.Counter
+import io.prometheus.metrics.core.metrics.Counter
 
 class SatsInstrumentation {
     private val regelBrukt =
         Counter
-            .build()
-            .namespace("dagpenger")
-            .name("sats_regel_brukt")
+            .builder()
+            .name("dagpenger_sats_regel_brukt")
             .help("Antall ganger det er beregnet sats")
             .labelNames(
                 "regelIdentifikator",
@@ -19,7 +18,7 @@ class SatsInstrumentation {
         brukt90ProsentRegel: Boolean,
     ) {
         regelBrukt
-            .labels(
+            .labelValues(
                 regelIdentifikator,
                 brukt90ProsentRegel.toString(),
             ).inc()

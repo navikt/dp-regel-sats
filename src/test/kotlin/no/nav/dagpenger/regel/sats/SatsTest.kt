@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.sats
 
-import io.prometheus.client.CollectorRegistry
+import io.prometheus.metrics.model.registry.PrometheusRegistry
+import io.prometheus.metrics.model.snapshots.CounterSnapshot
 import no.nav.dagpenger.regel.sats.versjoner.KoronaBeregning
 import no.nav.dagpenger.regel.sats.versjoner.KoronaLærlingBeregning
 import no.nav.dagpenger.regel.sats.versjoner.OrdinærBeregning
@@ -71,8 +72,11 @@ internal class SatsTest {
     @Test
     fun `vi teller hvilken regel som blir brukt`() {
         sats.forDato(beregningsdato, LocalDate.of(2022, Month.JANUARY, 1))
-        assert(
-            CollectorRegistry.defaultRegistry.getSampleValue(SATS_BEREGNING_BRUKT_NAVN, arrayOf("navn"), arrayOf("OrdinærBeregning")) > 0.0,
-        )
+        val teller =
+            PrometheusRegistry.defaultRegistry
+                .scrape { it == SATS_BEREGNING_BRUKT_NAVN }
+                .filterIsInstance<CounterSnapshot>()
+                .single()
+        assert(teller.dataPoints.single { it.labels.get("navn") == "OrdinærBeregning" }.value > 0.0)
     }
 }
